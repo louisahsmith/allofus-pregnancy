@@ -4,7 +4,17 @@ This repository contains the code and data used to identify and describe pregnan
 
 The repository is organized as follows:
 
-- `code/`: R code to identify pregnancies and describe the cohort. These are in the form of quarto files; the output is included as html files. `01-run-hipps.qmd` contains the code to run the algorithm; the rest of the files just look at the results in various ways.
+- `code/`: R code to identify pregnancies and describe the cohort. These are in the form of quarto files. `01-run-hipps.qmd` contains the code to run the algorithm; the rest of the files just look at the results in various ways. These are rendered as html files, so the easiest way to view them is to follow these links:
+  - https://htmlpreview.github.io/?https://github.com/louisahsmith/allofus-pregnancy/blob/main/code/01_run-hipps.html
+  - https://htmlpreview.github.io/?https://github.com/louisahsmith/allofus-pregnancy/blob/main/code/02_examine-hipps.html
+  - https://htmlpreview.github.io/?https://github.com/louisahsmith/allofus-pregnancy/blob/main/code/03_examine-hipps-restricted.html
+  - https://htmlpreview.github.io/?https://github.com/louisahsmith/allofus-pregnancy/blob/main/code/04_validate-hipps.html
+  - https://htmlpreview.github.io/?https://github.com/louisahsmith/allofus-pregnancy/blob/main/code/05_validate-hipps-restricted.html
+  - https://htmlpreview.github.io/?https://github.com/louisahsmith/allofus-pregnancy/blob/main/code/06_predictors.html
+  - https://htmlpreview.github.io/?https://github.com/louisahsmith/allofus-pregnancy/blob/main/code/07_compare-to-US-stats.html
+  - https://htmlpreview.github.io/?https://github.com/louisahsmith/allofus-pregnancy/blob/main/code/08_available-data.html
+  - https://htmlpreview.github.io/?https://github.com/louisahsmith/allofus-pregnancy/blob/main/code/09_make-maps.html
+  - https://htmlpreview.github.io/?https://github.com/louisahsmith/allofus-pregnancy/blob/main/code/10_session-info.html
 - `code/algorithm`: Jones et al.<sup>1</sup> algorithm translated to R and adapted to work on the All of Us Researcher Workbench
 - `data/`: concept sets from Jones et al.<sup>1</sup> and national vital statistics data from CDC Wonder<sup>2</sup>
 - `results/`: tables/figures/other results that do not contain individual-level data
