@@ -1,0 +1,262 @@
+---
+title: Look at results of HIPPS algorithm
+format:
+  html:
+    theme: cosmo
+df-print: kable
+execute: 
+  warning: false
+  message: false
+  cache: true
+---
+
+```{r}
+#| include: false
+# install.packages("pak")
+# pak::pak(c("roux-ohdsi/allofus"))
+```
+
+```{r}
+library(allofus)
+library(tidyverse)
+library(ggokabeito)
+library(gtsummary)
+theme_set(theme_classic())
+```
+
+```{r}
+con <- aou_connect()
+```
+
+```{r}
+all <- read_rds(here::here("workbench/merged_episodes_with_metadata_df.rds"))
+
+count(all,
+  both_algo = inferred_episode_start < inferred_episode_end & HIP_flag == 1 & PPS_flag == 1,
+  post_2016 = inferred_episode_start > as.Date("2016-01-01")
+)
+
+# restrict
+hipps <- all %>%
+  filter(
+    inferred_episode_start < inferred_episode_end,
+    HIP_flag == 1 & PPS_flag == 1,
+    inferred_episode_start > as.Date("2016-01-01")
+  )
+```
+
+```{r}
+hipps_w_demo <- read_rds(here::here("workbench/hipps_cleaned.rds")) %>%
+  filter(
+    inferred_episode_start < inferred_episode_end,
+    HIP_flag == 1 & PPS_flag == 1,
+    inferred_episode_start > as.Date("2016-01-01")
+  )
+```
+
+```{r}
+nrow(hipps_w_demo)
+length(unique(hipps_w_demo$person_id))
+```
+
+```{r}
+hipps_w_demo %>%
+  janitor::tabyl(outcome_category)
+```
+
+```{r}
+hipps_w_demo %>%
+  janitor::tabyl(outcome_category) %>%
+  mutate(outcome_category = fct_rev(outcome_category)) %>%
+  ggplot(aes(outcome_category, percent)) +
+  geom_col(aes(fill = outcome_category)) +
+  geom_text(aes(label = scales::number(n, big.mark = ",")),
+    hjust = -.25
+  ) +
+  scale_fill_okabe_ito() +
+  scale_y_continuous(labels = scales::percent) +
+  scale_x_discrete(labels = ~ str_wrap(.x, 13)) +
+  coord_flip(expand = FALSE, ylim = c(0, 1.03)) +
+  theme(
+    legend.position = "none",
+    axis.title = element_blank()
+  )
+```
+
+```{r}
+hipps_w_demo %>%
+  mutate(outcome_concordance_score = fct_rev(factor(outcome_concordance_score))) %>%
+  janitor::tabyl(outcome_category, outcome_concordance_score) %>%
+  mutate(across(where(is.numeric), ~ ifelse(.x < 20 & .x > 0, "<20", as.character(.x))))
+```
+
+```{r}
+janitor::tabyl(hipps_w_demo, outcome_concordance_score)
+```
+
+```{r}
+hipps_w_demo %>%
+  mutate(outcome_category = fct_rev(outcome_category)) %>%
+  ggplot() +
+  geom_bar(aes(outcome_category,
+    fill = outcome_category,
+    alpha = factor(outcome_concordance_score)
+  ), position = "fill") +
+  scale_alpha_manual(values = c(.25, .5, 1)) +
+  scale_fill_okabe_ito() +
+  scale_y_continuous(labels = scales::percent) +
+  scale_x_discrete(labels = ~ str_wrap(.x, 13)) +
+  coord_flip(expand = FALSE) +
+  theme(
+    legend.position = "none",
+    axis.title = element_blank()
+  )
+```
+
+```{r}
+hipps_w_demo %>%
+  janitor::tabyl(precision_category)
+```
+
+```{r}
+hipps_w_demo %>%
+  mutate(
+    resolution = case_when(
+      precision_category %in% c("week", "two-week", "three-week") ~ "Week-level",
+      precision_category %in% c("month", "two-month", "three-month") ~ "Month-level",
+      precision_category %in% c("week_poor-support") ~ "Week-level (1 concept)", precision_category %in% c("non-specific") ~ "Non-specific"
+    ),
+    resolution = fct_relevel(resolution, "Week-level", "Week-level (1 concept)", "Month-level", "Non-specific")
+  ) %>%
+  count(resolution) %>%
+  mutate(prop = n / sum(n))
+```
+
+```{r}
+hipps_w_demo %>%
+  group_by(outcome_category) %>%
+  summarise(mean = mean(gestational_age_days_calculated), median = median(gestational_age_days_calculated), min = min(gestational_age_days_calculated), max = max(gestational_age_days_calculated), q1 = quantile(gestational_age_days_calculated, .01), q99 = quantile(gestational_age_days_calculated, .99)) %>%
+  mutate(across(where(is.numeric), ~ . / 7))
+```
+
+```{r}
+hipps_cleaned <- hipps_w_demo
+```
+
+```{r}
+write_rds(hipps_cleaned, here::here("workbench/hipps_cleaned_restricted.rds"))
+aou_workspace_to_bucket(here::here("workbench/hipps_cleaned_restricted.rds"))
+```
+
+## Demographics table
+
+```{r}
+demo_table <- hipps_cleaned %>%
+  distinct(person_id, gender_cat, orientation_cat, race_eth_cat, income_cat, edu_cat, marital_status_cat, state_cat) %>%
+  mutate(across(where(is.factor), ~ fct_lump_min(.x, min = 20)),
+    state_cat = fct_infreq(state_cat),
+    state_cat = fct_lump_min(state_cat, min = 20),
+    orientation_cat = fct_relevel(orientation_cat, "Straight", "Bisexual", "Gay/lesbian", "None"),
+    orientation_cat = fct_recode(orientation_cat, NULL = "No answer")
+  ) %>%
+  tbl_summary(
+    include = c(gender_cat, orientation_cat, race_eth_cat, income_cat, edu_cat, state_cat),
+    label = list(
+      gender_cat ~ "Gender identity",
+      orientation_cat ~ "Sexual orientation",
+      race_eth_cat ~ "Race/ethnicity",
+      income_cat ~ "Family income",
+      edu_cat ~ "Education",
+      state_cat ~ "State of residence"
+    )
+  ) %>%
+  bold_labels()
+demo_table
+```
+
+## Live births
+
+```{r}
+preg_table <- hipps_cleaned %>%
+  filter(outcome_category == "Live birth") %>%
+  tbl_summary(
+    include = c(
+      mom_age_cat_table, year_end_cat, took_the_survey, gestational_age_weeks,
+      preterm_status_from_calculation
+    ),
+    label = list(
+      mom_age_cat_table ~ "Maternal age",
+      year_end_cat ~ "Year of delivery",
+      took_the_survey ~ "All of Us participation relative to pregnancy",
+      gestational_age_weeks ~ "Gestational age at delivery (weeks)",
+      preterm_status_from_calculation ~ "Preterm (< 37 weeks)"
+    ),
+    digits = list(gestational_age_weeks ~ c(1))
+  ) %>%
+  bold_labels()
+preg_table
+```
+
+## New combined table
+
+```{r}
+demo_table <- hipps_cleaned %>%
+  distinct(person_id, gender_cat, orientation_cat, race_eth_cat, income_cat, edu_cat, marital_status_cat, state_cat) %>%
+  mutate(across(where(is.factor), ~ fct_lump_min(.x, min = 20)),
+    state_cat = fct_infreq(state_cat),
+    state_cat = fct_lump_min(state_cat, min = 200),
+    orientation_cat = fct_relevel(orientation_cat, "Straight", "Bisexual", "Gay/lesbian", "None")
+  ) %>%
+  tbl_summary(
+    include = c(
+      gender_cat, orientation_cat, race_eth_cat, income_cat, edu_cat,
+      state_cat
+    ),
+    label = list(
+      gender_cat ~ "Gender identity",
+      orientation_cat ~ "Sexual orientation",
+      race_eth_cat ~ "Race/ethnicity",
+      income_cat ~ "Family income",
+      edu_cat ~ "Education",
+      state_cat ~ "State of residence"
+    ),
+    digits = list(everything() ~ c(0, 1))
+  ) %>%
+  bold_labels()
+
+preg_table <- hipps_cleaned %>%
+  filter(outcome_category == "Live birth") %>%
+  mutate(across(where(is.factor), ~ fct_lump_min(.x, min = 20)),
+    across(where(is.factor), fct_drop),
+    state_cat = fct_infreq(state_cat),
+    state_cat = fct_lump_min(state_cat, min = 200),
+    orientation_cat = fct_relevel(orientation_cat, "Straight", "Bisexual", "Gay/lesbian", "None"),
+    gender_cat = fct_collapse(gender_cat, "Other/multiple" = c("Other", "Man"))
+  ) %>%
+  tbl_summary(
+    include = c(
+      gender_cat, orientation_cat, race_eth_cat, income_cat, edu_cat,
+      state_cat,
+      mom_age_cat_table, year_end_cat, took_the_survey, gestational_age_weeks,
+      preterm_status_from_calculation
+    ),
+    label = list(
+      gender_cat ~ "Gender identity",
+      orientation_cat ~ "Sexual orientation",
+      race_eth_cat ~ "Race/ethnicity",
+      income_cat ~ "Family income",
+      edu_cat ~ "Education",
+      state_cat ~ "State of residence",
+      mom_age_cat_table ~ "Maternal age",
+      year_end_cat ~ "Year of delivery",
+      took_the_survey ~ "All of Us participation relative to pregnancy",
+      gestational_age_weeks ~ "Gestational age at delivery (weeks)",
+      preterm_status_from_calculation ~ "Preterm (< 37 weeks)"
+    ),
+    digits = list(everything() ~ c(0, 1))
+  ) %>%
+  bold_labels()
+combo <- gtsummary::tbl_merge(list(demo_table, preg_table), tab_spanner = c("Individuals", "Live births"))
+combo
+write_rds(combo, here::here("workbench/demographics_table.rds"))
+```

@@ -1,0 +1,208 @@
+---
+title: Run HIPPS algorithm in All of Us
+format:
+  html:
+    theme: cosmo
+execute: 
+  warning: false
+  message: false
+  cache: true
+---
+
+```{r setup}
+library(tidyverse)
+library(allofus)
+```
+
+```{r connection}
+con <- aou_connect()
+person_tbl <- tbl(con, "person")
+concept_tbl <- tbl(con, "concept")
+observation_tbl <- tbl(con, "observation")
+measurement_tbl <- tbl(con, "measurement")
+condition_occurrence_tbl <- tbl(con, "condition_occurrence")
+procedure_occurrence_tbl <- tbl(con, "procedure_occurrence")
+visit_occurrence_tbl <- tbl(con, "visit_occurrence")
+```
+
+```{r data}
+HIP_concepts <- readxl::read_excel(here::here("data/HIP_concepts.xlsx")) %>%
+  aou_create_temp_table()
+PPS_concepts <- readxl::read_excel(here::here("data/PPS_concepts.xlsx")) %>%
+  mutate(domain_concept_id = as.integer(domain_concept_id)) %>%
+  aou_create_temp_table()
+Matcho_outcome_limits <- readxl::read_excel(here::here("data/Matcho_outcome_limits.xlsx"))
+Matcho_term_durations <- readxl::read_excel(here::here("data/Matcho_term_durations.xlsx")) %>%
+  aou_create_temp_table()
+```
+
+```{r hip}
+source(here::here("code/algorithm/HIP_algorithm_functions.R"))
+
+## Outcome-based episodes
+
+# get initial cohort based on hip_concepts
+# this returns a dataset with person_id, concept_id, visit_date, domain, etc.
+# for all the the HIP concepts that for women who were 15-55
+initial_pregnant_cohort_df <- initial_pregnant_cohort(
+  procedure_occurrence_tbl,
+  measurement_tbl, observation_tbl,
+  condition_occurrence_tbl, person_tbl,
+  HIP_concepts
+) %>%
+  aou_compute()
+
+# get outcome visits from Matcho et al.
+# this function takes the HIP concepts matching the category of interest
+# calculates days between each visit and selects the first episode
+# and any episodes that are separated by at least that many days
+final_abortion_visits_df <- final_visits(
+  initial_pregnant_cohort_df,
+  Matcho_outcome_limits, c("AB", "SA")
+) %>%
+  aou_compute()
+
+final_delivery_visits_df <- final_visits(
+  initial_pregnant_cohort_df,
+  Matcho_outcome_limits, "DELIV"
+) %>%
+  aou_compute()
+
+final_ectopic_visits_df <- final_visits(
+  initial_pregnant_cohort_df,
+  Matcho_outcome_limits, "ECT"
+) %>%
+  aou_compute()
+
+final_stillbirth_visits_df <- final_visits(
+  initial_pregnant_cohort_df,
+  Matcho_outcome_limits, "SB"
+) %>%
+  aou_compute()
+
+final_livebirth_visits_df <- final_visits(
+  initial_pregnant_cohort_df,
+  Matcho_outcome_limits, "LB"
+) %>%
+  aou_compute()
+
+# add stillbirth episodes to livebirth episodes
+# after making sure they are sufficiently spaced
+add_stillbirth_df <- add_stillbirth(final_stillbirth_visits_df, final_livebirth_visits_df, Matcho_outcome_limits)
+
+# add ectopic episodes to previous
+add_ectopic_df <- add_ectopic(add_stillbirth_df, Matcho_outcome_limits, final_ectopic_visits_df)
+
+# add abortion episodes to previous
+add_abortion_df <- add_abortion(add_ectopic_df, Matcho_outcome_limits, final_abortion_visits_df)
+
+# add delivery-only episodes to previous
+add_delivery_df <- add_delivery(add_abortion_df, Matcho_outcome_limits, final_delivery_visits_df)
+
+# calculate start of pregnancies based on outcomes
+# min start date = latest possible start date if shortest term
+# max start date = earliest possible start date if max term
+calculate_start_df <- calculate_start(add_delivery_df, Matcho_term_durations) %>%
+  aou_compute()
+
+## Gestation-based episodes
+
+# now go back to the initial set of concepts and find ones with gestation weeks
+gestation_visits_df <- gestation_visits(initial_pregnant_cohort_df)
+
+# identify the start of episodes based on the difference in time between gestational age-related concepts
+# and the actual difference in days
+gestation_episodes_df <- gestation_episodes(gestation_visits_df)
+
+# get various mins and maxes of gestational age and dates
+get_min_max_gestation_df <- get_min_max_gestation(gestation_episodes_df)
+
+## Combine gestation-based and outcome-based episodes
+
+# add gestation episodes to outcome episodes
+add_gestation_df <- add_gestation(calculate_start_df, get_min_max_gestation_df)
+
+# clean episodes by removing duplicate episodes and reclassifying outcome-based episodes
+clean_episodes_df <- clean_episodes(add_gestation_df)
+
+# remove any episodes that overlap and keep only the latter episode if the previous episode is PREG
+remove_overlaps_df <- remove_overlaps(clean_episodes_df)
+
+# keep subset of columns with episode start and end as well as category
+final_episodes_df <- final_episodes(remove_overlaps_df)
+
+# find the first gestation record within an episode and calculate the episode length
+# based on the date of the first gestation record and the visit date
+HIP_episodes_df <- final_episodes_with_length(final_episodes_df, gestation_visits_df) %>%
+  aou_compute()
+```
+
+
+```{r pps}
+source(here::here("code/algorithm/PPS_algorithm_functions.R"))
+
+# pull PPS concepts from each table
+input_GT_concepts_df <- input_GT_concepts(
+  condition_occurrence_tbl, procedure_occurrence_tbl, observation_tbl,
+  measurement_tbl, visit_occurrence_tbl, PPS_concepts
+)
+
+# get the gestational timing information for each concept
+get_PPS_episodes_df <- get_PPS_episodes(input_GT_concepts_df, PPS_concepts, person_tbl)
+
+# get the min and max dates for each episode
+PPS_episodes_df <- get_episode_max_min_dates(get_PPS_episodes_df)
+```
+
+```{r merge}
+source(here::here("code/algorithm/Merge_HIPPS_episodes.R"))
+
+# collect outcomes for PPS algorithm from lookahead window
+outcomes_per_episode_df <- outcomes_per_episode(PPS_episodes_df, get_PPS_episodes_df, initial_pregnant_cohort_df)
+
+# add outcomes to PPS episodes
+PPS_episodes_with_outcomes_df <- add_outcomes(outcomes_per_episode_df, PPS_episodes_df)
+
+# bring HIP episodes into environment
+HIP_episodes_local_df <- collect(HIP_episodes_df)
+
+# merge HIPS and PPS episodes
+final_merged_episodes_df <- final_merged_episodes(HIP_episodes_local_df, PPS_episodes_with_outcomes_df)
+
+# remove any duplicated episodes
+final_merged_episodes_no_duplicates_df <- final_merged_episodes_no_duplicates(final_merged_episodes_df)
+
+# add (some) demographic details
+final_merged_episode_detailed_df <- final_merged_episode_detailed(final_merged_episodes_no_duplicates_df)
+```
+
+```{r esd}
+source(here::here("code/algorithm/ESD_algorithm_functions.R"))
+
+# get timing concepts
+get_timing_concepts_df <- get_timing_concepts(
+  concept_tbl, condition_occurrence_tbl,
+  observation_tbl, measurement_tbl,
+  procedure_occurrence_tbl,
+  final_merged_episode_detailed_df, PPS_concepts
+)
+
+# get gestational timing info
+episodes_with_gestational_timing_info_df <- episodes_with_gestational_timing_info(get_timing_concepts_df)
+
+# merge with metadata
+merged_episodes_with_metadata_df <- merged_episodes_with_metadata(
+  episodes_with_gestational_timing_info_df,
+  final_merged_episode_detailed_df,
+  Matcho_term_durations
+)
+```
+
+```{r save}
+if (!dir.exists(here::here("workbench"))) dir.create("workbench")
+
+write_rds(merged_episodes_with_metadata_df, here::here("workbench/merged_episodes_with_metadata_df.rds"))
+
+allofus::aou_workspace_to_bucket(here::here("workbench/merged_episodes_with_metadata_df.rds"))
+```
+

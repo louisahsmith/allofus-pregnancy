@@ -1,0 +1,54 @@
+---
+title: Geography of All of Us pregnancies
+format:
+  html:
+    theme: cosmo
+df-print: kable
+execute: 
+  warning: false
+  message: false
+  cache: true
+---
+```{r}
+#| include: false
+# install.packages("pak")
+# pak::pak(c("'cartogram', 'sf', 'spData', 'tmap'"))
+```
+```{r}
+library(sf)
+library(spData)
+library(cartogram)
+library(tmap)
+```
+
+```{r}
+data(us_states)
+
+us_states <- st_transform(us_states, 2163)
+
+us_states <- merge(us_states, read.csv(here::here("results/percent_by_state.csv")),
+  by.x = "NAME", by.y = "state_of_residence", all.x = TRUE
+)
+
+crt_nat <- cartogram_ncont(us_states[, c("births_national")],
+  weight = "births_national", inplace = FALSE
+)
+
+national <- tm_shape(us_states) +
+  tm_borders(alpha = .25) +
+  tm_shape(crt_nat) +
+  tm_polygons("births_national", style = "jenks") +
+  tm_layout(frame = FALSE, legend.show = FALSE)
+
+crt_aou <- cartogram_ncont(us_states[, c("births_allofus")],
+  weight = "births_allofus", inplace = FALSE
+)
+
+aou <- tm_shape(us_states) +
+  tm_borders(alpha = .25) +
+  tm_shape(crt_aou) +
+  tm_polygons("births_allofus", style = "jenks") +
+  tm_layout(frame = FALSE, legend.show = FALSE)
+national
+aou
+```

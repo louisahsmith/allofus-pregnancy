@@ -1,0 +1,82 @@
+---
+title: Associations with pregnancy-related variables
+format:
+  html:
+    theme: cosmo
+df-print: kable
+execute: 
+  warning: false
+  message: false
+  cache: true
+---
+
+```{r}
+#| include: false
+# install.packages("pak")
+# pak::pak(c("roux-ohdsi/allofus"))
+```
+
+```{r}
+library(tidyverse)
+library(allofus)
+library(gtsummary)
+library(ggokabeito)
+theme_set(theme_classic())
+```
+
+```{r}
+con <- aou_connect()
+```
+
+```{r} 
+hipps <- read_rds(here::here("workbench/hipps_cleaned_restricted.rds"))
+```
+
+```{r}
+hipps <- hipps %>%
+  mutate(
+    race_eth_cat = fct_relevel(race_eth_cat, "White"),
+    edu_cat = fct_relevel(edu_cat, "College graduate"),
+    income_cat = fct_relevel(income_cat, "> 100k"),
+    marital_status_cat = fct_relevel(marital_status_cat, "Married/partnered"),
+    mom_age_cat = fct_relevel(mom_age_cat, "25-29 years"),
+    live_birth = as.numeric(final_outcome_category == "LB")
+  )
+
+hipps_per_person <- hipps %>%
+  arrange(episode_number) %>%
+  group_by(
+    person_id, race_eth_cat, edu_cat,
+    income_cat, marital_status_cat
+  ) %>%
+  summarize(
+    n_pregnancies = n(),
+    gt_one_preg = as.numeric(n_pregnancies > 1),
+    age_at_first = mom_age_cat[1],
+    .groups = "drop"
+  )
+
+glm(
+  gt_one_preg ~ race_eth_cat + edu_cat + income_cat +
+    marital_status_cat + age_at_first,
+  family = poisson, data = hipps_per_person
+) %>%
+  tbl_regression(exponentiate = TRUE, tidy_fun = partial(tidy_robust, vcov = "HC1"))
+
+glm(
+  preterm_status_from_calculation ~ race_eth_cat + edu_cat + income_cat +
+    marital_status_cat + mom_age_cat,
+  family = poisson,
+  data = hipps, subset = final_outcome_category == "LB"
+) %>%
+  tbl_regression(exponentiate = TRUE, tidy_fun = partial(tidy_robust, vcov = "HC1"))
+
+glm(
+  live_birth ~ race_eth_cat + edu_cat + income_cat +
+    marital_status_cat + mom_age_cat,
+  data = hipps, family = poisson
+) %>%
+  tbl_regression(exponentiate = TRUE, tidy_fun = partial(tidy_robust, vcov = "HC1"))
+```
+
+

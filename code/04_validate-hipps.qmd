@@ -1,0 +1,386 @@
+---
+title: Validate HIPPS algorithm using survey data
+format:
+  html:
+    theme: cosmo
+df-print: kable
+execute: 
+  warning: false
+  message: false
+  cache: true
+---
+```{r}
+#| include: false
+# install.packages("pak")
+# pak::pak(c("roux-ohdsi/allofus"))
+```
+
+```{r}
+library(allofus)
+library(tidyverse)
+library(gtsummary)
+```
+
+```{r}
+con <- aou_connect()
+```
+
+```{r}
+hipps <- read_rds(here::here("workbench/hipps_cleaned.rds"))
+```
+
+```{r}
+ehr_female <- tbl(con, "cb_search_person") %>%
+  filter(sex_at_birth != "Male", has_ehr_data == 1) %>%
+  select(person_id, dob)
+```
+
+```{r}
+poss_preg <- ehr_female %>%
+  mutate(
+    date_15 = date_add(dob, sql("INTERVAL 15 year")),
+    date_55 = date_add(dob, sql("INTERVAL 55 year"))
+  ) %>%
+  inner_join(
+    aou_observation_period(),
+    by = join_by(person_id, overlaps(
+      date_15, date_55,
+      observation_period_start_date, observation_period_end_date
+    ))
+  )
+```
+
+```{r}
+tally(distinct(poss_preg, person_id)) %>% collect()
+```
+
+```{r}
+surv_preg <- aou_survey(distinct(poss_preg, person_id), questions = c(1585811), question_output = c("pregnancy"), collect = TRUE) %>%
+  mutate(pregnancy = ifelse(pregnancy %in% c("PreferNotToAnswer", "Skip"), "Skip", pregnancy))
+```
+
+```{r}
+combined_dat <- collect(poss_preg) %>%
+  left_join(surv_preg) %>%
+  left_join(hipps, by = join_by(person_id, dob, pregnancy, pregnancy_date), relationship = "many-to-many") %>%
+  mutate(
+    age_at_survey = as.numeric(pregnancy_date - dob) / 365,
+    ehr_interval = interval(observation_period_start_date, observation_period_end_date),
+    survey_during_ehr = pregnancy_date %within% ehr_interval,
+    week_12 = inferred_episode_start + weeks(12),
+    # the hipps pregnancy interval after week 12 (assume they know by then, though not always the case!)
+    hipps_interval_12 = interval(week_12, inferred_episode_end),
+    # did they take the survey while they should have known they were pregnant according to hipps
+    survey_after_week_12 = as.numeric(pregnancy_date %within% hipps_interval_12),
+    survey_after_week_12 = ifelse(is.na(survey_after_week_12), 0, survey_after_week_12),
+    hipps_interval_12_buffer = interval(week_12, inferred_episode_end + days(14)),
+    survey_after_week_12_buffer = as.numeric(pregnancy_date %within% hipps_interval_12_buffer),
+    survey_after_week_12_buffer = ifelse(is.na(survey_after_week_12_buffer), 0, survey_after_week_12_buffer),
+    # expanded hipps interval to account for imprecise dates
+    buffer_interval = interval(inferred_episode_start - days(14), inferred_episode_end + days(14)),
+    # did they take the survey at any time in the expanded hipps interval (0 for people who didn't have a hipps preg)
+    survey_within_buffer = as.numeric(pregnancy_date %within% buffer_interval),
+    survey_within_buffer = ifelse(is.na(survey_within_buffer), 0, survey_within_buffer),
+    # did they take the survey within the exact hipps interval
+    survey_within_exact = as.numeric(pregnancy_date %within% interval(inferred_episode_start, inferred_episode_end)),
+    survey_within_exact = ifelse(is.na(survey_within_exact), 0, survey_within_exact),
+    time_diff = inferred_episode_end - pregnancy_date,
+    time_to_closest = case_when(
+      is.na(week_12) ~ 1000000,
+      survey_within_buffer == 1 ~ 0,
+      abs(inferred_episode_end - pregnancy_date) <
+        abs(week_12 - pregnancy_date) ~ as.numeric(abs(inferred_episode_end - pregnancy_date)),
+      TRUE ~ as.numeric(abs(week_12 - pregnancy_date))
+    )
+  ) %>%
+  filter(survey_during_ehr, age_at_survey <= 55) %>%
+  group_by(person_id) %>%
+  slice_min(order_by = time_to_closest, n = 1, with_ties = FALSE) %>%
+  ungroup()
+```
+
+```{r}
+tally(distinct(combined_dat, person_id)) %>% collect()
+```
+
+PPV = probability of saying you are pregnant on the survey, given that you have been identified as pregnant by hipps (past 12 weeks)
+
+```{r}
+combined_dat %>%
+  filter(survey_after_week_12 == 1, inferred_episode_end > week_12) %>%
+  mutate(pregnancy = ifelse(pregnancy %in% c("Skip", "DontKnow"), "Skip/DK", pregnancy)) %>%
+  count(pregnancy)
+
+combined_dat %>%
+  filter(survey_after_week_12 == 1, inferred_episode_end > week_12, pregnancy %in% c("No", "Yes")) %>%
+  janitor::tabyl(pregnancy) %>%
+  filter(pregnancy == "Yes") %>%
+  pull(percent)
+```
+
+NPV = probability you say you aren't pregnant given that we say you aren't pregnant around the time you take the survey
+
+```{r}
+combined_dat %>%
+  filter(survey_within_buffer == 0, pregnancy %in% c("No", "Yes")) %>%
+  janitor::tabyl(pregnancy) %>%
+  filter(pregnancy == "No") %>%
+  pull(percent)
+```
+
+sensitivity = probability of identifying you as pregnant (within buffer zone) given that you reported you were pregnant on the survey
+if you are a 0 here, we don't know whether we missed you entirely or whether the dates were exatly right (probably the latter)
+
+```{r}
+combined_dat %>%
+  filter(pregnancy == "Yes") %>%
+  janitor::tabyl(survey_within_buffer)
+```
+
+specificity = probability we didn't identify you as > 12 weeks pregnant given you said you weren't pregnant
+
+```{r}
+combined_dat %>%
+  filter(pregnancy == "No", inferred_episode_end > week_12 | is.na(inferred_episode_end)) %>%
+  janitor::tabyl(survey_after_week_12)
+```
+
+here are the exact values
+
+```{r}
+combined_dat %>%
+  filter(pregnancy %in% c("Yes", "No")) %>%
+  janitor::tabyl(pregnancy, survey_within_exact)
+```
+
+```{r}
+combined_dat %>%
+  filter(pregnancy %in% c("Yes", "No")) %>%
+  janitor::tabyl(pregnancy, survey_within_exact) %>%
+  janitor::adorn_percentages()
+```
+
+On average, among people who said they were not pregnant during a HIPPS assigned pregnancy episode, they took the survey on average x days from the end of the pregnancy episode. x% of those were within two weeks of the end of the interval. Additional people might not have known they were pregnant at the time.
+
+```{r}
+combined_dat %>%
+  filter(survey_after_week_12 == 1, inferred_episode_end > week_12, pregnancy == "No") %>%
+  summarise(n = n(), quantile(time_diff, .25), median(time_diff), quantile(time_diff, .75))
+```
+
+```{r}
+combined_dat %>%
+  filter(survey_after_week_12 == 1, inferred_episode_end > week_12, pregnancy == "No") %>%
+  mutate(within_14 = as.numeric(abs(time_diff) <= 14)) %>%
+  janitor::tabyl(within_14) %>%
+  select(-n) %>%
+  mutate(percent = round(percent * 100))
+```
+
+```{r}
+combined_dat %>%
+  filter(survey_within_buffer == 0, pregnancy %in% c("No", "Yes")) %>%
+  janitor::tabyl(pregnancy)
+```
+
+So what's the deal with the people who said they were pregnant but we didn't catch their pregnancy?
+
+```{r}
+hidden_preg <- combined_dat %>%
+  filter(pregnancy == "Yes", survey_within_buffer == 0) %>%
+  mutate(
+    survey_start = pregnancy_date - days(260),
+    survey_end = pregnancy_date + days(260)
+  )
+found_preg <- combined_dat %>%
+  filter(pregnancy == "Yes", survey_within_buffer == 1) %>%
+  mutate(
+    survey_start = pregnancy_date - days(260),
+    survey_end = pregnancy_date + days(260)
+  )
+concept_names <- tbl(con, "concept") %>%
+  filter(vocabulary_id != "PPI") %>%
+  select(concept_name, concept_id)
+```
+
+```{r}
+HIP_concepts <- readxl::read_excel(here::here("data/HIP_concepts.xlsx")) %>%
+  select(-concept_name) %>%
+  distinct()
+```
+
+```{r}
+cond_hidden <- tbl(con, "condition_occurrence") %>%
+  filter(person_id %in% !!hidden_preg$person_id) %>%
+  inner_join(concept_names, by = join_by(condition_concept_id == concept_id)) %>%
+  collect() %>%
+  inner_join(hidden_preg, by = join_by(person_id, between(condition_start_date, survey_start, survey_end))) %>%
+  mutate(concept_id = as.double(condition_concept_id)) %>%
+  left_join(HIP_concepts, by = join_by(concept_id))
+```
+
+```{r}
+cond_found <- tbl(con, "condition_occurrence") %>%
+  filter(person_id %in% !!found_preg$person_id) %>%
+  inner_join(concept_names, by = join_by(condition_concept_id == concept_id)) %>%
+  collect() %>%
+  inner_join(found_preg, by = join_by(person_id, between(condition_start_date, survey_start, survey_end))) %>%
+  mutate(concept_id = as.double(condition_concept_id)) %>%
+  left_join(HIP_concepts, by = join_by(concept_id))
+```
+
+```{r}
+proc_hidden <- tbl(con, "procedure_occurrence") %>%
+  filter(person_id %in% !!hidden_preg$person_id) %>%
+  inner_join(concept_names, by = join_by(procedure_concept_id == concept_id)) %>%
+  collect() %>%
+  inner_join(hidden_preg, by = join_by(person_id, between(procedure_date, survey_start, survey_end))) %>%
+  mutate(concept_id = as.double(procedure_concept_id)) %>%
+  left_join(HIP_concepts, by = join_by(concept_id))
+```
+
+```{r}
+proc_found <- tbl(con, "procedure_occurrence") %>%
+  filter(person_id %in% !!found_preg$person_id) %>%
+  inner_join(concept_names, by = join_by(procedure_concept_id == concept_id)) %>%
+  collect(page_size = 25000) %>%
+  inner_join(found_preg, by = join_by(person_id, between(procedure_date, survey_start, survey_end))) %>%
+  mutate(concept_id = as.double(procedure_concept_id)) %>%
+  left_join(HIP_concepts, by = join_by(concept_id))
+```
+
+```{r}
+all_found <- cond_found %>%
+  select(person_id, concept_id, category, gest_value, pregnancy_date, date = condition_start_date) %>%
+  bind_rows(select(proc_found, person_id, concept_id, category, gest_value, pregnancy_date, date = procedure_date)) %>%
+  mutate(type = "found")
+```
+
+```{r}
+all_hidden <- cond_hidden %>%
+  select(person_id, concept_id, category, gest_value, pregnancy_date, date = condition_start_date) %>%
+  bind_rows(select(proc_hidden, person_id, concept_id, category, gest_value, pregnancy_date, date = procedure_date)) %>%
+  mutate(type = "hidden")
+```
+
+```{r}
+all <- bind_rows(all_found, all_hidden) %>%
+  mutate(
+    time_from_survey = as.numeric(date - pregnancy_date),
+    hips_time_from_survey = ifelse(is.na(category), NA, time_from_survey)
+  ) %>%
+  distinct() %>%
+  group_by(type, person_id) %>%
+  summarise(
+    n = n(),
+    n_hip = sum(!is.na(category)),
+    n_AB = sum(category == "AB", na.rm = TRUE),
+    n_DELIV = sum(category == "DELIV", na.rm = TRUE),
+    n_ECT = sum(category == "ECT", na.rm = TRUE),
+    n_LB = sum(category == "LB", na.rm = TRUE),
+    n_PREG = sum(category == "PREG", na.rm = TRUE),
+    n_SA = sum(category == "SA", na.rm = TRUE),
+    n_SB = sum(category == "SB", na.rm = TRUE),
+    med_time_from_survey = median(time_from_survey, na.rm = TRUE),
+    mean_time_from_survey = mean(time_from_survey, na.rm = TRUE),
+    min_time_from_survey = min(time_from_survey, na.rm = TRUE),
+    max_time_from_survey = max(time_from_survey, na.rm = TRUE),
+    med_time_from_survey_hips = median(hips_time_from_survey, na.rm = TRUE),
+    mean_time_from_survey_hips = mean(hips_time_from_survey, na.rm = TRUE),
+    min_time_from_survey_hips = min(hips_time_from_survey, na.rm = TRUE),
+    max_time_from_survey_hips = max(hips_time_from_survey, na.rm = TRUE),
+    .groups = "drop"
+  )
+```
+
+```{r}
+all_stats <- bind_rows(select(hidden_preg, person_id), select(found_preg, person_id)) %>%
+  left_join(all, by = "person_id") %>%
+  mutate(
+    type = ifelse(is.na(type), "hidden", type),
+    across(starts_with("n"), ~ ifelse(is.na(.x), 0, .x)),
+    across(where(is.numeric), ~ ifelse(is.infinite(.x), NA, .x))
+  )
+```
+
+```{r}
+table_stats <- all_stats %>%
+  select(-person_id) %>%
+  tbl_summary(by = type, type = everything() ~ "continuous", digits = list(starts_with("m") ~ 0, starts_with("n") ~ 1), missing = "no", statistic = all_continuous() ~ "{mean} ({sd})") %>%
+  add_p()
+table_stats
+```
+
+## Validation as in Jones et al
+```{r}
+extra_concepts <- tribble(
+  ~concept_id, ~min_months, ~max_months,
+  74698, 4.5, 11,
+  440795L, 5, 11,
+  2211760L, 6, 10,
+  81636L, 7, 11,
+  4062557L, 5, 11,
+  45757113L, 5, 9.25,
+  2211758L, 6, 10,
+  2211759L, 6, 11,
+  2110284L, 6, 11,
+  438542L, 1, 6,
+  4024659L, 6, 10,
+  2101829L, 1, 11,
+  40482406L, 4.5, 11,
+  2314183L, 2, 7,
+  437623L, 6, 11,
+  72693L, 6, 11,
+  4167493L, 5, 11,
+  2101830L, 1, 11,
+  36712703L, 5, 11,
+  77619L, 5.5, 11,
+  45766222L, 6.75, 11,
+  36712695L, 3, 11,
+  4218813L, 7, 11,
+  2211749L, 4, 11,
+  2211757L, 1, 6
+)
+pull_extra <- function(extra_concepts, df, start_date_col, id_col) {
+  top_concepts_df <- rename(df, "domain_concept_start_date" = start_date_col, "domain_concept_id" = id_col) %>%
+    filter(domain_concept_id %in% !!extra_concepts$concept_id) %>%
+    select(person_id, domain_concept_start_date, domain_concept_id) %>%
+    left_join(select(tbl(con, "concept"), concept_id, concept_name), by = c("domain_concept_id" = "concept_id")) %>%
+    distinct()
+  return(top_concepts_df)
+}
+
+c_o <- pull_extra(extra_concepts, tbl(con, "condition_occurrence"), "condition_start_date", "condition_concept_id")
+p_o <- pull_extra(extra_concepts, tbl(con, "procedure_occurrence"), "procedure_date", "procedure_concept_id")
+o_df <- pull_extra(extra_concepts, tbl(con, "observation"), "observation_date", "observation_concept_id")
+m_df <- pull_extra(extra_concepts, tbl(con, "measurement"), "measurement_date", "measurement_concept_id")
+
+extra_preg_related_concepts <- list(c_o, p_o, o_df, m_df) %>%
+  reduce(union_all) %>%
+  collect()
+
+matches <- extra_preg_related_concepts %>%
+  mutate(domain_concept_id = as.double(domain_concept_id)) %>%
+  left_join(extra_concepts, by = join_by(domain_concept_id == concept_id)) %>%
+  left_join(hipps, by = join_by(
+    person_id,
+    between(domain_concept_start_date, inferred_episode_start, inferred_episode_end)
+  )) %>%
+  mutate(
+    expected_min_date = inferred_episode_start %m+% months(as.integer(min_months)),
+    expected_max_date = inferred_episode_start %m+% months(as.integer(max_months)),
+    is_match = between(domain_concept_start_date, expected_min_date, expected_max_date),
+    is_match = ifelse(is.na(is_match), 0, is_match)
+  )
+
+matches %>%
+  group_by(concept_name) %>%
+  count(is_match) %>%
+  ungroup() %>%
+  pivot_wider(names_from = is_match, values_from = n) %>%
+  transmute(concept_name,
+    n_total = `0` + `1`,
+    overlapping = `1`,
+    percent = overlapping / n_total
+  )
+```

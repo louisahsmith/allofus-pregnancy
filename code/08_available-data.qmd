@@ -1,0 +1,104 @@
+---
+title: Other available data among All of Us pregnant people
+format:
+  html:
+    theme: cosmo
+df-print: kable
+execute: 
+  warning: false
+  message: false
+  cache: true
+---
+
+```{r}
+#| include: false
+# install.packages("pak")
+# pak::pak(c("roux-ohdsi/allofus"))
+```
+
+```{r}
+library(tidyverse)
+library(allofus)
+library(gtsummary)
+library(ggokabeito)
+theme_set(theme_classic())
+```
+
+```{r}
+con <- aou_connect()
+```
+
+```{r} 
+hipps <- read_rds(here::here("workbench/hipps_cleaned_restricted.rds"))
+```
+
+```{r}
+tbl(con, "activity_summary") %>%
+  distinct(person_id) %>%
+  filter(person_id %in% !!unique(hipps$person_id)) %>%
+  tally()
+```
+
+```{r}
+activity_data <- tbl(con, "activity_summary") %>%
+  distinct(person_id, date) %>%
+  filter(person_id %in% !!unique(hipps$person_id)) %>%
+  collect() %>%
+  inner_join(hipps, by = join_by(person_id, between(date, inferred_episode_start, inferred_episode_end))) %>%
+  group_by(person_id, episode_num) %>%
+  count() %>%
+  ungroup() %>%
+  pull(n)
+length(activity_data)
+summary(activity_data)
+
+heart_rate_data <- tbl(con, "heart_rate_summary") %>%
+  distinct(person_id, date) %>%
+  filter(person_id %in% !!unique(hipps$person_id)) %>%
+  collect() %>%
+  inner_join(hipps, by = join_by(person_id, between(date, inferred_episode_start, inferred_episode_end))) %>%
+  group_by(person_id, episode_num) %>%
+  count() %>%
+  ungroup() %>%
+  pull(n)
+length(heart_rate_data)
+summary(heart_rate_data)
+
+sleep_data <- tbl(con, "sleep_daily_summary") %>%
+  distinct(person_id, sleep_date) %>%
+  filter(person_id %in% !!unique(hipps$person_id)) %>%
+  collect() %>%
+  inner_join(hipps, by = join_by(person_id, between(sleep_date, inferred_episode_start, inferred_episode_end))) %>%
+  group_by(person_id, episode_num) %>%
+  count() %>%
+  ungroup() %>%
+  pull(n)
+length(sleep_data)
+summary(sleep_data)
+```
+
+```{r}
+has_gen <- tbl(con, "cb_search_person") %>%
+  select(
+    person_id, has_structural_variant_data,
+    has_whole_genome_variant, has_array_data,
+    has_lr_whole_genome_variant
+  ) %>%
+  filter(person_id %in% !!unique(hipps$person_id)) %>%
+  count(across(starts_with("has"))) %>%
+  collect()
+has_gen
+```
+
+```{r}
+has_surveys <- tbl(con, "ds_survey") %>%
+  filter(person_id %in% !!unique(hipps$person_id)) %>%
+  distinct(person_id, survey) %>%
+  collect()
+has_surveys %>%
+  mutate(survey = str_sub(survey, 1, 15)) %>%
+  pivot_wider(names_from = "survey", values_from = "survey") %>%
+  select(-person_id) %>%
+  mice::md.pattern(rotate.names = TRUE) %>%
+  as_tibble(rownames = "n")
+```

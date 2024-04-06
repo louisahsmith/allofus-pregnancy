@@ -1,0 +1,18 @@
+---
+title: Session info
+format:
+  html:
+    theme: cosmo
+df-print: kable
+execute: 
+  warning: false
+  message: false
+  cache: true
+---
+
+```{r}
+info <- allofus::aou_session_info()
+info$Platform
+info$AoU_Release
+info$Packages
+```
