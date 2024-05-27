@@ -226,18 +226,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>add_delivery_df <span class="ot">&lt;-</span> <span class="fu">add_delivery</span>(add_abortion_df, Matcho_outcome_limits, final_delivery_visits_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Total preliminary episodes:
+DELIV
+ 6828
 LB
 26517
 ECT
- 1579
+ 1583
 AB
  1696
 SA
  5116
 SB
-  232
-DELIV
- 6828</code></pre>
+  232</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate start of pregnancies based on outcomes</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co"># min start date = latest possible start date if shortest term</span></span>
@@ -263,31 +263,31 @@ DELIV
 <span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>add_gestation_df <span class="ot">&lt;-</span> <span class="fu">add_gestation</span>(calculate_start_df, get_min_max_gestation_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Total number of outcome-based episodes:
-42009
+42013
 Total number of gestation-based episodes:
 24167
 Total number of only outcome-based episodes after merging:
-23399
+23397
 Total number of only gestation-based episodes after merging:
-5557
+5551
 Total number of episodes with both after merging:
-18610</code></pre>
+18616</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># clean episodes by removing duplicate episodes and reclassifying outcome-based episodes</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>clean_episodes_df <span class="ot">&lt;-</span> <span class="fu">clean_episodes</span>(add_gestation_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Total number of episodes over maximum term duration:
-401
+406
 Total number of episodes under minimum term duration:
-170
+171
 Total number of episodes with negative number of days between outcome and max_gest_date:
-450</code></pre>
+446</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># remove any episodes that overlap and keep only the latter episode if the previous episode is PREG</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>remove_overlaps_df <span class="ot">&lt;-</span> <span class="fu">remove_overlaps</span>(clean_episodes_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Total number of episodes with removed outcome:
-779</code></pre>
+790</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># keep subset of columns with episode start and end as well as category</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>final_episodes_df <span class="ot">&lt;-</span> <span class="fu">final_episodes</span>(remove_overlaps_df)</span>
@@ -328,15 +328,15 @@ Total number of episodes with negative number of days between outcome and max_ge
 <span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>final_merged_episodes_df <span class="ot">&lt;-</span> <span class="fu">final_merged_episodes</span>(HIP_episodes_local_df, PPS_episodes_with_outcomes_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Total initial number of episodes for HIP:
-47116
+47118
 Total initial number of episodes for PPS:
 43657
 Count of HIP episodes that overlap multiple PPS episodes:
-403
+395
 Count of PPS episodes that overlap multiple HIP episodes:
-879
+865
 Total number of HIP episodes after merging:
-47116
+47118
 Total number of PPS episodes after merging:
 43657</code></pre>
 </div>
@@ -344,17 +344,17 @@ Total number of PPS episodes after merging:
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>final_merged_episodes_no_duplicates_df <span class="ot">&lt;-</span> <span class="fu">final_merged_episodes_no_duplicates</span>(final_merged_episodes_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Count of duplicated algorithm 1 episodes
-403
+395
 Count of duplicated algorithm 2 episodes
-879
+865
 count of unduplicated episodes with both
-30191
+30183
 count of unduplicated algorithm 1 episodes
-16211
+16216
 count of unduplicated algorithm 2 episodes
-13244
+13246
 total unduplicated episodes
-59646</code></pre>
+59645</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add (some) demographic details</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>final_merged_episode_detailed_df <span class="ot">&lt;-</span> <span class="fu">final_merged_episode_detailed</span>(final_merged_episodes_no_duplicates_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -374,9 +374,9 @@ total unduplicated episodes
 <span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>episodes_with_gestational_timing_info_df <span class="ot">&lt;-</span> <span class="fu">episodes_with_gestational_timing_info</span>(get_timing_concepts_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Number of episodes with GR3m intervals:
-17668
+17665
 Percent of cases that contain a GR3m intersection that ALSO have majority GW overlap:
-46.50215</code></pre>
+46.49873</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># merge with metadata</span></span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>merged_episodes_with_metadata_df <span class="ot">&lt;-</span> <span class="fu">merged_episodes_with_metadata</span>(</span>
@@ -395,8 +395,8 @@ Max pregnancy end date:
 2022-07-01</code></pre>
 </div>
 </div>
-<div class="cell" data-hash="01_run-hipps_cache/html/save_ef43c004a4eea827fa9a7f8573ad350c">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">dir.exists</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"workbench"</span>))) <span class="fu">dir.create</span>(<span class="st">"workbench"</span>)</span>
+<div class="cell" data-hash="01_run-hipps_cache/html/save_742aec6c16c377410691f9b9a2d1b929">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">dir.exists</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"workbench"</span>))) <span class="fu">dir.create</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"workbench"</span>))</span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="fu">write_rds</span>(merged_episodes_with_metadata_df, here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"workbench/merged_episodes_with_metadata_df.rds"</span>))</span>
 <span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a></span>

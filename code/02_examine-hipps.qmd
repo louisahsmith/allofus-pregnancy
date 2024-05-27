@@ -7,7 +7,6 @@ df-print: kable
 execute: 
   warning: false
   message: false
-  cache: true
   error: true
 ---
 
@@ -218,7 +217,7 @@ hipps_w_demo %>%
     HIP_flag == 1 & PPS_flag == 1,
     inferred_episode_start > as.Date("2016-01-01")
   ) %>%
-  mutate(conc = "High-quality episodes") %>%
+  mutate(conc = "Data-rich episodes") %>%
   bind_rows(hipps_w_demo %>% mutate(conc = "All")) %>%
   mutate(
     resolution = case_when(
@@ -336,7 +335,7 @@ hipps_cleaned <- hipps_w_demo %>%
       "Never married" = "NeverMarried"
     ),
     across(
-      c(gender_cat, race_eth_cat, edu_cat, income_cat, marital_status_cat),
+      c(gender_cat, orientation_cat, race_eth_cat, edu_cat, income_cat, marital_status_cat),
       ~ fct_drop(na_if(.x, "No answer"))
     )
   ) %>%
@@ -369,7 +368,10 @@ hipps_cleaned <- hipps_w_demo %>%
       labels = c("2015 and earlier", as.character(2016:2022))
     ),
     mom_age_cat_table = fct_collapse(mom_age_cat, "45 years and over" = c("45-49 years", "50 years and over")),
-    mom_age_cat_table = fct_drop(mom_age_cat_table)
+    mom_age_cat_table = fct_drop(mom_age_cat_table),
+    across(where(is.factor), ~ fct_lump_min(.x, min = 20)),
+         across(c(state_cat, gender_cat, orientation_cat, race_eth_cat, marital_status_cat), fct_infreq),
+    state_cat = fct_lump_min(state_cat, min = 20)
   )
 ```
 
@@ -404,12 +406,6 @@ hipps_cleaned %>%
 ```{r}
 demo_table <- hipps_cleaned %>%
   distinct(person_id, gender_cat, orientation_cat, race_eth_cat, income_cat, edu_cat, marital_status_cat, state_cat) %>%
-  mutate(across(where(is.factor), ~ fct_lump_min(.x, min = 20)),
-    state_cat = fct_infreq(state_cat),
-    state_cat = fct_lump_min(state_cat, min = 20),
-    orientation_cat = fct_relevel(orientation_cat, "Straight", "Bisexual", "Gay/lesbian", "None"),
-    orientation_cat = fct_recode(orientation_cat, NULL = "No answer")
-  ) %>%
   tbl_summary(
     include = c(gender_cat, orientation_cat, race_eth_cat, income_cat, edu_cat, state_cat),
     label = list(

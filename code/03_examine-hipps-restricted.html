@@ -123,17 +123,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </header>
 
-<div class="cell" data-hash="03_examine-hipps-restricted_cache/html/unnamed-chunk-2_d102cb8998960a2cd564c67f1bfd7e1c">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(allofus)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggokabeito)</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gtsummary)</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_classic</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="03_examine-hipps-restricted_cache/html/unnamed-chunk-3_77d692d81c5f955118478c8df80b986a">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">aou_connect</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="03_examine-hipps-restricted_cache/html/unnamed-chunk-4_0e91034ebf57dd947736db5b64f22989">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>all <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"workbench/merged_episodes_with_metadata_df.rds"</span>))</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">count</span>(all,</span>
@@ -159,17 +159,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tr class="even">
 <td style="text-align: left;">FALSE</td>
 <td style="text-align: left;">TRUE</td>
-<td style="text-align: right;">12548</td>
+<td style="text-align: right;">12555</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">TRUE</td>
 <td style="text-align: left;">FALSE</td>
-<td style="text-align: right;">11207</td>
+<td style="text-align: right;">11208</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">TRUE</td>
 <td style="text-align: left;">TRUE</td>
-<td style="text-align: right;">18970</td>
+<td style="text-align: right;">18961</td>
 </tr>
 </tbody>
 </table>
@@ -180,28 +180,30 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    inferred_episode_start <span class="sc">&lt;</span> inferred_episode_end,</span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    HIP_flag <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span> PPS_flag <span class="sc">==</span> <span class="dv">1</span>,</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    inferred_episode_start <span class="sc">&gt;</span> <span class="fu">as.Date</span>(<span class="st">"2016-01-01"</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    inferred_episode_start <span class="sc">&gt;=</span> <span class="fu">as.Date</span>(<span class="st">"2016-01-01"</span>)</span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="03_examine-hipps-restricted_cache/html/unnamed-chunk-5_61f2bef2707190edb6aa17ca751f2420">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>hipps_w_demo <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"workbench/hipps_cleaned.rds"</span>)) <span class="sc">%&gt;%</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    inferred_episode_start <span class="sc">&lt;</span> inferred_episode_end,</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    HIP_flag <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span> PPS_flag <span class="sc">==</span> <span class="dv">1</span>,</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    inferred_episode_start <span class="sc">&gt;</span> <span class="fu">as.Date</span>(<span class="st">"2016-01-01"</span>)</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    inferred_episode_start <span class="sc">&gt;=</span> <span class="fu">as.Date</span>(<span class="st">"2016-01-01"</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">c</span>(state_cat, gender_cat, orientation_cat, race_eth_cat, marital_status_cat), fct_infreq),</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>           <span class="fu">across</span>(<span class="fu">where</span>(is.factor), fct_drop))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="03_examine-hipps-restricted_cache/html/unnamed-chunk-6_2f490c7bd001a08cfa8384694b889380">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(hipps_w_demo)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 18970</code></pre>
+<pre><code>[1] 18968</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(hipps_w_demo<span class="sc">$</span>person_id))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 14234</code></pre>
+<pre><code>[1] 14237</code></pre>
 </div>
 </div>
-<div class="cell" data-hash="03_examine-hipps-restricted_cache/html/unnamed-chunk-7_9ff1d291c1663afead337e46078a2c0e">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>hipps_w_demo <span class="sc">%&gt;%</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">tabyl</span>(outcome_category)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -217,40 +219,40 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Live birth</td>
-<td style="text-align: right;">11379</td>
-<td style="text-align: right;">0.5998419</td>
+<td style="text-align: right;">11385</td>
+<td style="text-align: right;">0.6002214</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Missing outcome</td>
-<td style="text-align: right;">5053</td>
-<td style="text-align: right;">0.2663679</td>
+<td style="text-align: right;">5043</td>
+<td style="text-align: right;">0.2658688</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Delivery record only</td>
-<td style="text-align: right;">955</td>
-<td style="text-align: right;">0.0503426</td>
+<td style="text-align: right;">951</td>
+<td style="text-align: right;">0.0501371</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Abortion</td>
-<td style="text-align: right;">1297</td>
-<td style="text-align: right;">0.0683711</td>
+<td style="text-align: right;">1298</td>
+<td style="text-align: right;">0.0684310</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Ectopic pregnancy</td>
-<td style="text-align: right;">211</td>
-<td style="text-align: right;">0.0111228</td>
+<td style="text-align: right;">212</td>
+<td style="text-align: right;">0.0111767</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Stillbirth</td>
-<td style="text-align: right;">75</td>
-<td style="text-align: right;">0.0039536</td>
+<td style="text-align: right;">79</td>
+<td style="text-align: right;">0.0041649</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
 </div>
-<div class="cell" data-hash="03_examine-hipps-restricted_cache/html/unnamed-chunk-8_4b23c0379d46d453424e4b267947490c">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>hipps_w_demo <span class="sc">%&gt;%</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">tabyl</span>(outcome_category) <span class="sc">%&gt;%</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">outcome_category =</span> <span class="fu">fct_rev</span>(outcome_category)) <span class="sc">%&gt;%</span></span>
@@ -271,7 +273,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><img src="03_examine-hipps-restricted_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<div class="cell" data-hash="03_examine-hipps-restricted_cache/html/unnamed-chunk-9_e7e6c4e6598c5982413a5bc0c21ed1a4">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>hipps_w_demo <span class="sc">%&gt;%</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">outcome_concordance_score =</span> <span class="fu">fct_rev</span>(<span class="fu">factor</span>(outcome_concordance_score))) <span class="sc">%&gt;%</span></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">tabyl</span>(outcome_category, outcome_concordance_score) <span class="sc">%&gt;%</span></span>
@@ -290,37 +292,37 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Live birth</td>
-<td style="text-align: left;">10237</td>
-<td style="text-align: left;">992</td>
-<td style="text-align: left;">150</td>
+<td style="text-align: left;">10247</td>
+<td style="text-align: left;">991</td>
+<td style="text-align: left;">147</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Missing outcome</td>
 <td style="text-align: left;">4239</td>
-<td style="text-align: left;">715</td>
-<td style="text-align: left;">99</td>
+<td style="text-align: left;">702</td>
+<td style="text-align: left;">102</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Delivery record only</td>
-<td style="text-align: left;">428</td>
+<td style="text-align: left;">427</td>
 <td style="text-align: left;">25</td>
-<td style="text-align: left;">502</td>
+<td style="text-align: left;">499</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Abortion</td>
-<td style="text-align: left;">757</td>
-<td style="text-align: left;">67</td>
-<td style="text-align: left;">473</td>
+<td style="text-align: left;">759</td>
+<td style="text-align: left;">65</td>
+<td style="text-align: left;">474</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Ectopic pregnancy</td>
 <td style="text-align: left;">102</td>
 <td style="text-align: left;">&lt;20</td>
-<td style="text-align: left;">103</td>
+<td style="text-align: left;">104</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Stillbirth</td>
-<td style="text-align: left;">59</td>
+<td style="text-align: left;">62</td>
 <td style="text-align: left;">&lt;20</td>
 <td style="text-align: left;">&lt;20</td>
 </tr>
@@ -329,7 +331,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </div>
-<div class="cell" data-hash="03_examine-hipps-restricted_cache/html/unnamed-chunk-10_ccb15d91c6088ca383f2371494fe621b">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>janitor<span class="sc">::</span><span class="fu">tabyl</span>(hipps_w_demo, outcome_concordance_score)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="kable-table">
@@ -344,25 +346,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tbody>
 <tr class="odd">
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">1333</td>
-<td style="text-align: right;">0.0702688</td>
+<td style="text-align: right;">1332</td>
+<td style="text-align: right;">0.0702235</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">1815</td>
-<td style="text-align: right;">0.0956774</td>
+<td style="text-align: right;">1800</td>
+<td style="text-align: right;">0.0948967</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">2</td>
-<td style="text-align: right;">15822</td>
-<td style="text-align: right;">0.8340538</td>
+<td style="text-align: right;">15836</td>
+<td style="text-align: right;">0.8348798</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
 </div>
-<div class="cell" data-hash="03_examine-hipps-restricted_cache/html/unnamed-chunk-11_c6af90dee2d532eefb1809fed1f89f02">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>hipps_w_demo <span class="sc">%&gt;%</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">outcome_category =</span> <span class="fu">fct_rev</span>(outcome_category)) <span class="sc">%&gt;%</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
@@ -383,7 +385,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><img src="03_examine-hipps-restricted_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<div class="cell" data-hash="03_examine-hipps-restricted_cache/html/unnamed-chunk-12_34bc6e5059bf7fd771d26d66335faaed">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>hipps_w_demo <span class="sc">%&gt;%</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">tabyl</span>(precision_category)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -399,50 +401,50 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">month</td>
-<td style="text-align: right;">499</td>
-<td style="text-align: right;">0.0263047</td>
+<td style="text-align: right;">498</td>
+<td style="text-align: right;">0.0262547</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">non-specific</td>
-<td style="text-align: right;">727</td>
-<td style="text-align: right;">0.0383237</td>
+<td style="text-align: right;">729</td>
+<td style="text-align: right;">0.0384332</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">three-month</td>
-<td style="text-align: right;">526</td>
-<td style="text-align: right;">0.0277280</td>
+<td style="text-align: right;">528</td>
+<td style="text-align: right;">0.0278364</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">three-week</td>
-<td style="text-align: right;">1083</td>
-<td style="text-align: right;">0.0570901</td>
+<td style="text-align: right;">1084</td>
+<td style="text-align: right;">0.0571489</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">two-month</td>
-<td style="text-align: right;">375</td>
-<td style="text-align: right;">0.0197681</td>
+<td style="text-align: right;">374</td>
+<td style="text-align: right;">0.0197174</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">two-week</td>
 <td style="text-align: right;">3185</td>
-<td style="text-align: right;">0.1678967</td>
+<td style="text-align: right;">0.1679144</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">week</td>
-<td style="text-align: right;">10517</td>
-<td style="text-align: right;">0.5544017</td>
+<td style="text-align: right;">10519</td>
+<td style="text-align: right;">0.5545656</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">week_poor-support</td>
-<td style="text-align: right;">2058</td>
-<td style="text-align: right;">0.1084871</td>
+<td style="text-align: right;">2051</td>
+<td style="text-align: right;">0.1081295</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
 </div>
-<div class="cell" data-hash="03_examine-hipps-restricted_cache/html/unnamed-chunk-13_e572882175ff7a6b2b12e5ce3a190cf5">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>hipps_w_demo <span class="sc">%&gt;%</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">resolution =</span> <span class="fu">case_when</span>(</span>
@@ -467,30 +469,30 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Week-level</td>
-<td style="text-align: right;">14785</td>
-<td style="text-align: right;">0.7793885</td>
+<td style="text-align: right;">14788</td>
+<td style="text-align: right;">0.7796288</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Week-level (1 concept)</td>
-<td style="text-align: right;">2058</td>
-<td style="text-align: right;">0.1084871</td>
+<td style="text-align: right;">2051</td>
+<td style="text-align: right;">0.1081295</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Month-level</td>
 <td style="text-align: right;">1400</td>
-<td style="text-align: right;">0.0738007</td>
+<td style="text-align: right;">0.0738085</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Non-specific</td>
-<td style="text-align: right;">727</td>
-<td style="text-align: right;">0.0383237</td>
+<td style="text-align: right;">729</td>
+<td style="text-align: right;">0.0384332</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
 </div>
-<div class="cell" data-hash="03_examine-hipps-restricted_cache/html/unnamed-chunk-14_ff01219ec9cb45e1c5373b724aac178c">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>hipps_w_demo <span class="sc">%&gt;%</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(outcome_category) <span class="sc">%&gt;%</span></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean =</span> <span class="fu">mean</span>(gestational_age_days_calculated), <span class="at">median =</span> <span class="fu">median</span>(gestational_age_days_calculated), <span class="at">min =</span> <span class="fu">min</span>(gestational_age_days_calculated), <span class="at">max =</span> <span class="fu">max</span>(gestational_age_days_calculated), <span class="at">q1 =</span> <span class="fu">quantile</span>(gestational_age_days_calculated, .<span class="dv">01</span>), <span class="at">q99 =</span> <span class="fu">quantile</span>(gestational_age_days_calculated, .<span class="dv">99</span>)) <span class="sc">%&gt;%</span></span>
@@ -521,113 +523,107 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Live birth</td>
-<td style="text-align: right;">38.12188</td>
+<td style="text-align: right;">38.11573</td>
 <td style="text-align: right;">38.571429</td>
 <td style="text-align: right;">8.7142857</td>
 <td style="text-align: right;">79.57143</td>
-<td style="text-align: right;">27.142857</td>
-<td style="text-align: right;">42.88857</td>
+<td style="text-align: right;">27.262857</td>
+<td style="text-align: right;">42.85714</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Missing outcome</td>
-<td style="text-align: right;">24.26197</td>
+<td style="text-align: right;">24.25056</td>
 <td style="text-align: right;">23.000000</td>
 <td style="text-align: right;">3.7142857</td>
-<td style="text-align: right;">71.00000</td>
+<td style="text-align: right;">71.14286</td>
 <td style="text-align: right;">8.000000</td>
-<td style="text-align: right;">49.49714</td>
+<td style="text-align: right;">50.39143</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Delivery record only</td>
-<td style="text-align: right;">38.40434</td>
+<td style="text-align: right;">38.29623</td>
 <td style="text-align: right;">39.142857</td>
 <td style="text-align: right;">10.8571429</td>
-<td style="text-align: right;">81.00000</td>
-<td style="text-align: right;">14.220000</td>
-<td style="text-align: right;">60.61429</td>
+<td style="text-align: right;">77.85714</td>
+<td style="text-align: right;">14.285714</td>
+<td style="text-align: right;">58.14286</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Abortion</td>
-<td style="text-align: right;">13.00485</td>
+<td style="text-align: right;">13.04116</td>
 <td style="text-align: right;">11.714286</td>
 <td style="text-align: right;">0.2857143</td>
 <td style="text-align: right;">75.00000</td>
 <td style="text-align: right;">7.000000</td>
-<td style="text-align: right;">35.87429</td>
+<td style="text-align: right;">36.29429</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Ectopic pregnancy</td>
-<td style="text-align: right;">11.30264</td>
-<td style="text-align: right;">9.857143</td>
+<td style="text-align: right;">11.31536</td>
+<td style="text-align: right;">9.928571</td>
 <td style="text-align: right;">6.2857143</td>
 <td style="text-align: right;">41.28571</td>
 <td style="text-align: right;">6.714286</td>
-<td style="text-align: right;">37.71429</td>
+<td style="text-align: right;">37.65714</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Stillbirth</td>
-<td style="text-align: right;">28.56952</td>
-<td style="text-align: right;">27.285714</td>
+<td style="text-align: right;">28.72333</td>
+<td style="text-align: right;">26.714286</td>
 <td style="text-align: right;">17.1428571</td>
-<td style="text-align: right;">51.00000</td>
-<td style="text-align: right;">18.834286</td>
-<td style="text-align: right;">43.70571</td>
+<td style="text-align: right;">72.28571</td>
+<td style="text-align: right;">18.925714</td>
+<td style="text-align: right;">47.99429</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
 </div>
-<div class="cell" data-hash="03_examine-hipps-restricted_cache/html/unnamed-chunk-15_021840bbabab161f0594677a5580ff3d">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>hipps_cleaned <span class="ot">&lt;-</span> hipps_w_demo</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="03_examine-hipps-restricted_cache/html/unnamed-chunk-16_5414a576ed6c4d96e2adbe822a09300d">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_rds</span>(hipps_cleaned, here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"workbench/hipps_cleaned_restricted.rds"</span>))</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">aou_workspace_to_bucket</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"workbench/hipps_cleaned_restricted.rds"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="demographics-table" class="level2">
 <h2 class="anchored" data-anchor-id="demographics-table">Demographics table</h2>
-<div class="cell" data-hash="03_examine-hipps-restricted_cache/html/unnamed-chunk-17_e2913cc1e62f2b3301e14f9dacddb88e">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>demo_table <span class="ot">&lt;-</span> hipps_cleaned <span class="sc">%&gt;%</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(person_id, gender_cat, orientation_cat, race_eth_cat, income_cat, edu_cat, marital_status_cat, state_cat) <span class="sc">%&gt;%</span></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.factor), <span class="sc">~</span> <span class="fu">fct_lump_min</span>(.x, <span class="at">min =</span> <span class="dv">20</span>)),</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">state_cat =</span> <span class="fu">fct_infreq</span>(state_cat),</span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">state_cat =</span> <span class="fu">fct_lump_min</span>(state_cat, <span class="at">min =</span> <span class="dv">20</span>),</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">orientation_cat =</span> <span class="fu">fct_relevel</span>(orientation_cat, <span class="st">"Straight"</span>, <span class="st">"Bisexual"</span>, <span class="st">"Gay/lesbian"</span>, <span class="st">"None"</span>),</span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">orientation_cat =</span> <span class="fu">fct_recode</span>(orientation_cat, <span class="at">NULL =</span> <span class="st">"No answer"</span>)</span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl_summary</span>(</span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">include =</span> <span class="fu">c</span>(gender_cat, orientation_cat, race_eth_cat, income_cat, edu_cat, state_cat),</span>
-<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="fu">list</span>(</span>
-<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>      gender_cat <span class="sc">~</span> <span class="st">"Gender identity"</span>,</span>
-<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>      orientation_cat <span class="sc">~</span> <span class="st">"Sexual orientation"</span>,</span>
-<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>      race_eth_cat <span class="sc">~</span> <span class="st">"Race/ethnicity"</span>,</span>
-<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>      income_cat <span class="sc">~</span> <span class="st">"Family income"</span>,</span>
-<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>      edu_cat <span class="sc">~</span> <span class="st">"Education"</span>,</span>
-<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>      state_cat <span class="sc">~</span> <span class="st">"State of residence"</span></span>
-<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bold_labels</span>()</span>
-<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>demo_table</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl_summary</span>(</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">include =</span> <span class="fu">c</span>(gender_cat, orientation_cat, race_eth_cat, income_cat, edu_cat, state_cat),</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="fu">list</span>(</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>      gender_cat <span class="sc">~</span> <span class="st">"Gender identity"</span>,</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>      orientation_cat <span class="sc">~</span> <span class="st">"Sexual orientation"</span>,</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>      race_eth_cat <span class="sc">~</span> <span class="st">"Race/ethnicity"</span>,</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>      income_cat <span class="sc">~</span> <span class="st">"Family income"</span>,</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>      edu_cat <span class="sc">~</span> <span class="st">"Education"</span>,</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>      state_cat <span class="sc">~</span> <span class="st">"State of residence"</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bold_labels</span>()</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>demo_table</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 
-<div id="chapwxmunj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#chapwxmunj table {
+<div id="rnkceiamol" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#rnkceiamol table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#chapwxmunj thead, #chapwxmunj tbody, #chapwxmunj tfoot, #chapwxmunj tr, #chapwxmunj td, #chapwxmunj th {
+#rnkceiamol thead, #rnkceiamol tbody, #rnkceiamol tfoot, #rnkceiamol tr, #rnkceiamol td, #rnkceiamol th {
   border-style: none;
 }
 
-#chapwxmunj p {
+#rnkceiamol p {
   margin: 0;
   padding: 0;
 }
 
-#chapwxmunj .gt_table {
+#rnkceiamol .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -653,12 +649,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-left-color: #D3D3D3;
 }
 
-#chapwxmunj .gt_caption {
+#rnkceiamol .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#chapwxmunj .gt_title {
+#rnkceiamol .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -670,7 +666,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-width: 0;
 }
 
-#chapwxmunj .gt_subtitle {
+#rnkceiamol .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -682,7 +678,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-top-width: 0;
 }
 
-#chapwxmunj .gt_heading {
+#rnkceiamol .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -694,13 +690,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#chapwxmunj .gt_bottom_border {
+#rnkceiamol .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#chapwxmunj .gt_col_headings {
+#rnkceiamol .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -715,7 +711,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#chapwxmunj .gt_col_heading {
+#rnkceiamol .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -735,7 +731,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   overflow-x: hidden;
 }
 
-#chapwxmunj .gt_column_spanner_outer {
+#rnkceiamol .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -747,15 +743,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 4px;
 }
 
-#chapwxmunj .gt_column_spanner_outer:first-child {
+#rnkceiamol .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#chapwxmunj .gt_column_spanner_outer:last-child {
+#rnkceiamol .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#chapwxmunj .gt_column_spanner {
+#rnkceiamol .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -767,11 +763,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   width: 100%;
 }
 
-#chapwxmunj .gt_spanner_row {
+#rnkceiamol .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#chapwxmunj .gt_group_heading {
+#rnkceiamol .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -797,7 +793,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   text-align: left;
 }
 
-#chapwxmunj .gt_empty_group_heading {
+#rnkceiamol .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -812,15 +808,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   vertical-align: middle;
 }
 
-#chapwxmunj .gt_from_md > :first-child {
+#rnkceiamol .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#chapwxmunj .gt_from_md > :last-child {
+#rnkceiamol .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#chapwxmunj .gt_row {
+#rnkceiamol .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -839,7 +835,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   overflow-x: hidden;
 }
 
-#chapwxmunj .gt_stub {
+#rnkceiamol .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -852,7 +848,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#chapwxmunj .gt_stub_row_group {
+#rnkceiamol .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -866,15 +862,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   vertical-align: top;
 }
 
-#chapwxmunj .gt_row_group_first td {
+#rnkceiamol .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#chapwxmunj .gt_row_group_first th {
+#rnkceiamol .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#chapwxmunj .gt_summary_row {
+#rnkceiamol .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -884,16 +880,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#chapwxmunj .gt_first_summary_row {
+#rnkceiamol .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#chapwxmunj .gt_first_summary_row.thick {
+#rnkceiamol .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#chapwxmunj .gt_last_summary_row {
+#rnkceiamol .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -903,7 +899,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-color: #D3D3D3;
 }
 
-#chapwxmunj .gt_grand_summary_row {
+#rnkceiamol .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -913,7 +909,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#chapwxmunj .gt_first_grand_summary_row {
+#rnkceiamol .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -923,7 +919,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-top-color: #D3D3D3;
 }
 
-#chapwxmunj .gt_last_grand_summary_row_top {
+#rnkceiamol .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -933,11 +929,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-color: #D3D3D3;
 }
 
-#chapwxmunj .gt_striped {
+#rnkceiamol .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#chapwxmunj .gt_table_body {
+#rnkceiamol .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -946,7 +942,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-color: #D3D3D3;
 }
 
-#chapwxmunj .gt_footnotes {
+#rnkceiamol .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -960,7 +956,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#chapwxmunj .gt_footnote {
+#rnkceiamol .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -969,7 +965,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#chapwxmunj .gt_sourcenotes {
+#rnkceiamol .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -983,7 +979,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#chapwxmunj .gt_sourcenote {
+#rnkceiamol .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -991,63 +987,63 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#chapwxmunj .gt_left {
+#rnkceiamol .gt_left {
   text-align: left;
 }
 
-#chapwxmunj .gt_center {
+#rnkceiamol .gt_center {
   text-align: center;
 }
 
-#chapwxmunj .gt_right {
+#rnkceiamol .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#chapwxmunj .gt_font_normal {
+#rnkceiamol .gt_font_normal {
   font-weight: normal;
 }
 
-#chapwxmunj .gt_font_bold {
+#rnkceiamol .gt_font_bold {
   font-weight: bold;
 }
 
-#chapwxmunj .gt_font_italic {
+#rnkceiamol .gt_font_italic {
   font-style: italic;
 }
 
-#chapwxmunj .gt_super {
+#rnkceiamol .gt_super {
   font-size: 65%;
 }
 
-#chapwxmunj .gt_footnote_marks {
+#rnkceiamol .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#chapwxmunj .gt_asterisk {
+#rnkceiamol .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#chapwxmunj .gt_indent_1 {
+#rnkceiamol .gt_indent_1 {
   text-indent: 5px;
 }
 
-#chapwxmunj .gt_indent_2 {
+#rnkceiamol .gt_indent_2 {
   text-indent: 10px;
 }
 
-#chapwxmunj .gt_indent_3 {
+#rnkceiamol .gt_indent_3 {
   text-indent: 15px;
 }
 
-#chapwxmunj .gt_indent_4 {
+#rnkceiamol .gt_indent_4 {
   text-indent: 20px;
 }
 
-#chapwxmunj .gt_indent_5 {
+#rnkceiamol .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -1056,50 +1052,50 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     
     <tr class="gt_col_headings">
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="<strong>Characteristic</strong>"><strong>Characteristic</strong></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>N = 14,234</strong><span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>"><strong>N = 14,234</strong><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>N = 14,237</strong><span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>"><strong>N = 14,237</strong><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
     </tr>
   </thead>
   <tbody class="gt_table_body">
     <tr><td headers="label" class="gt_row gt_left" style="font-weight: bold;">Gender identity</td>
 <td headers="stat_0" class="gt_row gt_center"></td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Woman</td>
-<td headers="stat_0" class="gt_row gt_center">14,015 (99%)</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Man</td>
-<td headers="stat_0" class="gt_row gt_center">28 (0.2%)</td></tr>
+<td headers="stat_0" class="gt_row gt_center">14,018 (99%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Other/multiple</td>
 <td headers="stat_0" class="gt_row gt_center">52 (0.4%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Man</td>
+<td headers="stat_0" class="gt_row gt_center">28 (0.2%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Unknown</td>
 <td headers="stat_0" class="gt_row gt_center">139</td></tr>
     <tr><td headers="label" class="gt_row gt_left" style="font-weight: bold;">Sexual orientation</td>
 <td headers="stat_0" class="gt_row gt_center"></td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Straight</td>
-<td headers="stat_0" class="gt_row gt_center">12,792 (92%)</td></tr>
+<td headers="stat_0" class="gt_row gt_center">12,795 (92%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Bisexual</td>
 <td headers="stat_0" class="gt_row gt_center">833 (6.0%)</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Gay/lesbian</td>
-<td headers="stat_0" class="gt_row gt_center">89 (0.6%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;None</td>
 <td headers="stat_0" class="gt_row gt_center">195 (1.4%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Gay/lesbian</td>
+<td headers="stat_0" class="gt_row gt_center">89 (0.6%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Unknown</td>
 <td headers="stat_0" class="gt_row gt_center">325</td></tr>
     <tr><td headers="label" class="gt_row gt_left" style="font-weight: bold;">Race/ethnicity</td>
 <td headers="stat_0" class="gt_row gt_center"></td></tr>
-    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Asian</td>
-<td headers="stat_0" class="gt_row gt_center">464 (3.3%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Hispanic or Latino</td>
+<td headers="stat_0" class="gt_row gt_center">6,044 (43%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;White</td>
+<td headers="stat_0" class="gt_row gt_center">4,702 (34%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Black or African-American</td>
 <td headers="stat_0" class="gt_row gt_center">2,244 (16%)</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Hispanic or Latino</td>
-<td headers="stat_0" class="gt_row gt_center">6,043 (43%)</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Middle Eastern or North African</td>
-<td headers="stat_0" class="gt_row gt_center">95 (0.7%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Asian</td>
+<td headers="stat_0" class="gt_row gt_center">465 (3.3%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;More than one race</td>
 <td headers="stat_0" class="gt_row gt_center">304 (2.2%)</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Native Hawaiian or Other Pacific Islander</td>
-<td headers="stat_0" class="gt_row gt_center">25 (0.2%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Other</td>
 <td headers="stat_0" class="gt_row gt_center">118 (0.8%)</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;White</td>
-<td headers="stat_0" class="gt_row gt_center">4,701 (34%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Middle Eastern or North African</td>
+<td headers="stat_0" class="gt_row gt_center">95 (0.7%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Native Hawaiian or Other Pacific Islander</td>
+<td headers="stat_0" class="gt_row gt_center">25 (0.2%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Unknown</td>
 <td headers="stat_0" class="gt_row gt_center">240</td></tr>
     <tr><td headers="label" class="gt_row gt_left" style="font-weight: bold;">Family income</td>
@@ -1109,39 +1105,39 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;10-25k</td>
 <td headers="stat_0" class="gt_row gt_center">1,460 (15%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;25-50k</td>
-<td headers="stat_0" class="gt_row gt_center">2,103 (21%)</td></tr>
+<td headers="stat_0" class="gt_row gt_center">2,105 (21%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;50-100k</td>
 <td headers="stat_0" class="gt_row gt_center">1,905 (19%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;&gt; 100k</td>
-<td headers="stat_0" class="gt_row gt_center">2,405 (24%)</td></tr>
+<td headers="stat_0" class="gt_row gt_center">2,404 (24%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Unknown</td>
-<td headers="stat_0" class="gt_row gt_center">4,307</td></tr>
+<td headers="stat_0" class="gt_row gt_center">4,309</td></tr>
     <tr><td headers="label" class="gt_row gt_left" style="font-weight: bold;">Education</td>
 <td headers="stat_0" class="gt_row gt_center"></td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Less than high school</td>
 <td headers="stat_0" class="gt_row gt_center">1,566 (11%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;High school graduate</td>
-<td headers="stat_0" class="gt_row gt_center">3,829 (27%)</td></tr>
+<td headers="stat_0" class="gt_row gt_center">3,832 (27%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Some college</td>
 <td headers="stat_0" class="gt_row gt_center">3,683 (26%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;College graduate</td>
-<td headers="stat_0" class="gt_row gt_center">2,652 (19%)</td></tr>
+<td headers="stat_0" class="gt_row gt_center">2,651 (19%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Advanced degree</td>
-<td headers="stat_0" class="gt_row gt_center">2,212 (16%)</td></tr>
+<td headers="stat_0" class="gt_row gt_center">2,213 (16%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Unknown</td>
 <td headers="stat_0" class="gt_row gt_center">292</td></tr>
     <tr><td headers="label" class="gt_row gt_left" style="font-weight: bold;">State of residence</td>
 <td headers="stat_0" class="gt_row gt_center"></td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Arizona</td>
-<td headers="stat_0" class="gt_row gt_center">3,430 (24%)</td></tr>
+<td headers="stat_0" class="gt_row gt_center">3,431 (24%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;New York</td>
-<td headers="stat_0" class="gt_row gt_center">3,172 (22%)</td></tr>
+<td headers="stat_0" class="gt_row gt_center">3,173 (22%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;California</td>
 <td headers="stat_0" class="gt_row gt_center">1,655 (12%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Massachusetts</td>
 <td headers="stat_0" class="gt_row gt_center">1,294 (9.1%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Pennsylvania</td>
-<td headers="stat_0" class="gt_row gt_center">1,150 (8.1%)</td></tr>
+<td headers="stat_0" class="gt_row gt_center">1,151 (8.1%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Illinois</td>
 <td headers="stat_0" class="gt_row gt_center">745 (5.2%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Wisconsin</td>
@@ -1162,14 +1158,26 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td headers="stat_0" class="gt_row gt_center">79 (0.6%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;New Jersey</td>
 <td headers="stat_0" class="gt_row gt_center">74 (0.5%)</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Connecticut</td>
-<td headers="stat_0" class="gt_row gt_center">34 (0.2%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Other</td>
+<td headers="stat_0" class="gt_row gt_center">35 (0.2%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Mississippi</td>
 <td headers="stat_0" class="gt_row gt_center">31 (0.2%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Connecticut</td>
+<td headers="stat_0" class="gt_row gt_center">34 (0.2%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Tennessee</td>
 <td headers="stat_0" class="gt_row gt_center">23 (0.2%)</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Other</td>
-<td headers="stat_0" class="gt_row gt_center">93 (0.7%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;New Hampshire</td>
+<td headers="stat_0" class="gt_row gt_center">18 (0.1%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Louisiana</td>
+<td headers="stat_0" class="gt_row gt_center">11 (&lt;0.1%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Minnesota</td>
+<td headers="stat_0" class="gt_row gt_center">8 (&lt;0.1%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Rhode Island</td>
+<td headers="stat_0" class="gt_row gt_center">7 (&lt;0.1%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Indiana</td>
+<td headers="stat_0" class="gt_row gt_center">9 (&lt;0.1%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Wyoming</td>
+<td headers="stat_0" class="gt_row gt_center">5 (&lt;0.1%)</td></tr>
   </tbody>
   
   <tfoot class="gt_footnotes">
@@ -1184,7 +1192,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="live-births" class="level2">
 <h2 class="anchored" data-anchor-id="live-births">Live births</h2>
-<div class="cell" data-hash="03_examine-hipps-restricted_cache/html/unnamed-chunk-18_e6ec8faf0313a64bc6df1a19e2aa453d">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>preg_table <span class="ot">&lt;-</span> hipps_cleaned <span class="sc">%&gt;%</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(outcome_category <span class="sc">==</span> <span class="st">"Live birth"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl_summary</span>(</span>
@@ -1205,23 +1213,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>preg_table</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 
-<div id="slkcpcziwj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#slkcpcziwj table {
+<div id="xasmdztqpd" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#xasmdztqpd table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#slkcpcziwj thead, #slkcpcziwj tbody, #slkcpcziwj tfoot, #slkcpcziwj tr, #slkcpcziwj td, #slkcpcziwj th {
+#xasmdztqpd thead, #xasmdztqpd tbody, #xasmdztqpd tfoot, #xasmdztqpd tr, #xasmdztqpd td, #xasmdztqpd th {
   border-style: none;
 }
 
-#slkcpcziwj p {
+#xasmdztqpd p {
   margin: 0;
   padding: 0;
 }
 
-#slkcpcziwj .gt_table {
+#xasmdztqpd .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1247,12 +1255,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-left-color: #D3D3D3;
 }
 
-#slkcpcziwj .gt_caption {
+#xasmdztqpd .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#slkcpcziwj .gt_title {
+#xasmdztqpd .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1264,7 +1272,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-width: 0;
 }
 
-#slkcpcziwj .gt_subtitle {
+#xasmdztqpd .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1276,7 +1284,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-top-width: 0;
 }
 
-#slkcpcziwj .gt_heading {
+#xasmdztqpd .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1288,13 +1296,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#slkcpcziwj .gt_bottom_border {
+#xasmdztqpd .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#slkcpcziwj .gt_col_headings {
+#xasmdztqpd .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1309,7 +1317,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#slkcpcziwj .gt_col_heading {
+#xasmdztqpd .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1329,7 +1337,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   overflow-x: hidden;
 }
 
-#slkcpcziwj .gt_column_spanner_outer {
+#xasmdztqpd .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1341,15 +1349,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 4px;
 }
 
-#slkcpcziwj .gt_column_spanner_outer:first-child {
+#xasmdztqpd .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#slkcpcziwj .gt_column_spanner_outer:last-child {
+#xasmdztqpd .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#slkcpcziwj .gt_column_spanner {
+#xasmdztqpd .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1361,11 +1369,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   width: 100%;
 }
 
-#slkcpcziwj .gt_spanner_row {
+#xasmdztqpd .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#slkcpcziwj .gt_group_heading {
+#xasmdztqpd .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1391,7 +1399,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   text-align: left;
 }
 
-#slkcpcziwj .gt_empty_group_heading {
+#xasmdztqpd .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1406,15 +1414,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   vertical-align: middle;
 }
 
-#slkcpcziwj .gt_from_md > :first-child {
+#xasmdztqpd .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#slkcpcziwj .gt_from_md > :last-child {
+#xasmdztqpd .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#slkcpcziwj .gt_row {
+#xasmdztqpd .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1433,7 +1441,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   overflow-x: hidden;
 }
 
-#slkcpcziwj .gt_stub {
+#xasmdztqpd .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1446,7 +1454,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#slkcpcziwj .gt_stub_row_group {
+#xasmdztqpd .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1460,15 +1468,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   vertical-align: top;
 }
 
-#slkcpcziwj .gt_row_group_first td {
+#xasmdztqpd .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#slkcpcziwj .gt_row_group_first th {
+#xasmdztqpd .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#slkcpcziwj .gt_summary_row {
+#xasmdztqpd .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1478,16 +1486,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#slkcpcziwj .gt_first_summary_row {
+#xasmdztqpd .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#slkcpcziwj .gt_first_summary_row.thick {
+#xasmdztqpd .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#slkcpcziwj .gt_last_summary_row {
+#xasmdztqpd .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1497,7 +1505,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-color: #D3D3D3;
 }
 
-#slkcpcziwj .gt_grand_summary_row {
+#xasmdztqpd .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1507,7 +1515,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#slkcpcziwj .gt_first_grand_summary_row {
+#xasmdztqpd .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1517,7 +1525,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-top-color: #D3D3D3;
 }
 
-#slkcpcziwj .gt_last_grand_summary_row_top {
+#xasmdztqpd .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1527,11 +1535,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-color: #D3D3D3;
 }
 
-#slkcpcziwj .gt_striped {
+#xasmdztqpd .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#slkcpcziwj .gt_table_body {
+#xasmdztqpd .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1540,7 +1548,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-color: #D3D3D3;
 }
 
-#slkcpcziwj .gt_footnotes {
+#xasmdztqpd .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1554,7 +1562,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#slkcpcziwj .gt_footnote {
+#xasmdztqpd .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1563,7 +1571,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#slkcpcziwj .gt_sourcenotes {
+#xasmdztqpd .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1577,7 +1585,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#slkcpcziwj .gt_sourcenote {
+#xasmdztqpd .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1585,63 +1593,63 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#slkcpcziwj .gt_left {
+#xasmdztqpd .gt_left {
   text-align: left;
 }
 
-#slkcpcziwj .gt_center {
+#xasmdztqpd .gt_center {
   text-align: center;
 }
 
-#slkcpcziwj .gt_right {
+#xasmdztqpd .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#slkcpcziwj .gt_font_normal {
+#xasmdztqpd .gt_font_normal {
   font-weight: normal;
 }
 
-#slkcpcziwj .gt_font_bold {
+#xasmdztqpd .gt_font_bold {
   font-weight: bold;
 }
 
-#slkcpcziwj .gt_font_italic {
+#xasmdztqpd .gt_font_italic {
   font-style: italic;
 }
 
-#slkcpcziwj .gt_super {
+#xasmdztqpd .gt_super {
   font-size: 65%;
 }
 
-#slkcpcziwj .gt_footnote_marks {
+#xasmdztqpd .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#slkcpcziwj .gt_asterisk {
+#xasmdztqpd .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#slkcpcziwj .gt_indent_1 {
+#xasmdztqpd .gt_indent_1 {
   text-indent: 5px;
 }
 
-#slkcpcziwj .gt_indent_2 {
+#xasmdztqpd .gt_indent_2 {
   text-indent: 10px;
 }
 
-#slkcpcziwj .gt_indent_3 {
+#xasmdztqpd .gt_indent_3 {
   text-indent: 15px;
 }
 
-#slkcpcziwj .gt_indent_4 {
+#xasmdztqpd .gt_indent_4 {
   text-indent: 20px;
 }
 
-#slkcpcziwj .gt_indent_5 {
+#xasmdztqpd .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -1650,24 +1658,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     
     <tr class="gt_col_headings">
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="<strong>Characteristic</strong>"><strong>Characteristic</strong></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>N = 11,379</strong><span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>"><strong>N = 11,379</strong><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>N = 11,385</strong><span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>"><strong>N = 11,385</strong><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
     </tr>
   </thead>
   <tbody class="gt_table_body">
     <tr><td headers="label" class="gt_row gt_left" style="font-weight: bold;">Maternal age</td>
 <td headers="stat_0" class="gt_row gt_center"></td></tr>
-    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;0-14 years</td>
-<td headers="stat_0" class="gt_row gt_center">0 (0%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;15-19 years</td>
-<td headers="stat_0" class="gt_row gt_center">381 (3.3%)</td></tr>
+<td headers="stat_0" class="gt_row gt_center">386 (3.4%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;20-24 years</td>
-<td headers="stat_0" class="gt_row gt_center">2,193 (19%)</td></tr>
+<td headers="stat_0" class="gt_row gt_center">2,199 (19%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;25-29 years</td>
 <td headers="stat_0" class="gt_row gt_center">3,196 (28%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;30-34 years</td>
-<td headers="stat_0" class="gt_row gt_center">3,204 (28%)</td></tr>
+<td headers="stat_0" class="gt_row gt_center">3,201 (28%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;35-39 years</td>
-<td headers="stat_0" class="gt_row gt_center">1,907 (17%)</td></tr>
+<td headers="stat_0" class="gt_row gt_center">1,905 (17%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;40-44 years</td>
 <td headers="stat_0" class="gt_row gt_center">462 (4.1%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;45 years and over</td>
@@ -1676,36 +1682,34 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td headers="stat_0" class="gt_row gt_center">0 (0%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left" style="font-weight: bold;">Year of delivery</td>
 <td headers="stat_0" class="gt_row gt_center"></td></tr>
-    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;2015 and earlier</td>
-<td headers="stat_0" class="gt_row gt_center">0 (0%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;2016</td>
-<td headers="stat_0" class="gt_row gt_center">366 (3.2%)</td></tr>
+<td headers="stat_0" class="gt_row gt_center">375 (3.3%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;2017</td>
-<td headers="stat_0" class="gt_row gt_center">1,429 (13%)</td></tr>
+<td headers="stat_0" class="gt_row gt_center">1,430 (13%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;2018</td>
-<td headers="stat_0" class="gt_row gt_center">1,798 (16%)</td></tr>
+<td headers="stat_0" class="gt_row gt_center">1,795 (16%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;2019</td>
-<td headers="stat_0" class="gt_row gt_center">3,045 (27%)</td></tr>
+<td headers="stat_0" class="gt_row gt_center">3,046 (27%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;2020</td>
 <td headers="stat_0" class="gt_row gt_center">2,060 (18%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;2021</td>
-<td headers="stat_0" class="gt_row gt_center">1,782 (16%)</td></tr>
+<td headers="stat_0" class="gt_row gt_center">1,777 (16%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;2022</td>
-<td headers="stat_0" class="gt_row gt_center">899 (7.9%)</td></tr>
+<td headers="stat_0" class="gt_row gt_center">902 (7.9%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left" style="font-weight: bold;">All of Us participation relative to pregnancy</td>
 <td headers="stat_0" class="gt_row gt_center"></td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;After</td>
-<td headers="stat_0" class="gt_row gt_center">5,750 (51%)</td></tr>
+<td headers="stat_0" class="gt_row gt_center">5,766 (51%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Before</td>
-<td headers="stat_0" class="gt_row gt_center">2,331 (20%)</td></tr>
+<td headers="stat_0" class="gt_row gt_center">2,324 (20%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;During</td>
-<td headers="stat_0" class="gt_row gt_center">3,265 (29%)</td></tr>
+<td headers="stat_0" class="gt_row gt_center">3,263 (29%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Unclear</td>
-<td headers="stat_0" class="gt_row gt_center">33 (0.3%)</td></tr>
+<td headers="stat_0" class="gt_row gt_center">32 (0.3%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left" style="font-weight: bold;">Gestational age at delivery (weeks)</td>
 <td headers="stat_0" class="gt_row gt_center">38.6 (37.1, 39.4)</td></tr>
     <tr><td headers="label" class="gt_row gt_left" style="font-weight: bold;">Preterm (&lt; 37 weeks)</td>
-<td headers="stat_0" class="gt_row gt_center">2,329 (20%)</td></tr>
+<td headers="stat_0" class="gt_row gt_center">2,330 (20%)</td></tr>
   </tbody>
   
   <tfoot class="gt_footnotes">
@@ -1720,84 +1724,75 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="new-combined-table" class="level2">
 <h2 class="anchored" data-anchor-id="new-combined-table">New combined table</h2>
-<div class="cell" data-hash="03_examine-hipps-restricted_cache/html/unnamed-chunk-19_0ef2c154656fac875b0d6b734fc672b9">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>demo_table <span class="ot">&lt;-</span> hipps_cleaned <span class="sc">%&gt;%</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(person_id, gender_cat, orientation_cat, race_eth_cat, income_cat, edu_cat, marital_status_cat, state_cat) <span class="sc">%&gt;%</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.factor), <span class="sc">~</span> <span class="fu">fct_lump_min</span>(.x, <span class="at">min =</span> <span class="dv">20</span>)),</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">state_cat =</span> <span class="fu">fct_infreq</span>(state_cat),</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">state_cat =</span> <span class="fu">fct_lump_min</span>(state_cat, <span class="at">min =</span> <span class="dv">200</span>),</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">orientation_cat =</span> <span class="fu">fct_relevel</span>(orientation_cat, <span class="st">"Straight"</span>, <span class="st">"Bisexual"</span>, <span class="st">"Gay/lesbian"</span>, <span class="st">"None"</span>)</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl_summary</span>(</span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">include =</span> <span class="fu">c</span>(</span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>      gender_cat, orientation_cat, race_eth_cat, income_cat, edu_cat,</span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>      state_cat</span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="fu">list</span>(</span>
-<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>      gender_cat <span class="sc">~</span> <span class="st">"Gender identity"</span>,</span>
-<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>      orientation_cat <span class="sc">~</span> <span class="st">"Sexual orientation"</span>,</span>
-<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>      race_eth_cat <span class="sc">~</span> <span class="st">"Race/ethnicity"</span>,</span>
-<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>      income_cat <span class="sc">~</span> <span class="st">"Family income"</span>,</span>
-<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>      edu_cat <span class="sc">~</span> <span class="st">"Education"</span>,</span>
-<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>      state_cat <span class="sc">~</span> <span class="st">"State of residence"</span></span>
-<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">digits =</span> <span class="fu">list</span>(<span class="fu">everything</span>() <span class="sc">~</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>))</span>
-<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bold_labels</span>()</span>
-<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>preg_table <span class="ot">&lt;-</span> hipps_cleaned <span class="sc">%&gt;%</span></span>
-<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(outcome_category <span class="sc">==</span> <span class="st">"Live birth"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.factor), <span class="sc">~</span> <span class="fu">fct_lump_min</span>(.x, <span class="at">min =</span> <span class="dv">20</span>)),</span>
-<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(<span class="fu">where</span>(is.factor), fct_drop),</span>
-<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">state_cat =</span> <span class="fu">fct_infreq</span>(state_cat),</span>
-<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">state_cat =</span> <span class="fu">fct_lump_min</span>(state_cat, <span class="at">min =</span> <span class="dv">200</span>),</span>
-<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">orientation_cat =</span> <span class="fu">fct_relevel</span>(orientation_cat, <span class="st">"Straight"</span>, <span class="st">"Bisexual"</span>, <span class="st">"Gay/lesbian"</span>, <span class="st">"None"</span>),</span>
-<span id="cb22-32"><a href="#cb22-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">gender_cat =</span> <span class="fu">fct_collapse</span>(gender_cat, <span class="st">"Other/multiple"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"Other"</span>, <span class="st">"Man"</span>))</span>
-<span id="cb22-33"><a href="#cb22-33" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb22-34"><a href="#cb22-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl_summary</span>(</span>
-<span id="cb22-35"><a href="#cb22-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">include =</span> <span class="fu">c</span>(</span>
-<span id="cb22-36"><a href="#cb22-36" aria-hidden="true" tabindex="-1"></a>      gender_cat, orientation_cat, race_eth_cat, income_cat, edu_cat,</span>
-<span id="cb22-37"><a href="#cb22-37" aria-hidden="true" tabindex="-1"></a>      state_cat,</span>
-<span id="cb22-38"><a href="#cb22-38" aria-hidden="true" tabindex="-1"></a>      mom_age_cat_table, year_end_cat, took_the_survey, gestational_age_weeks,</span>
-<span id="cb22-39"><a href="#cb22-39" aria-hidden="true" tabindex="-1"></a>      preterm_status_from_calculation</span>
-<span id="cb22-40"><a href="#cb22-40" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb22-41"><a href="#cb22-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="fu">list</span>(</span>
-<span id="cb22-42"><a href="#cb22-42" aria-hidden="true" tabindex="-1"></a>      gender_cat <span class="sc">~</span> <span class="st">"Gender identity"</span>,</span>
-<span id="cb22-43"><a href="#cb22-43" aria-hidden="true" tabindex="-1"></a>      orientation_cat <span class="sc">~</span> <span class="st">"Sexual orientation"</span>,</span>
-<span id="cb22-44"><a href="#cb22-44" aria-hidden="true" tabindex="-1"></a>      race_eth_cat <span class="sc">~</span> <span class="st">"Race/ethnicity"</span>,</span>
-<span id="cb22-45"><a href="#cb22-45" aria-hidden="true" tabindex="-1"></a>      income_cat <span class="sc">~</span> <span class="st">"Family income"</span>,</span>
-<span id="cb22-46"><a href="#cb22-46" aria-hidden="true" tabindex="-1"></a>      edu_cat <span class="sc">~</span> <span class="st">"Education"</span>,</span>
-<span id="cb22-47"><a href="#cb22-47" aria-hidden="true" tabindex="-1"></a>      state_cat <span class="sc">~</span> <span class="st">"State of residence"</span>,</span>
-<span id="cb22-48"><a href="#cb22-48" aria-hidden="true" tabindex="-1"></a>      mom_age_cat_table <span class="sc">~</span> <span class="st">"Maternal age"</span>,</span>
-<span id="cb22-49"><a href="#cb22-49" aria-hidden="true" tabindex="-1"></a>      year_end_cat <span class="sc">~</span> <span class="st">"Year of delivery"</span>,</span>
-<span id="cb22-50"><a href="#cb22-50" aria-hidden="true" tabindex="-1"></a>      took_the_survey <span class="sc">~</span> <span class="st">"All of Us participation relative to pregnancy"</span>,</span>
-<span id="cb22-51"><a href="#cb22-51" aria-hidden="true" tabindex="-1"></a>      gestational_age_weeks <span class="sc">~</span> <span class="st">"Gestational age at delivery (weeks)"</span>,</span>
-<span id="cb22-52"><a href="#cb22-52" aria-hidden="true" tabindex="-1"></a>      preterm_status_from_calculation <span class="sc">~</span> <span class="st">"Preterm (&lt; 37 weeks)"</span></span>
-<span id="cb22-53"><a href="#cb22-53" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb22-54"><a href="#cb22-54" aria-hidden="true" tabindex="-1"></a>    <span class="at">digits =</span> <span class="fu">list</span>(<span class="fu">everything</span>() <span class="sc">~</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>))</span>
-<span id="cb22-55"><a href="#cb22-55" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb22-56"><a href="#cb22-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bold_labels</span>()</span>
-<span id="cb22-57"><a href="#cb22-57" aria-hidden="true" tabindex="-1"></a>combo <span class="ot">&lt;-</span> gtsummary<span class="sc">::</span><span class="fu">tbl_merge</span>(<span class="fu">list</span>(demo_table, preg_table), <span class="at">tab_spanner =</span> <span class="fu">c</span>(<span class="st">"Individuals"</span>, <span class="st">"Live births"</span>))</span>
-<span id="cb22-58"><a href="#cb22-58" aria-hidden="true" tabindex="-1"></a>combo</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl_summary</span>(</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">include =</span> <span class="fu">c</span>(</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>      gender_cat, orientation_cat, race_eth_cat, income_cat, edu_cat,</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>      state_cat</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="fu">list</span>(</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>      gender_cat <span class="sc">~</span> <span class="st">"Gender identity"</span>,</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>      orientation_cat <span class="sc">~</span> <span class="st">"Sexual orientation"</span>,</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>      race_eth_cat <span class="sc">~</span> <span class="st">"Race/ethnicity"</span>,</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>      income_cat <span class="sc">~</span> <span class="st">"Family income"</span>,</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>      edu_cat <span class="sc">~</span> <span class="st">"Education"</span>,</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>      state_cat <span class="sc">~</span> <span class="st">"State of residence"</span></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">digits =</span> <span class="fu">list</span>(<span class="fu">everything</span>() <span class="sc">~</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>))</span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bold_labels</span>()</span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>preg_table <span class="ot">&lt;-</span> hipps_cleaned <span class="sc">%&gt;%</span></span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(outcome_category <span class="sc">==</span> <span class="st">"Live birth"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">gender_cat =</span> <span class="fu">fct_collapse</span>(gender_cat, <span class="st">"Other/multiple"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"Other"</span>, <span class="st">"Man"</span>))</span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl_summary</span>(</span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">include =</span> <span class="fu">c</span>(</span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a>      gender_cat, orientation_cat, race_eth_cat, income_cat, edu_cat,</span>
+<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a>      state_cat,</span>
+<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a>      mom_age_cat_table, year_end_cat, took_the_survey, gestational_age_weeks,</span>
+<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a>      preterm_status_from_calculation</span>
+<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb22-32"><a href="#cb22-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="fu">list</span>(</span>
+<span id="cb22-33"><a href="#cb22-33" aria-hidden="true" tabindex="-1"></a>      gender_cat <span class="sc">~</span> <span class="st">"Gender identity"</span>,</span>
+<span id="cb22-34"><a href="#cb22-34" aria-hidden="true" tabindex="-1"></a>      orientation_cat <span class="sc">~</span> <span class="st">"Sexual orientation"</span>,</span>
+<span id="cb22-35"><a href="#cb22-35" aria-hidden="true" tabindex="-1"></a>      race_eth_cat <span class="sc">~</span> <span class="st">"Race/ethnicity"</span>,</span>
+<span id="cb22-36"><a href="#cb22-36" aria-hidden="true" tabindex="-1"></a>      income_cat <span class="sc">~</span> <span class="st">"Family income"</span>,</span>
+<span id="cb22-37"><a href="#cb22-37" aria-hidden="true" tabindex="-1"></a>      edu_cat <span class="sc">~</span> <span class="st">"Education"</span>,</span>
+<span id="cb22-38"><a href="#cb22-38" aria-hidden="true" tabindex="-1"></a>      state_cat <span class="sc">~</span> <span class="st">"State of residence"</span>,</span>
+<span id="cb22-39"><a href="#cb22-39" aria-hidden="true" tabindex="-1"></a>      mom_age_cat_table <span class="sc">~</span> <span class="st">"Maternal age"</span>,</span>
+<span id="cb22-40"><a href="#cb22-40" aria-hidden="true" tabindex="-1"></a>      year_end_cat <span class="sc">~</span> <span class="st">"Year of delivery"</span>,</span>
+<span id="cb22-41"><a href="#cb22-41" aria-hidden="true" tabindex="-1"></a>      took_the_survey <span class="sc">~</span> <span class="st">"All of Us participation relative to pregnancy"</span>,</span>
+<span id="cb22-42"><a href="#cb22-42" aria-hidden="true" tabindex="-1"></a>      gestational_age_weeks <span class="sc">~</span> <span class="st">"Gestational age at delivery (weeks)"</span>,</span>
+<span id="cb22-43"><a href="#cb22-43" aria-hidden="true" tabindex="-1"></a>      preterm_status_from_calculation <span class="sc">~</span> <span class="st">"Preterm (&lt; 37 weeks)"</span></span>
+<span id="cb22-44"><a href="#cb22-44" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb22-45"><a href="#cb22-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">digits =</span> <span class="fu">list</span>(<span class="fu">everything</span>() <span class="sc">~</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>))</span>
+<span id="cb22-46"><a href="#cb22-46" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb22-47"><a href="#cb22-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bold_labels</span>()</span>
+<span id="cb22-48"><a href="#cb22-48" aria-hidden="true" tabindex="-1"></a>combo <span class="ot">&lt;-</span> gtsummary<span class="sc">::</span><span class="fu">tbl_merge</span>(<span class="fu">list</span>(demo_table, preg_table), <span class="at">tab_spanner =</span> <span class="fu">c</span>(<span class="st">"Individuals"</span>, <span class="st">"Live births"</span>))</span>
+<span id="cb22-49"><a href="#cb22-49" aria-hidden="true" tabindex="-1"></a>combo</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 
-<div id="amjeruytnm" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#amjeruytnm table {
+<div id="pztwxhpacf" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#pztwxhpacf table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#amjeruytnm thead, #amjeruytnm tbody, #amjeruytnm tfoot, #amjeruytnm tr, #amjeruytnm td, #amjeruytnm th {
+#pztwxhpacf thead, #pztwxhpacf tbody, #pztwxhpacf tfoot, #pztwxhpacf tr, #pztwxhpacf td, #pztwxhpacf th {
   border-style: none;
 }
 
-#amjeruytnm p {
+#pztwxhpacf p {
   margin: 0;
   padding: 0;
 }
 
-#amjeruytnm .gt_table {
+#pztwxhpacf .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1823,12 +1818,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-left-color: #D3D3D3;
 }
 
-#amjeruytnm .gt_caption {
+#pztwxhpacf .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#amjeruytnm .gt_title {
+#pztwxhpacf .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1840,7 +1835,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-width: 0;
 }
 
-#amjeruytnm .gt_subtitle {
+#pztwxhpacf .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1852,7 +1847,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-top-width: 0;
 }
 
-#amjeruytnm .gt_heading {
+#pztwxhpacf .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1864,13 +1859,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#amjeruytnm .gt_bottom_border {
+#pztwxhpacf .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#amjeruytnm .gt_col_headings {
+#pztwxhpacf .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1885,7 +1880,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#amjeruytnm .gt_col_heading {
+#pztwxhpacf .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1905,7 +1900,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   overflow-x: hidden;
 }
 
-#amjeruytnm .gt_column_spanner_outer {
+#pztwxhpacf .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1917,15 +1912,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 4px;
 }
 
-#amjeruytnm .gt_column_spanner_outer:first-child {
+#pztwxhpacf .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#amjeruytnm .gt_column_spanner_outer:last-child {
+#pztwxhpacf .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#amjeruytnm .gt_column_spanner {
+#pztwxhpacf .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1937,11 +1932,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   width: 100%;
 }
 
-#amjeruytnm .gt_spanner_row {
+#pztwxhpacf .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#amjeruytnm .gt_group_heading {
+#pztwxhpacf .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1967,7 +1962,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   text-align: left;
 }
 
-#amjeruytnm .gt_empty_group_heading {
+#pztwxhpacf .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1982,15 +1977,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   vertical-align: middle;
 }
 
-#amjeruytnm .gt_from_md > :first-child {
+#pztwxhpacf .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#amjeruytnm .gt_from_md > :last-child {
+#pztwxhpacf .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#amjeruytnm .gt_row {
+#pztwxhpacf .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2009,7 +2004,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   overflow-x: hidden;
 }
 
-#amjeruytnm .gt_stub {
+#pztwxhpacf .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2022,7 +2017,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#amjeruytnm .gt_stub_row_group {
+#pztwxhpacf .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2036,15 +2031,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   vertical-align: top;
 }
 
-#amjeruytnm .gt_row_group_first td {
+#pztwxhpacf .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#amjeruytnm .gt_row_group_first th {
+#pztwxhpacf .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#amjeruytnm .gt_summary_row {
+#pztwxhpacf .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2054,16 +2049,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#amjeruytnm .gt_first_summary_row {
+#pztwxhpacf .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#amjeruytnm .gt_first_summary_row.thick {
+#pztwxhpacf .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#amjeruytnm .gt_last_summary_row {
+#pztwxhpacf .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2073,7 +2068,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-color: #D3D3D3;
 }
 
-#amjeruytnm .gt_grand_summary_row {
+#pztwxhpacf .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2083,7 +2078,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#amjeruytnm .gt_first_grand_summary_row {
+#pztwxhpacf .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2093,7 +2088,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-top-color: #D3D3D3;
 }
 
-#amjeruytnm .gt_last_grand_summary_row_top {
+#pztwxhpacf .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2103,11 +2098,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-color: #D3D3D3;
 }
 
-#amjeruytnm .gt_striped {
+#pztwxhpacf .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#amjeruytnm .gt_table_body {
+#pztwxhpacf .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2116,7 +2111,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-color: #D3D3D3;
 }
 
-#amjeruytnm .gt_footnotes {
+#pztwxhpacf .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2130,7 +2125,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#amjeruytnm .gt_footnote {
+#pztwxhpacf .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2139,7 +2134,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#amjeruytnm .gt_sourcenotes {
+#pztwxhpacf .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2153,7 +2148,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#amjeruytnm .gt_sourcenote {
+#pztwxhpacf .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2161,63 +2156,63 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#amjeruytnm .gt_left {
+#pztwxhpacf .gt_left {
   text-align: left;
 }
 
-#amjeruytnm .gt_center {
+#pztwxhpacf .gt_center {
   text-align: center;
 }
 
-#amjeruytnm .gt_right {
+#pztwxhpacf .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#amjeruytnm .gt_font_normal {
+#pztwxhpacf .gt_font_normal {
   font-weight: normal;
 }
 
-#amjeruytnm .gt_font_bold {
+#pztwxhpacf .gt_font_bold {
   font-weight: bold;
 }
 
-#amjeruytnm .gt_font_italic {
+#pztwxhpacf .gt_font_italic {
   font-style: italic;
 }
 
-#amjeruytnm .gt_super {
+#pztwxhpacf .gt_super {
   font-size: 65%;
 }
 
-#amjeruytnm .gt_footnote_marks {
+#pztwxhpacf .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#amjeruytnm .gt_asterisk {
+#pztwxhpacf .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#amjeruytnm .gt_indent_1 {
+#pztwxhpacf .gt_indent_1 {
   text-indent: 5px;
 }
 
-#amjeruytnm .gt_indent_2 {
+#pztwxhpacf .gt_indent_2 {
   text-indent: 10px;
 }
 
-#amjeruytnm .gt_indent_3 {
+#pztwxhpacf .gt_indent_3 {
   text-indent: 15px;
 }
 
-#amjeruytnm .gt_indent_4 {
+#pztwxhpacf .gt_indent_4 {
   text-indent: 20px;
 }
 
-#amjeruytnm .gt_indent_5 {
+#pztwxhpacf .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -2234,8 +2229,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       </th>
     </tr>
     <tr class="gt_col_headings">
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>N = 14,234</strong><span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>"><strong>N = 14,234</strong><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>N = 11,379</strong><span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>2</sup></span>"><strong>N = 11,379</strong><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>2</sup></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>N = 14,237</strong><span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>"><strong>N = 14,237</strong><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>N = 11,385</strong><span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>2</sup></span>"><strong>N = 11,385</strong><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>2</sup></span></th>
     </tr>
   </thead>
   <tbody class="gt_table_body">
@@ -2243,14 +2238,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td headers="stat_0_1" class="gt_row gt_center"></td>
 <td headers="stat_0_2" class="gt_row gt_center"></td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Woman</td>
-<td headers="stat_0_1" class="gt_row gt_center">14,015 (99.4%)</td>
-<td headers="stat_0_2" class="gt_row gt_center">11,233 (99.5%)</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Man</td>
-<td headers="stat_0_1" class="gt_row gt_center">28 (0.2%)</td>
-<td headers="stat_0_2" class="gt_row gt_center"></td></tr>
+<td headers="stat_0_1" class="gt_row gt_center">14,018 (99.4%)</td>
+<td headers="stat_0_2" class="gt_row gt_center">11,239 (99.5%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Other/multiple</td>
 <td headers="stat_0_1" class="gt_row gt_center">52 (0.4%)</td>
 <td headers="stat_0_2" class="gt_row gt_center">53 (0.5%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Man</td>
+<td headers="stat_0_1" class="gt_row gt_center">28 (0.2%)</td>
+<td headers="stat_0_2" class="gt_row gt_center"></td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Unknown</td>
 <td headers="stat_0_1" class="gt_row gt_center">139</td>
 <td headers="stat_0_2" class="gt_row gt_center">93</td></tr>
@@ -2258,47 +2253,47 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td headers="stat_0_1" class="gt_row gt_center"></td>
 <td headers="stat_0_2" class="gt_row gt_center"></td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Straight</td>
-<td headers="stat_0_1" class="gt_row gt_center">12,792 (89.9%)</td>
-<td headers="stat_0_2" class="gt_row gt_center">10,451 (91.8%)</td></tr>
+<td headers="stat_0_1" class="gt_row gt_center">12,795 (92.0%)</td>
+<td headers="stat_0_2" class="gt_row gt_center">10,455 (93.6%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Bisexual</td>
-<td headers="stat_0_1" class="gt_row gt_center">833 (5.9%)</td>
-<td headers="stat_0_2" class="gt_row gt_center">542 (4.8%)</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Gay/lesbian</td>
-<td headers="stat_0_1" class="gt_row gt_center">89 (0.6%)</td>
-<td headers="stat_0_2" class="gt_row gt_center">48 (0.4%)</td></tr>
+<td headers="stat_0_1" class="gt_row gt_center">833 (6.0%)</td>
+<td headers="stat_0_2" class="gt_row gt_center">544 (4.9%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;None</td>
 <td headers="stat_0_1" class="gt_row gt_center">195 (1.4%)</td>
-<td headers="stat_0_2" class="gt_row gt_center">122 (1.1%)</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;No answer</td>
-<td headers="stat_0_1" class="gt_row gt_center">325 (2.3%)</td>
-<td headers="stat_0_2" class="gt_row gt_center">216 (1.9%)</td></tr>
+<td headers="stat_0_2" class="gt_row gt_center">119 (1.1%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Gay/lesbian</td>
+<td headers="stat_0_1" class="gt_row gt_center">89 (0.6%)</td>
+<td headers="stat_0_2" class="gt_row gt_center">49 (0.4%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Unknown</td>
+<td headers="stat_0_1" class="gt_row gt_center">325</td>
+<td headers="stat_0_2" class="gt_row gt_center">218</td></tr>
     <tr><td headers="label" class="gt_row gt_left" style="font-weight: bold;">Race/ethnicity</td>
 <td headers="stat_0_1" class="gt_row gt_center"></td>
 <td headers="stat_0_2" class="gt_row gt_center"></td></tr>
-    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Asian</td>
-<td headers="stat_0_1" class="gt_row gt_center">464 (3.3%)</td>
-<td headers="stat_0_2" class="gt_row gt_center">369 (3.3%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Hispanic or Latino</td>
+<td headers="stat_0_1" class="gt_row gt_center">6,044 (43.2%)</td>
+<td headers="stat_0_2" class="gt_row gt_center">5,407 (48.2%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;White</td>
+<td headers="stat_0_1" class="gt_row gt_center">4,702 (33.6%)</td>
+<td headers="stat_0_2" class="gt_row gt_center">3,422 (30.5%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Black or African-American</td>
 <td headers="stat_0_1" class="gt_row gt_center">2,244 (16.0%)</td>
-<td headers="stat_0_2" class="gt_row gt_center">1,581 (14.1%)</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Hispanic or Latino</td>
-<td headers="stat_0_1" class="gt_row gt_center">6,043 (43.2%)</td>
-<td headers="stat_0_2" class="gt_row gt_center">5,409 (48.3%)</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Middle Eastern or North African</td>
-<td headers="stat_0_1" class="gt_row gt_center">95 (0.7%)</td>
-<td headers="stat_0_2" class="gt_row gt_center">80 (0.7%)</td></tr>
+<td headers="stat_0_2" class="gt_row gt_center">1,582 (14.1%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Asian</td>
+<td headers="stat_0_1" class="gt_row gt_center">465 (3.3%)</td>
+<td headers="stat_0_2" class="gt_row gt_center">370 (3.3%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;More than one race</td>
 <td headers="stat_0_1" class="gt_row gt_center">304 (2.2%)</td>
-<td headers="stat_0_2" class="gt_row gt_center">249 (2.2%)</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Native Hawaiian or Other Pacific Islander</td>
-<td headers="stat_0_1" class="gt_row gt_center">25 (0.2%)</td>
-<td headers="stat_0_2" class="gt_row gt_center">24 (0.2%)</td></tr>
+<td headers="stat_0_2" class="gt_row gt_center">247 (2.2%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Other</td>
 <td headers="stat_0_1" class="gt_row gt_center">118 (0.8%)</td>
 <td headers="stat_0_2" class="gt_row gt_center">83 (0.7%)</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;White</td>
-<td headers="stat_0_1" class="gt_row gt_center">4,701 (33.6%)</td>
-<td headers="stat_0_2" class="gt_row gt_center">3,413 (30.5%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Middle Eastern or North African</td>
+<td headers="stat_0_1" class="gt_row gt_center">95 (0.7%)</td>
+<td headers="stat_0_2" class="gt_row gt_center">79 (0.7%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Native Hawaiian or Other Pacific Islander</td>
+<td headers="stat_0_1" class="gt_row gt_center">25 (0.2%)</td>
+<td headers="stat_0_2" class="gt_row gt_center">24 (0.2%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Unknown</td>
 <td headers="stat_0_1" class="gt_row gt_center">240</td>
 <td headers="stat_0_2" class="gt_row gt_center">171</td></tr>
@@ -2307,145 +2302,193 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td headers="stat_0_2" class="gt_row gt_center"></td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;&lt; 10k</td>
 <td headers="stat_0_1" class="gt_row gt_center">2,054 (20.7%)</td>
-<td headers="stat_0_2" class="gt_row gt_center">1,429 (19.1%)</td></tr>
+<td headers="stat_0_2" class="gt_row gt_center">1,435 (19.1%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;10-25k</td>
 <td headers="stat_0_1" class="gt_row gt_center">1,460 (14.7%)</td>
-<td headers="stat_0_2" class="gt_row gt_center">1,113 (14.9%)</td></tr>
+<td headers="stat_0_2" class="gt_row gt_center">1,106 (14.7%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;25-50k</td>
-<td headers="stat_0_1" class="gt_row gt_center">2,103 (21.2%)</td>
-<td headers="stat_0_2" class="gt_row gt_center">1,720 (23.0%)</td></tr>
+<td headers="stat_0_1" class="gt_row gt_center">2,105 (21.2%)</td>
+<td headers="stat_0_2" class="gt_row gt_center">1,727 (23.0%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;50-100k</td>
 <td headers="stat_0_1" class="gt_row gt_center">1,905 (19.2%)</td>
-<td headers="stat_0_2" class="gt_row gt_center">1,478 (19.7%)</td></tr>
+<td headers="stat_0_2" class="gt_row gt_center">1,488 (19.8%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;&gt; 100k</td>
-<td headers="stat_0_1" class="gt_row gt_center">2,405 (24.2%)</td>
-<td headers="stat_0_2" class="gt_row gt_center">1,747 (23.3%)</td></tr>
+<td headers="stat_0_1" class="gt_row gt_center">2,404 (24.2%)</td>
+<td headers="stat_0_2" class="gt_row gt_center">1,743 (23.2%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Unknown</td>
-<td headers="stat_0_1" class="gt_row gt_center">4,307</td>
-<td headers="stat_0_2" class="gt_row gt_center">3,892</td></tr>
+<td headers="stat_0_1" class="gt_row gt_center">4,309</td>
+<td headers="stat_0_2" class="gt_row gt_center">3,886</td></tr>
     <tr><td headers="label" class="gt_row gt_left" style="font-weight: bold;">Education</td>
 <td headers="stat_0_1" class="gt_row gt_center"></td>
 <td headers="stat_0_2" class="gt_row gt_center"></td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Less than high school</td>
 <td headers="stat_0_1" class="gt_row gt_center">1,566 (11.2%)</td>
-<td headers="stat_0_2" class="gt_row gt_center">1,256 (11.2%)</td></tr>
+<td headers="stat_0_2" class="gt_row gt_center">1,258 (11.2%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;High school graduate</td>
-<td headers="stat_0_1" class="gt_row gt_center">3,829 (27.5%)</td>
-<td headers="stat_0_2" class="gt_row gt_center">3,269 (29.3%)</td></tr>
+<td headers="stat_0_1" class="gt_row gt_center">3,832 (27.5%)</td>
+<td headers="stat_0_2" class="gt_row gt_center">3,281 (29.3%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Some college</td>
 <td headers="stat_0_1" class="gt_row gt_center">3,683 (26.4%)</td>
-<td headers="stat_0_2" class="gt_row gt_center">2,970 (26.6%)</td></tr>
+<td headers="stat_0_2" class="gt_row gt_center">2,962 (26.5%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;College graduate</td>
-<td headers="stat_0_1" class="gt_row gt_center">2,652 (19.0%)</td>
-<td headers="stat_0_2" class="gt_row gt_center">2,035 (18.2%)</td></tr>
+<td headers="stat_0_1" class="gt_row gt_center">2,651 (19.0%)</td>
+<td headers="stat_0_2" class="gt_row gt_center">2,040 (18.2%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Advanced degree</td>
-<td headers="stat_0_1" class="gt_row gt_center">2,212 (15.9%)</td>
-<td headers="stat_0_2" class="gt_row gt_center">1,645 (14.7%)</td></tr>
+<td headers="stat_0_1" class="gt_row gt_center">2,213 (15.9%)</td>
+<td headers="stat_0_2" class="gt_row gt_center">1,644 (14.7%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Unknown</td>
 <td headers="stat_0_1" class="gt_row gt_center">292</td>
-<td headers="stat_0_2" class="gt_row gt_center">204</td></tr>
+<td headers="stat_0_2" class="gt_row gt_center">200</td></tr>
     <tr><td headers="label" class="gt_row gt_left" style="font-weight: bold;">State of residence</td>
 <td headers="stat_0_1" class="gt_row gt_center"></td>
 <td headers="stat_0_2" class="gt_row gt_center"></td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Arizona</td>
-<td headers="stat_0_1" class="gt_row gt_center">3,430 (24.1%)</td>
-<td headers="stat_0_2" class="gt_row gt_center">3,284 (28.9%)</td></tr>
+<td headers="stat_0_1" class="gt_row gt_center">3,431 (24.1%)</td>
+<td headers="stat_0_2" class="gt_row gt_center">3,285 (28.9%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;New York</td>
-<td headers="stat_0_1" class="gt_row gt_center">3,172 (22.3%)</td>
-<td headers="stat_0_2" class="gt_row gt_center">2,875 (25.3%)</td></tr>
+<td headers="stat_0_1" class="gt_row gt_center">3,173 (22.3%)</td>
+<td headers="stat_0_2" class="gt_row gt_center">2,877 (25.3%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;California</td>
 <td headers="stat_0_1" class="gt_row gt_center">1,655 (11.6%)</td>
-<td headers="stat_0_2" class="gt_row gt_center">1,512 (13.3%)</td></tr>
+<td headers="stat_0_2" class="gt_row gt_center">1,513 (13.3%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Massachusetts</td>
 <td headers="stat_0_1" class="gt_row gt_center">1,294 (9.1%)</td>
-<td headers="stat_0_2" class="gt_row gt_center">780 (6.9%)</td></tr>
+<td headers="stat_0_2" class="gt_row gt_center">782 (6.9%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Pennsylvania</td>
-<td headers="stat_0_1" class="gt_row gt_center">1,150 (8.1%)</td>
-<td headers="stat_0_2" class="gt_row gt_center">1,033 (9.1%)</td></tr>
+<td headers="stat_0_1" class="gt_row gt_center">1,151 (8.1%)</td>
+<td headers="stat_0_2" class="gt_row gt_center">1,032 (9.1%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Illinois</td>
 <td headers="stat_0_1" class="gt_row gt_center">745 (5.2%)</td>
-<td headers="stat_0_2" class="gt_row gt_center">522 (4.6%)</td></tr>
+<td headers="stat_0_2" class="gt_row gt_center">521 (4.6%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Wisconsin</td>
 <td headers="stat_0_1" class="gt_row gt_center">656 (4.6%)</td>
 <td headers="stat_0_2" class="gt_row gt_center">273 (2.4%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Alabama</td>
 <td headers="stat_0_1" class="gt_row gt_center">613 (4.3%)</td>
-<td headers="stat_0_2" class="gt_row gt_center">494 (4.3%)</td></tr>
+<td headers="stat_0_2" class="gt_row gt_center">496 (4.4%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Michigan</td>
 <td headers="stat_0_1" class="gt_row gt_center">584 (4.1%)</td>
 <td headers="stat_0_2" class="gt_row gt_center">231 (2.0%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;South Carolina</td>
+<td headers="stat_0_1" class="gt_row gt_center">193 (1.4%)</td>
+<td headers="stat_0_2" class="gt_row gt_center">2 (0.0%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Texas</td>
+<td headers="stat_0_1" class="gt_row gt_center">164 (1.2%)</td>
+<td headers="stat_0_2" class="gt_row gt_center">32 (0.3%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Florida</td>
+<td headers="stat_0_1" class="gt_row gt_center">152 (1.1%)</td>
+<td headers="stat_0_2" class="gt_row gt_center">73 (0.6%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Georgia</td>
+<td headers="stat_0_1" class="gt_row gt_center">92 (0.6%)</td>
+<td headers="stat_0_2" class="gt_row gt_center">53 (0.5%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Colorado</td>
+<td headers="stat_0_1" class="gt_row gt_center">79 (0.6%)</td>
+<td headers="stat_0_2" class="gt_row gt_center">75 (0.7%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;New Jersey</td>
+<td headers="stat_0_1" class="gt_row gt_center">74 (0.5%)</td>
+<td headers="stat_0_2" class="gt_row gt_center">64 (0.6%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Other</td>
-<td headers="stat_0_1" class="gt_row gt_center">935 (6.6%)</td>
-<td headers="stat_0_2" class="gt_row gt_center">375 (3.3%)</td></tr>
+<td headers="stat_0_1" class="gt_row gt_center">35 (0.2%)</td>
+<td headers="stat_0_2" class="gt_row gt_center">28 (0.2%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Mississippi</td>
+<td headers="stat_0_1" class="gt_row gt_center">31 (0.2%)</td>
+<td headers="stat_0_2" class="gt_row gt_center">1 (0.0%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Connecticut</td>
+<td headers="stat_0_1" class="gt_row gt_center">34 (0.2%)</td>
+<td headers="stat_0_2" class="gt_row gt_center">1 (0.0%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Tennessee</td>
+<td headers="stat_0_1" class="gt_row gt_center">23 (0.2%)</td>
+<td headers="stat_0_2" class="gt_row gt_center">0 (0.0%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;New Hampshire</td>
+<td headers="stat_0_1" class="gt_row gt_center">18 (0.1%)</td>
+<td headers="stat_0_2" class="gt_row gt_center">17 (0.1%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Louisiana</td>
+<td headers="stat_0_1" class="gt_row gt_center">11 (0.1%)</td>
+<td headers="stat_0_2" class="gt_row gt_center">6 (0.1%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Minnesota</td>
+<td headers="stat_0_1" class="gt_row gt_center">8 (0.1%)</td>
+<td headers="stat_0_2" class="gt_row gt_center">9 (0.1%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Rhode Island</td>
+<td headers="stat_0_1" class="gt_row gt_center">7 (0.0%)</td>
+<td headers="stat_0_2" class="gt_row gt_center">6 (0.1%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Indiana</td>
+<td headers="stat_0_1" class="gt_row gt_center">9 (0.1%)</td>
+<td headers="stat_0_2" class="gt_row gt_center">7 (0.1%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Wyoming</td>
+<td headers="stat_0_1" class="gt_row gt_center">5 (0.0%)</td>
+<td headers="stat_0_2" class="gt_row gt_center">1 (0.0%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left" style="font-weight: bold;">Maternal age</td>
 <td headers="stat_0_1" class="gt_row gt_center"></td>
 <td headers="stat_0_2" class="gt_row gt_center"></td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;15-19 years</td>
 <td headers="stat_0_1" class="gt_row gt_center"></td>
-<td headers="stat_0_2" class="gt_row gt_center">381 (3.3%)</td></tr>
+<td headers="stat_0_2" class="gt_row gt_center">386 (3.4%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;20-24 years</td>
 <td headers="stat_0_1" class="gt_row gt_center"></td>
-<td headers="stat_0_2" class="gt_row gt_center">2,193 (19.3%)</td></tr>
+<td headers="stat_0_2" class="gt_row gt_center">2,199 (19.3%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;25-29 years</td>
 <td headers="stat_0_1" class="gt_row gt_center"></td>
 <td headers="stat_0_2" class="gt_row gt_center">3,196 (28.1%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;30-34 years</td>
 <td headers="stat_0_1" class="gt_row gt_center"></td>
-<td headers="stat_0_2" class="gt_row gt_center">3,204 (28.2%)</td></tr>
+<td headers="stat_0_2" class="gt_row gt_center">3,201 (28.1%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;35-39 years</td>
 <td headers="stat_0_1" class="gt_row gt_center"></td>
-<td headers="stat_0_2" class="gt_row gt_center">1,907 (16.8%)</td></tr>
+<td headers="stat_0_2" class="gt_row gt_center">1,905 (16.7%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;40-44 years</td>
 <td headers="stat_0_1" class="gt_row gt_center"></td>
 <td headers="stat_0_2" class="gt_row gt_center">462 (4.1%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;45 years and over</td>
 <td headers="stat_0_1" class="gt_row gt_center"></td>
 <td headers="stat_0_2" class="gt_row gt_center">36 (0.3%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;NA-NA years</td>
+<td headers="stat_0_1" class="gt_row gt_center"></td>
+<td headers="stat_0_2" class="gt_row gt_center">0 (0.0%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left" style="font-weight: bold;">Year of delivery</td>
 <td headers="stat_0_1" class="gt_row gt_center"></td>
 <td headers="stat_0_2" class="gt_row gt_center"></td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;2016</td>
 <td headers="stat_0_1" class="gt_row gt_center"></td>
-<td headers="stat_0_2" class="gt_row gt_center">366 (3.2%)</td></tr>
+<td headers="stat_0_2" class="gt_row gt_center">375 (3.3%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;2017</td>
 <td headers="stat_0_1" class="gt_row gt_center"></td>
-<td headers="stat_0_2" class="gt_row gt_center">1,429 (12.6%)</td></tr>
+<td headers="stat_0_2" class="gt_row gt_center">1,430 (12.6%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;2018</td>
 <td headers="stat_0_1" class="gt_row gt_center"></td>
-<td headers="stat_0_2" class="gt_row gt_center">1,798 (15.8%)</td></tr>
+<td headers="stat_0_2" class="gt_row gt_center">1,795 (15.8%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;2019</td>
 <td headers="stat_0_1" class="gt_row gt_center"></td>
-<td headers="stat_0_2" class="gt_row gt_center">3,045 (26.8%)</td></tr>
+<td headers="stat_0_2" class="gt_row gt_center">3,046 (26.8%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;2020</td>
 <td headers="stat_0_1" class="gt_row gt_center"></td>
 <td headers="stat_0_2" class="gt_row gt_center">2,060 (18.1%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;2021</td>
 <td headers="stat_0_1" class="gt_row gt_center"></td>
-<td headers="stat_0_2" class="gt_row gt_center">1,782 (15.7%)</td></tr>
+<td headers="stat_0_2" class="gt_row gt_center">1,777 (15.6%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;2022</td>
 <td headers="stat_0_1" class="gt_row gt_center"></td>
-<td headers="stat_0_2" class="gt_row gt_center">899 (7.9%)</td></tr>
+<td headers="stat_0_2" class="gt_row gt_center">902 (7.9%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left" style="font-weight: bold;">All of Us participation relative to pregnancy</td>
 <td headers="stat_0_1" class="gt_row gt_center"></td>
 <td headers="stat_0_2" class="gt_row gt_center"></td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;After</td>
 <td headers="stat_0_1" class="gt_row gt_center"></td>
-<td headers="stat_0_2" class="gt_row gt_center">5,750 (50.5%)</td></tr>
+<td headers="stat_0_2" class="gt_row gt_center">5,766 (50.6%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Before</td>
 <td headers="stat_0_1" class="gt_row gt_center"></td>
-<td headers="stat_0_2" class="gt_row gt_center">2,331 (20.5%)</td></tr>
+<td headers="stat_0_2" class="gt_row gt_center">2,324 (20.4%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;During</td>
 <td headers="stat_0_1" class="gt_row gt_center"></td>
-<td headers="stat_0_2" class="gt_row gt_center">3,265 (28.7%)</td></tr>
+<td headers="stat_0_2" class="gt_row gt_center">3,263 (28.7%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Unclear</td>
 <td headers="stat_0_1" class="gt_row gt_center"></td>
-<td headers="stat_0_2" class="gt_row gt_center">33 (0.3%)</td></tr>
+<td headers="stat_0_2" class="gt_row gt_center">32 (0.3%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left" style="font-weight: bold;">Gestational age at delivery (weeks)</td>
 <td headers="stat_0_1" class="gt_row gt_center"></td>
 <td headers="stat_0_2" class="gt_row gt_center">39 (37.1, 39)</td></tr>
     <tr><td headers="label" class="gt_row gt_left" style="font-weight: bold;">Preterm (&lt; 37 weeks)</td>
 <td headers="stat_0_1" class="gt_row gt_center"></td>
-<td headers="stat_0_2" class="gt_row gt_center">2,329 (20.5%)</td></tr>
+<td headers="stat_0_2" class="gt_row gt_center">2,330 (20.5%)</td></tr>
   </tbody>
   
   <tfoot class="gt_footnotes">

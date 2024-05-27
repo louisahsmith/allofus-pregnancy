@@ -45,7 +45,7 @@ poss_preg <- ehr_female %>%
     aou_observation_period() %>%
       mutate(observation_period_start_date = if_else(
         observation_period_start_date < as.Date("2016-01-01") &
-          observation_period_end_date > as.Date("2016-01-01"), as.Date("2016-01-01"),
+          observation_period_end_date >= as.Date("2016-01-01"), as.Date("2016-01-01"),
         observation_period_start_date
       )) %>%
       filter(observation_period_end_date >= as.Date("2016-01-01")),
@@ -82,6 +82,18 @@ combined_dat <- collect(poss_preg) %>%
     hipps_interval_12_buffer = interval(week_12, inferred_episode_end + days(14)),
     survey_after_week_12_buffer = as.numeric(pregnancy_date %within% hipps_interval_12_buffer),
     survey_after_week_12_buffer = ifelse(is.na(survey_after_week_12_buffer), 0, survey_after_week_12_buffer),
+    
+    week_20 = inferred_episode_start + weeks(20),
+    # the hipps pregnancy interval after week 20 (assume they know by then, though not always the case!)
+    hipps_interval_20 = interval(week_20, inferred_episode_end),
+    # did they take the survey while they should have known they were pregnant according to hipps
+    survey_after_week_20 = as.numeric(pregnancy_date %within% hipps_interval_20),
+    survey_after_week_20 = ifelse(is.na(survey_after_week_20), 0, survey_after_week_20),
+    hipps_interval_20_buffer = interval(week_20, inferred_episode_end + days(14)),
+    survey_after_week_20_buffer = as.numeric(pregnancy_date %within% hipps_interval_20_buffer),
+    survey_after_week_20_buffer = ifelse(is.na(survey_after_week_20_buffer), 0, survey_after_week_20_buffer),
+    
+    
     # expanded hipps interval to account for imprecise dates
     buffer_interval = interval(inferred_episode_start - days(14), inferred_episode_end + days(14)),
     # did they take the survey at any time in the expanded hipps interval (0 for people who didn't have a hipps preg)
@@ -124,6 +136,21 @@ combined_dat %>%
   pull(percent)
 ```
 
+PPV = probability of saying you are pregnant on the survey, given that you have been identified as pregnant by hipps (past 20 weeks)
+
+```{r}
+combined_dat %>%
+  filter(survey_after_week_20 == 1, inferred_episode_end > week_20) %>%
+  mutate(pregnancy = ifelse(pregnancy %in% c("Skip", "DontKnow"), "Skip/DK", pregnancy)) %>%
+  count(pregnancy)
+
+combined_dat %>%
+  filter(survey_after_week_20 == 1, inferred_episode_end > week_20, pregnancy %in% c("No", "Yes")) %>%
+  janitor::tabyl(pregnancy) %>%
+  filter(pregnancy == "Yes") %>%
+  pull(percent)
+```
+
 NPV = probability you say you aren't pregnant given that we say you aren't pregnant around the time you take the survey
 
 ```{r}
@@ -149,6 +176,14 @@ specificity = probability we didn't identify you as > 12 weeks pregnant given yo
 combined_dat %>%
   filter(pregnancy == "No", inferred_episode_end > week_12 | is.na(inferred_episode_end)) %>%
   janitor::tabyl(survey_after_week_12)
+```
+
+specificity = probability we didn't identify you as > 20 weeks pregnant given you said you weren't pregnant
+
+```{r}
+combined_dat %>%
+  filter(pregnancy == "No", inferred_episode_end > week_20 | is.na(inferred_episode_end)) %>%
+  janitor::tabyl(survey_after_week_20)
 ```
 
 here are the exact values
@@ -249,7 +284,7 @@ proc_hidden <- tbl(con, "procedure_occurrence") %>%
 proc_found <- tbl(con, "procedure_occurrence") %>%
   filter(person_id %in% !!found_preg$person_id) %>%
   inner_join(concept_names, by = join_by(procedure_concept_id == concept_id)) %>%
-  collect() %>%
+  collect(page_size = 25000) %>%
   inner_join(found_preg, by = join_by(person_id, between(procedure_date, survey_start, survey_end))) %>%
   mutate(concept_id = as.double(procedure_concept_id)) %>%
   left_join(HIP_concepts, by = join_by(concept_id))
@@ -268,7 +303,6 @@ all_hidden <- cond_hidden %>%
   bind_rows(select(proc_hidden, person_id, concept_id, category, gest_value, pregnancy_date, date = procedure_date)) %>%
   mutate(type = "hidden")
 ```
-
 ```{r}
 all <- bind_rows(all_found, all_hidden) %>%
   mutate(
@@ -347,6 +381,7 @@ extra_concepts <- tribble(
   2211749L, 4, 11,
   2211757L, 1, 6
 )
+
 pull_extra <- function(extra_concepts, df, start_date_col, id_col) {
   top_concepts_df <- rename(df, "domain_concept_start_date" = start_date_col, "domain_concept_id" = id_col) %>%
     filter(domain_concept_id %in% !!extra_concepts$concept_id) %>%
@@ -363,15 +398,14 @@ m_df <- pull_extra(extra_concepts, tbl(con, "measurement"), "measurement_date", 
 
 extra_preg_related_concepts <- list(c_o, p_o, o_df, m_df) %>%
   reduce(union_all) %>%
-  filter(domain_concept_start_date > as.Date("2016-01-01")) %>%
+  filter(domain_concept_start_date >= as.Date("2016-01-01")) %>%
   collect()
 
 matches <- extra_preg_related_concepts %>%
   mutate(domain_concept_id = as.double(domain_concept_id)) %>%
   left_join(extra_concepts, by = join_by(domain_concept_id == concept_id)) %>%
   left_join(hipps, by = join_by(
-    person_id,
-    between(domain_concept_start_date, inferred_episode_start, inferred_episode_end)
+    person_id, closest(domain_concept_start_date >= inferred_episode_start)
   )) %>%
   mutate(
     expected_min_date = inferred_episode_start %m+% months(as.integer(min_months)),

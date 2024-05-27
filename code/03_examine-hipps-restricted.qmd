@@ -7,7 +7,6 @@ df-print: kable
 execute: 
   warning: false
   message: false
-  cache: true
 ---
 
 ```{r}
@@ -41,7 +40,7 @@ hipps <- all %>%
   filter(
     inferred_episode_start < inferred_episode_end,
     HIP_flag == 1 & PPS_flag == 1,
-    inferred_episode_start > as.Date("2016-01-01")
+    inferred_episode_start >= as.Date("2016-01-01")
   )
 ```
 
@@ -50,8 +49,10 @@ hipps_w_demo <- read_rds(here::here("workbench/hipps_cleaned.rds")) %>%
   filter(
     inferred_episode_start < inferred_episode_end,
     HIP_flag == 1 & PPS_flag == 1,
-    inferred_episode_start > as.Date("2016-01-01")
-  )
+    inferred_episode_start >= as.Date("2016-01-01")
+  ) %>% 
+    mutate(across(c(state_cat, gender_cat, orientation_cat, race_eth_cat, marital_status_cat), fct_infreq),
+           across(where(is.factor), fct_drop))
 ```
 
 ```{r}
@@ -153,12 +154,6 @@ aou_workspace_to_bucket(here::here("workbench/hipps_cleaned_restricted.rds"))
 ```{r}
 demo_table <- hipps_cleaned %>%
   distinct(person_id, gender_cat, orientation_cat, race_eth_cat, income_cat, edu_cat, marital_status_cat, state_cat) %>%
-  mutate(across(where(is.factor), ~ fct_lump_min(.x, min = 20)),
-    state_cat = fct_infreq(state_cat),
-    state_cat = fct_lump_min(state_cat, min = 20),
-    orientation_cat = fct_relevel(orientation_cat, "Straight", "Bisexual", "Gay/lesbian", "None"),
-    orientation_cat = fct_recode(orientation_cat, NULL = "No answer")
-  ) %>%
   tbl_summary(
     include = c(gender_cat, orientation_cat, race_eth_cat, income_cat, edu_cat, state_cat),
     label = list(
@@ -202,11 +197,6 @@ preg_table
 ```{r}
 demo_table <- hipps_cleaned %>%
   distinct(person_id, gender_cat, orientation_cat, race_eth_cat, income_cat, edu_cat, marital_status_cat, state_cat) %>%
-  mutate(across(where(is.factor), ~ fct_lump_min(.x, min = 20)),
-    state_cat = fct_infreq(state_cat),
-    state_cat = fct_lump_min(state_cat, min = 200),
-    orientation_cat = fct_relevel(orientation_cat, "Straight", "Bisexual", "Gay/lesbian", "None")
-  ) %>%
   tbl_summary(
     include = c(
       gender_cat, orientation_cat, race_eth_cat, income_cat, edu_cat,
@@ -226,11 +216,7 @@ demo_table <- hipps_cleaned %>%
 
 preg_table <- hipps_cleaned %>%
   filter(outcome_category == "Live birth") %>%
-  mutate(across(where(is.factor), ~ fct_lump_min(.x, min = 20)),
-    across(where(is.factor), fct_drop),
-    state_cat = fct_infreq(state_cat),
-    state_cat = fct_lump_min(state_cat, min = 200),
-    orientation_cat = fct_relevel(orientation_cat, "Straight", "Bisexual", "Gay/lesbian", "None"),
+  mutate(
     gender_cat = fct_collapse(gender_cat, "Other/multiple" = c("Other", "Man"))
   ) %>%
   tbl_summary(

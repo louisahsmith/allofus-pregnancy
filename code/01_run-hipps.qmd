@@ -199,7 +199,7 @@ merged_episodes_with_metadata_df <- merged_episodes_with_metadata(
 ```
 
 ```{r save}
-if (!dir.exists(here::here("workbench"))) dir.create("workbench")
+if (!dir.exists(here::here("workbench"))) dir.create(here::here("workbench"))
 
 write_rds(merged_episodes_with_metadata_df, here::here("workbench/merged_episodes_with_metadata_df.rds"))
 

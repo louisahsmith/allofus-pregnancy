@@ -176,7 +176,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>surv_preg <span class="ot">&lt;-</span> <span class="fu">aou_survey</span>(<span class="fu">distinct</span>(poss_preg, person_id), <span class="at">questions =</span> <span class="fu">c</span>(<span class="dv">1585811</span>), <span class="at">question_output =</span> <span class="fu">c</span>(<span class="st">"pregnancy"</span>), <span class="at">collect =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pregnancy =</span> <span class="fu">ifelse</span>(pregnancy <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"PreferNotToAnswer"</span>, <span class="st">"Skip"</span>), <span class="st">"Skip"</span>, pregnancy))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="04_validate-hipps_cache/html/unnamed-chunk-9_58324cf6cdf8eb28abc35f87c6c50180">
+<div class="cell" data-hash="04_validate-hipps_cache/html/unnamed-chunk-9_20eeb1b3a9fd0d55ae482f5de2d2c71a">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>combined_dat <span class="ot">&lt;-</span> <span class="fu">collect</span>(poss_preg) <span class="sc">%&gt;%</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(surv_preg) <span class="sc">%&gt;%</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(hipps, <span class="at">by =</span> <span class="fu">join_by</span>(person_id, dob, pregnancy, pregnancy_date), <span class="at">relationship =</span> <span class="st">"many-to-many"</span>) <span class="sc">%&gt;%</span></span>
@@ -193,27 +193,39 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">hipps_interval_12_buffer =</span> <span class="fu">interval</span>(week_12, inferred_episode_end <span class="sc">+</span> <span class="fu">days</span>(<span class="dv">14</span>)),</span>
 <span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">survey_after_week_12_buffer =</span> <span class="fu">as.numeric</span>(pregnancy_date <span class="sc">%within%</span> hipps_interval_12_buffer),</span>
 <span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">survey_after_week_12_buffer =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(survey_after_week_12_buffer), <span class="dv">0</span>, survey_after_week_12_buffer),</span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># expanded hipps interval to account for imprecise dates</span></span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">buffer_interval =</span> <span class="fu">interval</span>(inferred_episode_start <span class="sc">-</span> <span class="fu">days</span>(<span class="dv">14</span>), inferred_episode_end <span class="sc">+</span> <span class="fu">days</span>(<span class="dv">14</span>)),</span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># did they take the survey at any time in the expanded hipps interval (0 for people who didn't have a hipps preg)</span></span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">survey_within_buffer =</span> <span class="fu">as.numeric</span>(pregnancy_date <span class="sc">%within%</span> buffer_interval),</span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">survey_within_buffer =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(survey_within_buffer), <span class="dv">0</span>, survey_within_buffer),</span>
-<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># did they take the survey within the exact hipps interval</span></span>
-<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">survey_within_exact =</span> <span class="fu">as.numeric</span>(pregnancy_date <span class="sc">%within%</span> <span class="fu">interval</span>(inferred_episode_start, inferred_episode_end)),</span>
-<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">survey_within_exact =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(survey_within_exact), <span class="dv">0</span>, survey_within_exact),</span>
-<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">time_diff =</span> inferred_episode_end <span class="sc">-</span> pregnancy_date,</span>
-<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">time_to_closest =</span> <span class="fu">case_when</span>(</span>
-<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>      <span class="fu">is.na</span>(week_12) <span class="sc">~</span> <span class="dv">1000000</span>,</span>
-<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>      survey_within_buffer <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="dv">0</span>,</span>
-<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>      <span class="fu">abs</span>(inferred_episode_end <span class="sc">-</span> pregnancy_date) <span class="sc">&lt;</span></span>
-<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>        <span class="fu">abs</span>(week_12 <span class="sc">-</span> pregnancy_date) <span class="sc">~</span> <span class="fu">as.numeric</span>(<span class="fu">abs</span>(inferred_episode_end <span class="sc">-</span> pregnancy_date)),</span>
-<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="fu">as.numeric</span>(<span class="fu">abs</span>(week_12 <span class="sc">-</span> pregnancy_date))</span>
-<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(survey_during_ehr, age_at_survey <span class="sc">&lt;=</span> <span class="dv">55</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(person_id) <span class="sc">%&gt;%</span></span>
-<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_min</span>(<span class="at">order_by =</span> time_to_closest, <span class="at">n =</span> <span class="dv">1</span>, <span class="at">with_ties =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">week_20 =</span> inferred_episode_start <span class="sc">+</span> <span class="fu">weeks</span>(<span class="dv">20</span>),</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># the hipps pregnancy interval after week 20 (assume they know by then, though not always the case!)</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">hipps_interval_20 =</span> <span class="fu">interval</span>(week_20, inferred_episode_end),</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># did they take the survey while they should have known they were pregnant according to hipps</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">survey_after_week_20 =</span> <span class="fu">as.numeric</span>(pregnancy_date <span class="sc">%within%</span> hipps_interval_20),</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">survey_after_week_20 =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(survey_after_week_20), <span class="dv">0</span>, survey_after_week_20),</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">hipps_interval_20_buffer =</span> <span class="fu">interval</span>(week_20, inferred_episode_end <span class="sc">+</span> <span class="fu">days</span>(<span class="dv">14</span>)),</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">survey_after_week_20_buffer =</span> <span class="fu">as.numeric</span>(pregnancy_date <span class="sc">%within%</span> hipps_interval_20_buffer),</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">survey_after_week_20_buffer =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(survey_after_week_20_buffer), <span class="dv">0</span>, survey_after_week_20_buffer),</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>    <span class="co"># expanded hipps interval to account for imprecise dates</span></span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">buffer_interval =</span> <span class="fu">interval</span>(inferred_episode_start <span class="sc">-</span> <span class="fu">days</span>(<span class="dv">14</span>), inferred_episode_end <span class="sc">+</span> <span class="fu">days</span>(<span class="dv">14</span>)),</span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>    <span class="co"># did they take the survey at any time in the expanded hipps interval (0 for people who didn't have a hipps preg)</span></span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">survey_within_buffer =</span> <span class="fu">as.numeric</span>(pregnancy_date <span class="sc">%within%</span> buffer_interval),</span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">survey_within_buffer =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(survey_within_buffer), <span class="dv">0</span>, survey_within_buffer),</span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>    <span class="co"># did they take the survey within the exact hipps interval</span></span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">survey_within_exact =</span> <span class="fu">as.numeric</span>(pregnancy_date <span class="sc">%within%</span> <span class="fu">interval</span>(inferred_episode_start, inferred_episode_end)),</span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">survey_within_exact =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(survey_within_exact), <span class="dv">0</span>, survey_within_exact),</span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">time_diff =</span> inferred_episode_end <span class="sc">-</span> pregnancy_date,</span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">time_to_closest =</span> <span class="fu">case_when</span>(</span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>      <span class="fu">is.na</span>(week_12) <span class="sc">~</span> <span class="dv">1000000</span>,</span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>      survey_within_buffer <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="dv">0</span>,</span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>      <span class="fu">abs</span>(inferred_episode_end <span class="sc">-</span> pregnancy_date) <span class="sc">&lt;</span></span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>        <span class="fu">abs</span>(week_12 <span class="sc">-</span> pregnancy_date) <span class="sc">~</span> <span class="fu">as.numeric</span>(<span class="fu">abs</span>(inferred_episode_end <span class="sc">-</span> pregnancy_date)),</span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="fu">as.numeric</span>(<span class="fu">abs</span>(week_12 <span class="sc">-</span> pregnancy_date))</span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(survey_during_ehr, age_at_survey <span class="sc">&lt;=</span> <span class="dv">55</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(person_id) <span class="sc">%&gt;%</span></span>
+<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_min</span>(<span class="at">order_by =</span> time_to_closest, <span class="at">n =</span> <span class="dv">1</span>, <span class="at">with_ties =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-hash="04_validate-hipps_cache/html/unnamed-chunk-10_b102b0712653a25afc1dbbd357969062">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tally</span>(<span class="fu">distinct</span>(combined_dat, person_id)) <span class="sc">%&gt;%</span> <span class="fu">collect</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -252,7 +264,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">No</td>
-<td style="text-align: right;">820</td>
+<td style="text-align: right;">822</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Yes</td>
@@ -268,25 +280,62 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(pregnancy <span class="sc">==</span> <span class="st">"Yes"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(percent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.769986</code></pre>
+<pre><code>[1] 0.7695542</code></pre>
+</div>
+</div>
+<p>PPV = probability of saying you are pregnant on the survey, given that you have been identified as pregnant by hipps (past 20 weeks)</p>
+<div class="cell" data-hash="04_validate-hipps_cache/html/unnamed-chunk-12_b7b8603fb7e99ab5fc26100b523da33a">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>combined_dat <span class="sc">%&gt;%</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(survey_after_week_20 <span class="sc">==</span> <span class="dv">1</span>, inferred_episode_end <span class="sc">&gt;</span> week_20) <span class="sc">%&gt;%</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pregnancy =</span> <span class="fu">ifelse</span>(pregnancy <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Skip"</span>, <span class="st">"DontKnow"</span>), <span class="st">"Skip/DK"</span>, pregnancy)) <span class="sc">%&gt;%</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(pregnancy)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="kable-table">
+<table class="table table-sm table-striped">
+<thead>
+<tr class="header">
+<th style="text-align: left;">pregnancy</th>
+<th style="text-align: right;">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">No</td>
+<td style="text-align: right;">746</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Yes</td>
+<td style="text-align: right;">1398</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>combined_dat <span class="sc">%&gt;%</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(survey_after_week_20 <span class="sc">==</span> <span class="dv">1</span>, inferred_episode_end <span class="sc">&gt;</span> week_20, pregnancy <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"No"</span>, <span class="st">"Yes"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">tabyl</span>(pregnancy) <span class="sc">%&gt;%</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(pregnancy <span class="sc">==</span> <span class="st">"Yes"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(percent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.6520522</code></pre>
 </div>
 </div>
 <p>NPV = probability you say you aren’t pregnant given that we say you aren’t pregnant around the time you take the survey</p>
-<div class="cell" data-hash="04_validate-hipps_cache/html/unnamed-chunk-12_6448ef37fc17e6b9662e6917b05cdb61">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>combined_dat <span class="sc">%&gt;%</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(survey_within_buffer <span class="sc">==</span> <span class="dv">0</span>, pregnancy <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"No"</span>, <span class="st">"Yes"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">tabyl</span>(pregnancy) <span class="sc">%&gt;%</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(pregnancy <span class="sc">==</span> <span class="st">"No"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(percent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="04_validate-hipps_cache/html/unnamed-chunk-13_9a44f29bf7b824e43906a12b57e64b7e">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>combined_dat <span class="sc">%&gt;%</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(survey_within_buffer <span class="sc">==</span> <span class="dv">0</span>, pregnancy <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"No"</span>, <span class="st">"Yes"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">tabyl</span>(pregnancy) <span class="sc">%&gt;%</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(pregnancy <span class="sc">==</span> <span class="st">"No"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(percent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.989555</code></pre>
 </div>
 </div>
 <p>sensitivity = probability of identifying you as pregnant (within buffer zone) given that you reported you were pregnant on the survey if you are a 0 here, we don’t know whether we missed you entirely or whether the dates were exatly right (probably the latter)</p>
-<div class="cell" data-hash="04_validate-hipps_cache/html/unnamed-chunk-13_5dde1b2250986edf46f512a055e0a1f4">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>combined_dat <span class="sc">%&gt;%</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(pregnancy <span class="sc">==</span> <span class="st">"Yes"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">tabyl</span>(survey_within_buffer)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="04_validate-hipps_cache/html/unnamed-chunk-14_c39fbc1b849a3ce83b2dec11adc6b2fc">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>combined_dat <span class="sc">%&gt;%</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(pregnancy <span class="sc">==</span> <span class="st">"Yes"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">tabyl</span>(survey_within_buffer)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="kable-table">
 <table class="table table-sm table-striped">
@@ -314,10 +363,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 <p>specificity = probability we didn’t identify you as &gt; 12 weeks pregnant given you said you weren’t pregnant</p>
-<div class="cell" data-hash="04_validate-hipps_cache/html/unnamed-chunk-14_524db891ffb8fbd50466810c2fb4f08d">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>combined_dat <span class="sc">%&gt;%</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(pregnancy <span class="sc">==</span> <span class="st">"No"</span>, inferred_episode_end <span class="sc">&gt;</span> week_12 <span class="sc">|</span> <span class="fu">is.na</span>(inferred_episode_end)) <span class="sc">%&gt;%</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">tabyl</span>(survey_after_week_12)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="04_validate-hipps_cache/html/unnamed-chunk-15_e7dbcc2be606c9b2de5f74ad120e6c5e">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>combined_dat <span class="sc">%&gt;%</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(pregnancy <span class="sc">==</span> <span class="st">"No"</span>, inferred_episode_end <span class="sc">&gt;</span> week_12 <span class="sc">|</span> <span class="fu">is.na</span>(inferred_episode_end)) <span class="sc">%&gt;%</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">tabyl</span>(survey_after_week_12)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="kable-table">
 <table class="table table-sm table-striped">
@@ -331,13 +380,44 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tbody>
 <tr class="odd">
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">55656</td>
-<td style="text-align: right;">0.9854806</td>
+<td style="text-align: right;">55655</td>
+<td style="text-align: right;">0.9854454</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">820</td>
-<td style="text-align: right;">0.0145194</td>
+<td style="text-align: right;">822</td>
+<td style="text-align: right;">0.0145546</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p>specificity = probability we didn’t identify you as &gt; 20 weeks pregnant given you said you weren’t pregnant</p>
+<div class="cell" data-hash="04_validate-hipps_cache/html/unnamed-chunk-16_fc7432b9965594cb0e6cc51d985779c4">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>combined_dat <span class="sc">%&gt;%</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(pregnancy <span class="sc">==</span> <span class="st">"No"</span>, inferred_episode_end <span class="sc">&gt;</span> week_20 <span class="sc">|</span> <span class="fu">is.na</span>(inferred_episode_end)) <span class="sc">%&gt;%</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">tabyl</span>(survey_after_week_20)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="kable-table">
+<table class="table table-sm table-striped">
+<thead>
+<tr class="header">
+<th style="text-align: right;">survey_after_week_20</th>
+<th style="text-align: right;">n</th>
+<th style="text-align: right;">percent</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">53528</td>
+<td style="text-align: right;">0.9862549</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">746</td>
+<td style="text-align: right;">0.0137451</td>
 </tr>
 </tbody>
 </table>
@@ -345,10 +425,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 <p>here are the exact values</p>
-<div class="cell" data-hash="04_validate-hipps_cache/html/unnamed-chunk-15_46eb7515e4ddf154cbaa160a032fc064">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>combined_dat <span class="sc">%&gt;%</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(pregnancy <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Yes"</span>, <span class="st">"No"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">tabyl</span>(pregnancy, survey_within_exact)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="04_validate-hipps_cache/html/unnamed-chunk-17_2a9da4598ccd56b77dc89ec4fca605f3">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>combined_dat <span class="sc">%&gt;%</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(pregnancy <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Yes"</span>, <span class="st">"No"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">tabyl</span>(pregnancy, survey_within_exact)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="kable-table">
 <table class="table table-sm table-striped">
@@ -362,8 +442,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">No</td>
-<td style="text-align: right;">57584</td>
-<td style="text-align: right;">1155</td>
+<td style="text-align: right;">57582</td>
+<td style="text-align: right;">1157</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Yes</td>
@@ -375,11 +455,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </div>
-<div class="cell" data-hash="04_validate-hipps_cache/html/unnamed-chunk-16_a8bc2c20c2f3ae4f9f51e9fa5185451c">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>combined_dat <span class="sc">%&gt;%</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(pregnancy <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Yes"</span>, <span class="st">"No"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">tabyl</span>(pregnancy, survey_within_exact) <span class="sc">%&gt;%</span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">adorn_percentages</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="04_validate-hipps_cache/html/unnamed-chunk-18_14617dcdda3ebb818a99219e57cd77bb">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>combined_dat <span class="sc">%&gt;%</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(pregnancy <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Yes"</span>, <span class="st">"No"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">tabyl</span>(pregnancy, survey_within_exact) <span class="sc">%&gt;%</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">adorn_percentages</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="kable-table">
 <table class="table table-sm table-striped">
@@ -393,8 +473,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">No</td>
-<td style="text-align: right;">0.9803367</td>
-<td style="text-align: right;">0.0196633</td>
+<td style="text-align: right;">0.9803027</td>
+<td style="text-align: right;">0.0196973</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Yes</td>
@@ -407,10 +487,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 <p>On average, among people who said they were not pregnant during a HIPPS assigned pregnancy episode, they took the survey on average x days from the end of the pregnancy episode. x% of those were within two weeks of the end of the interval. Additional people might not have known they were pregnant at the time.</p>
-<div class="cell" data-hash="04_validate-hipps_cache/html/unnamed-chunk-17_43198b7b6b478c845561c29964207acf">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>combined_dat <span class="sc">%&gt;%</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(survey_after_week_12 <span class="sc">==</span> <span class="dv">1</span>, inferred_episode_end <span class="sc">&gt;</span> week_12, pregnancy <span class="sc">==</span> <span class="st">"No"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(), <span class="fu">quantile</span>(time_diff, .<span class="dv">25</span>), <span class="fu">median</span>(time_diff), <span class="fu">quantile</span>(time_diff, .<span class="dv">75</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="04_validate-hipps_cache/html/unnamed-chunk-19_15b3896e076a5bbc49ddaa5f11d00073">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>combined_dat <span class="sc">%&gt;%</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(survey_after_week_12 <span class="sc">==</span> <span class="dv">1</span>, inferred_episode_end <span class="sc">&gt;</span> week_12, pregnancy <span class="sc">==</span> <span class="st">"No"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(), <span class="fu">quantile</span>(time_diff, .<span class="dv">25</span>), <span class="fu">median</span>(time_diff), <span class="fu">quantile</span>(time_diff, .<span class="dv">75</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="kable-table">
 <table class="table table-sm table-striped">
@@ -430,7 +510,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: right;">820</td>
+<td style="text-align: right;">822</td>
 <td style="text-align: left;">0 days</td>
 <td style="text-align: left;">13 days</td>
 <td style="text-align: left;">24 days</td>
@@ -440,13 +520,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </div>
-<div class="cell" data-hash="04_validate-hipps_cache/html/unnamed-chunk-18_e6d9c2d33e55caea42da66516f38b899">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>combined_dat <span class="sc">%&gt;%</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(survey_after_week_12 <span class="sc">==</span> <span class="dv">1</span>, inferred_episode_end <span class="sc">&gt;</span> week_12, pregnancy <span class="sc">==</span> <span class="st">"No"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">within_14 =</span> <span class="fu">as.numeric</span>(<span class="fu">abs</span>(time_diff) <span class="sc">&lt;=</span> <span class="dv">14</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">tabyl</span>(within_14) <span class="sc">%&gt;%</span></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>n) <span class="sc">%&gt;%</span></span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">percent =</span> <span class="fu">round</span>(percent <span class="sc">*</span> <span class="dv">100</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="04_validate-hipps_cache/html/unnamed-chunk-20_7e2af361c2a73b63d27607f313b57b83">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>combined_dat <span class="sc">%&gt;%</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(survey_after_week_12 <span class="sc">==</span> <span class="dv">1</span>, inferred_episode_end <span class="sc">&gt;</span> week_12, pregnancy <span class="sc">==</span> <span class="st">"No"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">within_14 =</span> <span class="fu">as.numeric</span>(<span class="fu">abs</span>(time_diff) <span class="sc">&lt;=</span> <span class="dv">14</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">tabyl</span>(within_14) <span class="sc">%&gt;%</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>n) <span class="sc">%&gt;%</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">percent =</span> <span class="fu">round</span>(percent <span class="sc">*</span> <span class="dv">100</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="kable-table">
 <table class="table table-sm table-striped">
@@ -459,21 +539,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tbody>
 <tr class="odd">
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">42</td>
+<td style="text-align: right;">43</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">58</td>
+<td style="text-align: right;">57</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
 </div>
-<div class="cell" data-hash="04_validate-hipps_cache/html/unnamed-chunk-19_d5d994c3408821ae2b3c564ee970dc53">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>combined_dat <span class="sc">%&gt;%</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(survey_within_buffer <span class="sc">==</span> <span class="dv">0</span>, pregnancy <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"No"</span>, <span class="st">"Yes"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">tabyl</span>(pregnancy)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="04_validate-hipps_cache/html/unnamed-chunk-21_dc1e42a091922b6f3ee96b6cf0b54456">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>combined_dat <span class="sc">%&gt;%</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(survey_within_buffer <span class="sc">==</span> <span class="dv">0</span>, pregnancy <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"No"</span>, <span class="st">"Yes"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">tabyl</span>(pregnancy)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="kable-table">
 <table class="table table-sm table-striped">
@@ -501,139 +581,139 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 <p>So what’s the deal with the people who said they were pregnant but we didn’t catch their pregnancy?</p>
-<div class="cell" data-hash="04_validate-hipps_cache/html/unnamed-chunk-20_1e156d60c1adfea4e87f0bea72830ed5">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>hidden_preg <span class="ot">&lt;-</span> combined_dat <span class="sc">%&gt;%</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(pregnancy <span class="sc">==</span> <span class="st">"Yes"</span>, survey_within_buffer <span class="sc">==</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">survey_start =</span> pregnancy_date <span class="sc">-</span> <span class="fu">days</span>(<span class="dv">260</span>),</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">survey_end =</span> pregnancy_date <span class="sc">+</span> <span class="fu">days</span>(<span class="dv">260</span>)</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>found_preg <span class="ot">&lt;-</span> combined_dat <span class="sc">%&gt;%</span></span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(pregnancy <span class="sc">==</span> <span class="st">"Yes"</span>, survey_within_buffer <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">survey_start =</span> pregnancy_date <span class="sc">-</span> <span class="fu">days</span>(<span class="dv">260</span>),</span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">survey_end =</span> pregnancy_date <span class="sc">+</span> <span class="fu">days</span>(<span class="dv">260</span>)</span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>concept_names <span class="ot">&lt;-</span> <span class="fu">tbl</span>(con, <span class="st">"concept"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(vocabulary_id <span class="sc">!=</span> <span class="st">"PPI"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(concept_name, concept_id)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="04_validate-hipps_cache/html/unnamed-chunk-22_b7b376ea4b848e5ec1296b997f54c63d">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>hidden_preg <span class="ot">&lt;-</span> combined_dat <span class="sc">%&gt;%</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(pregnancy <span class="sc">==</span> <span class="st">"Yes"</span>, survey_within_buffer <span class="sc">==</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">survey_start =</span> pregnancy_date <span class="sc">-</span> <span class="fu">days</span>(<span class="dv">260</span>),</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">survey_end =</span> pregnancy_date <span class="sc">+</span> <span class="fu">days</span>(<span class="dv">260</span>)</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>found_preg <span class="ot">&lt;-</span> combined_dat <span class="sc">%&gt;%</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(pregnancy <span class="sc">==</span> <span class="st">"Yes"</span>, survey_within_buffer <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">survey_start =</span> pregnancy_date <span class="sc">-</span> <span class="fu">days</span>(<span class="dv">260</span>),</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">survey_end =</span> pregnancy_date <span class="sc">+</span> <span class="fu">days</span>(<span class="dv">260</span>)</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>concept_names <span class="ot">&lt;-</span> <span class="fu">tbl</span>(con, <span class="st">"concept"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(vocabulary_id <span class="sc">!=</span> <span class="st">"PPI"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(concept_name, concept_id)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="04_validate-hipps_cache/html/unnamed-chunk-21_4980b10c72a52752dacff612e510a6c1">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>HIP_concepts <span class="ot">&lt;-</span> readxl<span class="sc">::</span><span class="fu">read_excel</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data/HIP_concepts.xlsx"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>concept_name) <span class="sc">%&gt;%</span></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="04_validate-hipps_cache/html/unnamed-chunk-23_1c1f9ac64d52ee705c3b6dc206b65d7d">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>HIP_concepts <span class="ot">&lt;-</span> readxl<span class="sc">::</span><span class="fu">read_excel</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data/HIP_concepts.xlsx"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>concept_name) <span class="sc">%&gt;%</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="04_validate-hipps_cache/html/unnamed-chunk-22_6e087f8c283bbb42db59991a691f9e59">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>cond_hidden <span class="ot">&lt;-</span> <span class="fu">tbl</span>(con, <span class="st">"condition_occurrence"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(person_id <span class="sc">%in%</span> <span class="sc">!!</span>hidden_preg<span class="sc">$</span>person_id) <span class="sc">%&gt;%</span></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(concept_names, <span class="at">by =</span> <span class="fu">join_by</span>(condition_concept_id <span class="sc">==</span> concept_id)) <span class="sc">%&gt;%</span></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(hidden_preg, <span class="at">by =</span> <span class="fu">join_by</span>(person_id, <span class="fu">between</span>(condition_start_date, survey_start, survey_end))) <span class="sc">%&gt;%</span></span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">concept_id =</span> <span class="fu">as.double</span>(condition_concept_id)) <span class="sc">%&gt;%</span></span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(HIP_concepts, <span class="at">by =</span> <span class="fu">join_by</span>(concept_id))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="04_validate-hipps_cache/html/unnamed-chunk-24_ff4d56c97f2ab59765d489c197475edd">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>cond_hidden <span class="ot">&lt;-</span> <span class="fu">tbl</span>(con, <span class="st">"condition_occurrence"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(person_id <span class="sc">%in%</span> <span class="sc">!!</span>hidden_preg<span class="sc">$</span>person_id) <span class="sc">%&gt;%</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(concept_names, <span class="at">by =</span> <span class="fu">join_by</span>(condition_concept_id <span class="sc">==</span> concept_id)) <span class="sc">%&gt;%</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(hidden_preg, <span class="at">by =</span> <span class="fu">join_by</span>(person_id, <span class="fu">between</span>(condition_start_date, survey_start, survey_end))) <span class="sc">%&gt;%</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">concept_id =</span> <span class="fu">as.double</span>(condition_concept_id)) <span class="sc">%&gt;%</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(HIP_concepts, <span class="at">by =</span> <span class="fu">join_by</span>(concept_id))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="04_validate-hipps_cache/html/unnamed-chunk-23_ec17ac40873a7ed63e6603c46d223185">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>cond_found <span class="ot">&lt;-</span> <span class="fu">tbl</span>(con, <span class="st">"condition_occurrence"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(person_id <span class="sc">%in%</span> <span class="sc">!!</span>found_preg<span class="sc">$</span>person_id) <span class="sc">%&gt;%</span></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(concept_names, <span class="at">by =</span> <span class="fu">join_by</span>(condition_concept_id <span class="sc">==</span> concept_id)) <span class="sc">%&gt;%</span></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(found_preg, <span class="at">by =</span> <span class="fu">join_by</span>(person_id, <span class="fu">between</span>(condition_start_date, survey_start, survey_end))) <span class="sc">%&gt;%</span></span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">concept_id =</span> <span class="fu">as.double</span>(condition_concept_id)) <span class="sc">%&gt;%</span></span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(HIP_concepts, <span class="at">by =</span> <span class="fu">join_by</span>(concept_id))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="04_validate-hipps_cache/html/unnamed-chunk-25_f4a6d194344c3dd6a68d5a427f340033">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>cond_found <span class="ot">&lt;-</span> <span class="fu">tbl</span>(con, <span class="st">"condition_occurrence"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(person_id <span class="sc">%in%</span> <span class="sc">!!</span>found_preg<span class="sc">$</span>person_id) <span class="sc">%&gt;%</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(concept_names, <span class="at">by =</span> <span class="fu">join_by</span>(condition_concept_id <span class="sc">==</span> concept_id)) <span class="sc">%&gt;%</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(found_preg, <span class="at">by =</span> <span class="fu">join_by</span>(person_id, <span class="fu">between</span>(condition_start_date, survey_start, survey_end))) <span class="sc">%&gt;%</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">concept_id =</span> <span class="fu">as.double</span>(condition_concept_id)) <span class="sc">%&gt;%</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(HIP_concepts, <span class="at">by =</span> <span class="fu">join_by</span>(concept_id))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="04_validate-hipps_cache/html/unnamed-chunk-24_8ec82bf1429163dc618662f482d33246">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>proc_hidden <span class="ot">&lt;-</span> <span class="fu">tbl</span>(con, <span class="st">"procedure_occurrence"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(person_id <span class="sc">%in%</span> <span class="sc">!!</span>hidden_preg<span class="sc">$</span>person_id) <span class="sc">%&gt;%</span></span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(concept_names, <span class="at">by =</span> <span class="fu">join_by</span>(procedure_concept_id <span class="sc">==</span> concept_id)) <span class="sc">%&gt;%</span></span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(hidden_preg, <span class="at">by =</span> <span class="fu">join_by</span>(person_id, <span class="fu">between</span>(procedure_date, survey_start, survey_end))) <span class="sc">%&gt;%</span></span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">concept_id =</span> <span class="fu">as.double</span>(procedure_concept_id)) <span class="sc">%&gt;%</span></span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(HIP_concepts, <span class="at">by =</span> <span class="fu">join_by</span>(concept_id))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="04_validate-hipps_cache/html/unnamed-chunk-26_3d5903fc23c3393694d69a54e5587404">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>proc_hidden <span class="ot">&lt;-</span> <span class="fu">tbl</span>(con, <span class="st">"procedure_occurrence"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(person_id <span class="sc">%in%</span> <span class="sc">!!</span>hidden_preg<span class="sc">$</span>person_id) <span class="sc">%&gt;%</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(concept_names, <span class="at">by =</span> <span class="fu">join_by</span>(procedure_concept_id <span class="sc">==</span> concept_id)) <span class="sc">%&gt;%</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(hidden_preg, <span class="at">by =</span> <span class="fu">join_by</span>(person_id, <span class="fu">between</span>(procedure_date, survey_start, survey_end))) <span class="sc">%&gt;%</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">concept_id =</span> <span class="fu">as.double</span>(procedure_concept_id)) <span class="sc">%&gt;%</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(HIP_concepts, <span class="at">by =</span> <span class="fu">join_by</span>(concept_id))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="04_validate-hipps_cache/html/unnamed-chunk-25_fe52c70b512c1258dffd517729c2cc3e">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>proc_found <span class="ot">&lt;-</span> <span class="fu">tbl</span>(con, <span class="st">"procedure_occurrence"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(person_id <span class="sc">%in%</span> <span class="sc">!!</span>found_preg<span class="sc">$</span>person_id) <span class="sc">%&gt;%</span></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(concept_names, <span class="at">by =</span> <span class="fu">join_by</span>(procedure_concept_id <span class="sc">==</span> concept_id)) <span class="sc">%&gt;%</span></span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>(<span class="at">page_size =</span> <span class="dv">25000</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(found_preg, <span class="at">by =</span> <span class="fu">join_by</span>(person_id, <span class="fu">between</span>(procedure_date, survey_start, survey_end))) <span class="sc">%&gt;%</span></span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">concept_id =</span> <span class="fu">as.double</span>(procedure_concept_id)) <span class="sc">%&gt;%</span></span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(HIP_concepts, <span class="at">by =</span> <span class="fu">join_by</span>(concept_id))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="04_validate-hipps_cache/html/unnamed-chunk-27_d05acd6b360f34468968f347c778124f">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>proc_found <span class="ot">&lt;-</span> <span class="fu">tbl</span>(con, <span class="st">"procedure_occurrence"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(person_id <span class="sc">%in%</span> <span class="sc">!!</span>found_preg<span class="sc">$</span>person_id) <span class="sc">%&gt;%</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(concept_names, <span class="at">by =</span> <span class="fu">join_by</span>(procedure_concept_id <span class="sc">==</span> concept_id)) <span class="sc">%&gt;%</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>(<span class="at">page_size =</span> <span class="dv">25000</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(found_preg, <span class="at">by =</span> <span class="fu">join_by</span>(person_id, <span class="fu">between</span>(procedure_date, survey_start, survey_end))) <span class="sc">%&gt;%</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">concept_id =</span> <span class="fu">as.double</span>(procedure_concept_id)) <span class="sc">%&gt;%</span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(HIP_concepts, <span class="at">by =</span> <span class="fu">join_by</span>(concept_id))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="04_validate-hipps_cache/html/unnamed-chunk-26_1d871cae78575f43eaa9adeed7547ba6">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>all_found <span class="ot">&lt;-</span> cond_found <span class="sc">%&gt;%</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(person_id, concept_id, category, gest_value, pregnancy_date, <span class="at">date =</span> condition_start_date) <span class="sc">%&gt;%</span></span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>(<span class="fu">select</span>(proc_found, person_id, concept_id, category, gest_value, pregnancy_date, <span class="at">date =</span> procedure_date)) <span class="sc">%&gt;%</span></span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">type =</span> <span class="st">"found"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="04_validate-hipps_cache/html/unnamed-chunk-28_86b2532780f647840e34351fd655de42">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>all_found <span class="ot">&lt;-</span> cond_found <span class="sc">%&gt;%</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(person_id, concept_id, category, gest_value, pregnancy_date, <span class="at">date =</span> condition_start_date) <span class="sc">%&gt;%</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>(<span class="fu">select</span>(proc_found, person_id, concept_id, category, gest_value, pregnancy_date, <span class="at">date =</span> procedure_date)) <span class="sc">%&gt;%</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">type =</span> <span class="st">"found"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="04_validate-hipps_cache/html/unnamed-chunk-27_ba59ca9b8af9fc1f47bfd58b4ec83bc3">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>all_hidden <span class="ot">&lt;-</span> cond_hidden <span class="sc">%&gt;%</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(person_id, concept_id, category, gest_value, pregnancy_date, <span class="at">date =</span> condition_start_date) <span class="sc">%&gt;%</span></span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>(<span class="fu">select</span>(proc_hidden, person_id, concept_id, category, gest_value, pregnancy_date, <span class="at">date =</span> procedure_date)) <span class="sc">%&gt;%</span></span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">type =</span> <span class="st">"hidden"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="04_validate-hipps_cache/html/unnamed-chunk-29_227ad78d56279b5bba8941a178bd6f53">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>all_hidden <span class="ot">&lt;-</span> cond_hidden <span class="sc">%&gt;%</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(person_id, concept_id, category, gest_value, pregnancy_date, <span class="at">date =</span> condition_start_date) <span class="sc">%&gt;%</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>(<span class="fu">select</span>(proc_hidden, person_id, concept_id, category, gest_value, pregnancy_date, <span class="at">date =</span> procedure_date)) <span class="sc">%&gt;%</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">type =</span> <span class="st">"hidden"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="04_validate-hipps_cache/html/unnamed-chunk-28_e1146b102984aeac855639c18a6fd845">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>all <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(all_found, all_hidden) <span class="sc">%&gt;%</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">time_from_survey =</span> <span class="fu">as.numeric</span>(date <span class="sc">-</span> pregnancy_date),</span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">hips_time_from_survey =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(category), <span class="cn">NA</span>, time_from_survey)</span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(type, person_id) <span class="sc">%&gt;%</span></span>
-<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
-<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_hip =</span> <span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(category)),</span>
-<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_AB =</span> <span class="fu">sum</span>(category <span class="sc">==</span> <span class="st">"AB"</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_DELIV =</span> <span class="fu">sum</span>(category <span class="sc">==</span> <span class="st">"DELIV"</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_ECT =</span> <span class="fu">sum</span>(category <span class="sc">==</span> <span class="st">"ECT"</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_LB =</span> <span class="fu">sum</span>(category <span class="sc">==</span> <span class="st">"LB"</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_PREG =</span> <span class="fu">sum</span>(category <span class="sc">==</span> <span class="st">"PREG"</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_SA =</span> <span class="fu">sum</span>(category <span class="sc">==</span> <span class="st">"SA"</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_SB =</span> <span class="fu">sum</span>(category <span class="sc">==</span> <span class="st">"SB"</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">med_time_from_survey =</span> <span class="fu">median</span>(time_from_survey, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_time_from_survey =</span> <span class="fu">mean</span>(time_from_survey, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">min_time_from_survey =</span> <span class="fu">min</span>(time_from_survey, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">max_time_from_survey =</span> <span class="fu">max</span>(time_from_survey, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">med_time_from_survey_hips =</span> <span class="fu">median</span>(hips_time_from_survey, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_time_from_survey_hips =</span> <span class="fu">mean</span>(hips_time_from_survey, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb30-24"><a href="#cb30-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">min_time_from_survey_hips =</span> <span class="fu">min</span>(hips_time_from_survey, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb30-25"><a href="#cb30-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">max_time_from_survey_hips =</span> <span class="fu">max</span>(hips_time_from_survey, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb30-26"><a href="#cb30-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span></span>
-<span id="cb30-27"><a href="#cb30-27" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="04_validate-hipps_cache/html/unnamed-chunk-30_d8168fbd4b4a35b3bbdaf969f2cf5759">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>all <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(all_found, all_hidden) <span class="sc">%&gt;%</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">time_from_survey =</span> <span class="fu">as.numeric</span>(date <span class="sc">-</span> pregnancy_date),</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">hips_time_from_survey =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(category), <span class="cn">NA</span>, time_from_survey)</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(type, person_id) <span class="sc">%&gt;%</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_hip =</span> <span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(category)),</span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_AB =</span> <span class="fu">sum</span>(category <span class="sc">==</span> <span class="st">"AB"</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_DELIV =</span> <span class="fu">sum</span>(category <span class="sc">==</span> <span class="st">"DELIV"</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_ECT =</span> <span class="fu">sum</span>(category <span class="sc">==</span> <span class="st">"ECT"</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_LB =</span> <span class="fu">sum</span>(category <span class="sc">==</span> <span class="st">"LB"</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_PREG =</span> <span class="fu">sum</span>(category <span class="sc">==</span> <span class="st">"PREG"</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_SA =</span> <span class="fu">sum</span>(category <span class="sc">==</span> <span class="st">"SA"</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_SB =</span> <span class="fu">sum</span>(category <span class="sc">==</span> <span class="st">"SB"</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">med_time_from_survey =</span> <span class="fu">median</span>(time_from_survey, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_time_from_survey =</span> <span class="fu">mean</span>(time_from_survey, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">min_time_from_survey =</span> <span class="fu">min</span>(time_from_survey, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb34-21"><a href="#cb34-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">max_time_from_survey =</span> <span class="fu">max</span>(time_from_survey, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb34-22"><a href="#cb34-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">med_time_from_survey_hips =</span> <span class="fu">median</span>(hips_time_from_survey, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb34-23"><a href="#cb34-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_time_from_survey_hips =</span> <span class="fu">mean</span>(hips_time_from_survey, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb34-24"><a href="#cb34-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">min_time_from_survey_hips =</span> <span class="fu">min</span>(hips_time_from_survey, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb34-25"><a href="#cb34-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">max_time_from_survey_hips =</span> <span class="fu">max</span>(hips_time_from_survey, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb34-26"><a href="#cb34-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span></span>
+<span id="cb34-27"><a href="#cb34-27" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="04_validate-hipps_cache/html/unnamed-chunk-29_8519a70678ba973f7e2708d0bf3c6bf2">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>all_stats <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(<span class="fu">select</span>(hidden_preg, person_id), <span class="fu">select</span>(found_preg, person_id)) <span class="sc">%&gt;%</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(all, <span class="at">by =</span> <span class="st">"person_id"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">type =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(type), <span class="st">"hidden"</span>, type),</span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">"n"</span>), <span class="sc">~</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(.x), <span class="dv">0</span>, .x)),</span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(<span class="fu">where</span>(is.numeric), <span class="sc">~</span> <span class="fu">ifelse</span>(<span class="fu">is.infinite</span>(.x), <span class="cn">NA</span>, .x))</span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="04_validate-hipps_cache/html/unnamed-chunk-31_05198f0d361482b773960cc6f5e9c229">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>all_stats <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(<span class="fu">select</span>(hidden_preg, person_id), <span class="fu">select</span>(found_preg, person_id)) <span class="sc">%&gt;%</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(all, <span class="at">by =</span> <span class="st">"person_id"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">type =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(type), <span class="st">"hidden"</span>, type),</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">"n"</span>), <span class="sc">~</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(.x), <span class="dv">0</span>, .x)),</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(<span class="fu">where</span>(is.numeric), <span class="sc">~</span> <span class="fu">ifelse</span>(<span class="fu">is.infinite</span>(.x), <span class="cn">NA</span>, .x))</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="04_validate-hipps_cache/html/unnamed-chunk-30_d8cd3f3b3e61facacd0e0a7f7380035f">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>table_stats <span class="ot">&lt;-</span> all_stats <span class="sc">%&gt;%</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>person_id) <span class="sc">%&gt;%</span></span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl_summary</span>(<span class="at">by =</span> type, <span class="at">type =</span> <span class="fu">everything</span>() <span class="sc">~</span> <span class="st">"continuous"</span>, <span class="at">digits =</span> <span class="fu">list</span>(<span class="fu">starts_with</span>(<span class="st">"m"</span>) <span class="sc">~</span> <span class="dv">0</span>, <span class="fu">starts_with</span>(<span class="st">"n"</span>) <span class="sc">~</span> <span class="dv">1</span>), <span class="at">missing =</span> <span class="st">"no"</span>, <span class="at">statistic =</span> <span class="fu">all_continuous</span>() <span class="sc">~</span> <span class="st">"{mean} ({sd})"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_p</span>()</span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>table_stats</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="04_validate-hipps_cache/html/unnamed-chunk-32_e7c7cc36750b28398fc628977e1d6b95">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>table_stats <span class="ot">&lt;-</span> all_stats <span class="sc">%&gt;%</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>person_id) <span class="sc">%&gt;%</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl_summary</span>(<span class="at">by =</span> type, <span class="at">type =</span> <span class="fu">everything</span>() <span class="sc">~</span> <span class="st">"continuous"</span>, <span class="at">digits =</span> <span class="fu">list</span>(<span class="fu">starts_with</span>(<span class="st">"m"</span>) <span class="sc">~</span> <span class="dv">0</span>, <span class="fu">starts_with</span>(<span class="st">"n"</span>) <span class="sc">~</span> <span class="dv">1</span>), <span class="at">missing =</span> <span class="st">"no"</span>, <span class="at">statistic =</span> <span class="fu">all_continuous</span>() <span class="sc">~</span> <span class="st">"{mean} ({sd})"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_p</span>()</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>table_stats</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 
-<div id="gnutyqafvj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#gnutyqafvj table {
+<div id="vdfqqxlcon" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#vdfqqxlcon table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#gnutyqafvj thead, #gnutyqafvj tbody, #gnutyqafvj tfoot, #gnutyqafvj tr, #gnutyqafvj td, #gnutyqafvj th {
+#vdfqqxlcon thead, #vdfqqxlcon tbody, #vdfqqxlcon tfoot, #vdfqqxlcon tr, #vdfqqxlcon td, #vdfqqxlcon th {
   border-style: none;
 }
 
-#gnutyqafvj p {
+#vdfqqxlcon p {
   margin: 0;
   padding: 0;
 }
 
-#gnutyqafvj .gt_table {
+#vdfqqxlcon .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -659,12 +739,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-left-color: #D3D3D3;
 }
 
-#gnutyqafvj .gt_caption {
+#vdfqqxlcon .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#gnutyqafvj .gt_title {
+#vdfqqxlcon .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -676,7 +756,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-width: 0;
 }
 
-#gnutyqafvj .gt_subtitle {
+#vdfqqxlcon .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -688,7 +768,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-top-width: 0;
 }
 
-#gnutyqafvj .gt_heading {
+#vdfqqxlcon .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -700,13 +780,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#gnutyqafvj .gt_bottom_border {
+#vdfqqxlcon .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#gnutyqafvj .gt_col_headings {
+#vdfqqxlcon .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -721,7 +801,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#gnutyqafvj .gt_col_heading {
+#vdfqqxlcon .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -741,7 +821,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   overflow-x: hidden;
 }
 
-#gnutyqafvj .gt_column_spanner_outer {
+#vdfqqxlcon .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -753,15 +833,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 4px;
 }
 
-#gnutyqafvj .gt_column_spanner_outer:first-child {
+#vdfqqxlcon .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#gnutyqafvj .gt_column_spanner_outer:last-child {
+#vdfqqxlcon .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#gnutyqafvj .gt_column_spanner {
+#vdfqqxlcon .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -773,11 +853,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   width: 100%;
 }
 
-#gnutyqafvj .gt_spanner_row {
+#vdfqqxlcon .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#gnutyqafvj .gt_group_heading {
+#vdfqqxlcon .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -803,7 +883,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   text-align: left;
 }
 
-#gnutyqafvj .gt_empty_group_heading {
+#vdfqqxlcon .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -818,15 +898,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   vertical-align: middle;
 }
 
-#gnutyqafvj .gt_from_md > :first-child {
+#vdfqqxlcon .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#gnutyqafvj .gt_from_md > :last-child {
+#vdfqqxlcon .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#gnutyqafvj .gt_row {
+#vdfqqxlcon .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -845,7 +925,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   overflow-x: hidden;
 }
 
-#gnutyqafvj .gt_stub {
+#vdfqqxlcon .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -858,7 +938,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#gnutyqafvj .gt_stub_row_group {
+#vdfqqxlcon .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -872,15 +952,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   vertical-align: top;
 }
 
-#gnutyqafvj .gt_row_group_first td {
+#vdfqqxlcon .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#gnutyqafvj .gt_row_group_first th {
+#vdfqqxlcon .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#gnutyqafvj .gt_summary_row {
+#vdfqqxlcon .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -890,16 +970,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#gnutyqafvj .gt_first_summary_row {
+#vdfqqxlcon .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#gnutyqafvj .gt_first_summary_row.thick {
+#vdfqqxlcon .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#gnutyqafvj .gt_last_summary_row {
+#vdfqqxlcon .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -909,7 +989,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-color: #D3D3D3;
 }
 
-#gnutyqafvj .gt_grand_summary_row {
+#vdfqqxlcon .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -919,7 +999,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#gnutyqafvj .gt_first_grand_summary_row {
+#vdfqqxlcon .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -929,7 +1009,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-top-color: #D3D3D3;
 }
 
-#gnutyqafvj .gt_last_grand_summary_row_top {
+#vdfqqxlcon .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -939,11 +1019,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-color: #D3D3D3;
 }
 
-#gnutyqafvj .gt_striped {
+#vdfqqxlcon .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#gnutyqafvj .gt_table_body {
+#vdfqqxlcon .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -952,7 +1032,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-color: #D3D3D3;
 }
 
-#gnutyqafvj .gt_footnotes {
+#vdfqqxlcon .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -966,7 +1046,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#gnutyqafvj .gt_footnote {
+#vdfqqxlcon .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -975,7 +1055,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#gnutyqafvj .gt_sourcenotes {
+#vdfqqxlcon .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -989,7 +1069,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#gnutyqafvj .gt_sourcenote {
+#vdfqqxlcon .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -997,63 +1077,63 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#gnutyqafvj .gt_left {
+#vdfqqxlcon .gt_left {
   text-align: left;
 }
 
-#gnutyqafvj .gt_center {
+#vdfqqxlcon .gt_center {
   text-align: center;
 }
 
-#gnutyqafvj .gt_right {
+#vdfqqxlcon .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#gnutyqafvj .gt_font_normal {
+#vdfqqxlcon .gt_font_normal {
   font-weight: normal;
 }
 
-#gnutyqafvj .gt_font_bold {
+#vdfqqxlcon .gt_font_bold {
   font-weight: bold;
 }
 
-#gnutyqafvj .gt_font_italic {
+#vdfqqxlcon .gt_font_italic {
   font-style: italic;
 }
 
-#gnutyqafvj .gt_super {
+#vdfqqxlcon .gt_super {
   font-size: 65%;
 }
 
-#gnutyqafvj .gt_footnote_marks {
+#vdfqqxlcon .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#gnutyqafvj .gt_asterisk {
+#vdfqqxlcon .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#gnutyqafvj .gt_indent_1 {
+#vdfqqxlcon .gt_indent_1 {
   text-indent: 5px;
 }
 
-#gnutyqafvj .gt_indent_2 {
+#vdfqqxlcon .gt_indent_2 {
   text-indent: 10px;
 }
 
-#gnutyqafvj .gt_indent_3 {
+#vdfqqxlcon .gt_indent_3 {
   text-indent: 15px;
 }
 
-#gnutyqafvj .gt_indent_4 {
+#vdfqqxlcon .gt_indent_4 {
   text-indent: 20px;
 }
 
-#gnutyqafvj .gt_indent_5 {
+#vdfqqxlcon .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -1152,77 +1232,77 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <section id="validation-as-in-jones-et-al" class="level2">
 <h2 class="anchored" data-anchor-id="validation-as-in-jones-et-al">Validation as in Jones et al</h2>
-<div class="cell" data-hash="04_validate-hipps_cache/html/unnamed-chunk-31_5bc5f2cb676bdcdb449f8f3f18b72543">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>extra_concepts <span class="ot">&lt;-</span> <span class="fu">tribble</span>(</span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span>concept_id, <span class="sc">~</span>min_months, <span class="sc">~</span>max_months,</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="dv">74698</span>, <span class="fl">4.5</span>, <span class="dv">11</span>,</span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  440795L, <span class="dv">5</span>, <span class="dv">11</span>,</span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  2211760L, <span class="dv">6</span>, <span class="dv">10</span>,</span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>  81636L, <span class="dv">7</span>, <span class="dv">11</span>,</span>
-<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>  4062557L, <span class="dv">5</span>, <span class="dv">11</span>,</span>
-<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>  45757113L, <span class="dv">5</span>, <span class="fl">9.25</span>,</span>
-<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>  2211758L, <span class="dv">6</span>, <span class="dv">10</span>,</span>
-<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>  2211759L, <span class="dv">6</span>, <span class="dv">11</span>,</span>
-<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>  2110284L, <span class="dv">6</span>, <span class="dv">11</span>,</span>
-<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>  438542L, <span class="dv">1</span>, <span class="dv">6</span>,</span>
-<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>  4024659L, <span class="dv">6</span>, <span class="dv">10</span>,</span>
-<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>  2101829L, <span class="dv">1</span>, <span class="dv">11</span>,</span>
-<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>  40482406L, <span class="fl">4.5</span>, <span class="dv">11</span>,</span>
-<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a>  2314183L, <span class="dv">2</span>, <span class="dv">7</span>,</span>
-<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a>  437623L, <span class="dv">6</span>, <span class="dv">11</span>,</span>
-<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a>  72693L, <span class="dv">6</span>, <span class="dv">11</span>,</span>
-<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a>  4167493L, <span class="dv">5</span>, <span class="dv">11</span>,</span>
-<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a>  2101830L, <span class="dv">1</span>, <span class="dv">11</span>,</span>
-<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a>  36712703L, <span class="dv">5</span>, <span class="dv">11</span>,</span>
-<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a>  77619L, <span class="fl">5.5</span>, <span class="dv">11</span>,</span>
-<span id="cb33-23"><a href="#cb33-23" aria-hidden="true" tabindex="-1"></a>  45766222L, <span class="fl">6.75</span>, <span class="dv">11</span>,</span>
-<span id="cb33-24"><a href="#cb33-24" aria-hidden="true" tabindex="-1"></a>  36712695L, <span class="dv">3</span>, <span class="dv">11</span>,</span>
-<span id="cb33-25"><a href="#cb33-25" aria-hidden="true" tabindex="-1"></a>  4218813L, <span class="dv">7</span>, <span class="dv">11</span>,</span>
-<span id="cb33-26"><a href="#cb33-26" aria-hidden="true" tabindex="-1"></a>  2211749L, <span class="dv">4</span>, <span class="dv">11</span>,</span>
-<span id="cb33-27"><a href="#cb33-27" aria-hidden="true" tabindex="-1"></a>  2211757L, <span class="dv">1</span>, <span class="dv">6</span></span>
-<span id="cb33-28"><a href="#cb33-28" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb33-29"><a href="#cb33-29" aria-hidden="true" tabindex="-1"></a>pull_extra <span class="ot">&lt;-</span> <span class="cf">function</span>(extra_concepts, df, start_date_col, id_col) {</span>
-<span id="cb33-30"><a href="#cb33-30" aria-hidden="true" tabindex="-1"></a>  top_concepts_df <span class="ot">&lt;-</span> <span class="fu">rename</span>(df, <span class="st">"domain_concept_start_date"</span> <span class="ot">=</span> start_date_col, <span class="st">"domain_concept_id"</span> <span class="ot">=</span> id_col) <span class="sc">%&gt;%</span></span>
-<span id="cb33-31"><a href="#cb33-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(domain_concept_id <span class="sc">%in%</span> <span class="sc">!!</span>extra_concepts<span class="sc">$</span>concept_id) <span class="sc">%&gt;%</span></span>
-<span id="cb33-32"><a href="#cb33-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(person_id, domain_concept_start_date, domain_concept_id) <span class="sc">%&gt;%</span></span>
-<span id="cb33-33"><a href="#cb33-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(<span class="fu">select</span>(<span class="fu">tbl</span>(con, <span class="st">"concept"</span>), concept_id, concept_name), <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"domain_concept_id"</span> <span class="ot">=</span> <span class="st">"concept_id"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb33-34"><a href="#cb33-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">distinct</span>()</span>
-<span id="cb33-35"><a href="#cb33-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(top_concepts_df)</span>
-<span id="cb33-36"><a href="#cb33-36" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb33-37"><a href="#cb33-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-38"><a href="#cb33-38" aria-hidden="true" tabindex="-1"></a>c_o <span class="ot">&lt;-</span> <span class="fu">pull_extra</span>(extra_concepts, <span class="fu">tbl</span>(con, <span class="st">"condition_occurrence"</span>), <span class="st">"condition_start_date"</span>, <span class="st">"condition_concept_id"</span>)</span>
-<span id="cb33-39"><a href="#cb33-39" aria-hidden="true" tabindex="-1"></a>p_o <span class="ot">&lt;-</span> <span class="fu">pull_extra</span>(extra_concepts, <span class="fu">tbl</span>(con, <span class="st">"procedure_occurrence"</span>), <span class="st">"procedure_date"</span>, <span class="st">"procedure_concept_id"</span>)</span>
-<span id="cb33-40"><a href="#cb33-40" aria-hidden="true" tabindex="-1"></a>o_df <span class="ot">&lt;-</span> <span class="fu">pull_extra</span>(extra_concepts, <span class="fu">tbl</span>(con, <span class="st">"observation"</span>), <span class="st">"observation_date"</span>, <span class="st">"observation_concept_id"</span>)</span>
-<span id="cb33-41"><a href="#cb33-41" aria-hidden="true" tabindex="-1"></a>m_df <span class="ot">&lt;-</span> <span class="fu">pull_extra</span>(extra_concepts, <span class="fu">tbl</span>(con, <span class="st">"measurement"</span>), <span class="st">"measurement_date"</span>, <span class="st">"measurement_concept_id"</span>)</span>
-<span id="cb33-42"><a href="#cb33-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-43"><a href="#cb33-43" aria-hidden="true" tabindex="-1"></a>extra_preg_related_concepts <span class="ot">&lt;-</span> <span class="fu">list</span>(c_o, p_o, o_df, m_df) <span class="sc">%&gt;%</span></span>
-<span id="cb33-44"><a href="#cb33-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">reduce</span>(union_all) <span class="sc">%&gt;%</span></span>
-<span id="cb33-45"><a href="#cb33-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>()</span>
-<span id="cb33-46"><a href="#cb33-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-47"><a href="#cb33-47" aria-hidden="true" tabindex="-1"></a>matches <span class="ot">&lt;-</span> extra_preg_related_concepts <span class="sc">%&gt;%</span></span>
-<span id="cb33-48"><a href="#cb33-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">domain_concept_id =</span> <span class="fu">as.double</span>(domain_concept_id)) <span class="sc">%&gt;%</span></span>
-<span id="cb33-49"><a href="#cb33-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(extra_concepts, <span class="at">by =</span> <span class="fu">join_by</span>(domain_concept_id <span class="sc">==</span> concept_id)) <span class="sc">%&gt;%</span></span>
-<span id="cb33-50"><a href="#cb33-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(hipps, <span class="at">by =</span> <span class="fu">join_by</span>(</span>
-<span id="cb33-51"><a href="#cb33-51" aria-hidden="true" tabindex="-1"></a>    person_id,</span>
-<span id="cb33-52"><a href="#cb33-52" aria-hidden="true" tabindex="-1"></a>    <span class="fu">between</span>(domain_concept_start_date, inferred_episode_start, inferred_episode_end)</span>
-<span id="cb33-53"><a href="#cb33-53" aria-hidden="true" tabindex="-1"></a>  )) <span class="sc">%&gt;%</span></span>
-<span id="cb33-54"><a href="#cb33-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb33-55"><a href="#cb33-55" aria-hidden="true" tabindex="-1"></a>    <span class="at">expected_min_date =</span> inferred_episode_start <span class="sc">%m+%</span> <span class="fu">months</span>(<span class="fu">as.integer</span>(min_months)),</span>
-<span id="cb33-56"><a href="#cb33-56" aria-hidden="true" tabindex="-1"></a>    <span class="at">expected_max_date =</span> inferred_episode_start <span class="sc">%m+%</span> <span class="fu">months</span>(<span class="fu">as.integer</span>(max_months)),</span>
-<span id="cb33-57"><a href="#cb33-57" aria-hidden="true" tabindex="-1"></a>    <span class="at">is_match =</span> <span class="fu">between</span>(domain_concept_start_date, expected_min_date, expected_max_date),</span>
-<span id="cb33-58"><a href="#cb33-58" aria-hidden="true" tabindex="-1"></a>    <span class="at">is_match =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(is_match), <span class="dv">0</span>, is_match)</span>
-<span id="cb33-59"><a href="#cb33-59" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb33-60"><a href="#cb33-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-61"><a href="#cb33-61" aria-hidden="true" tabindex="-1"></a>matches <span class="sc">%&gt;%</span></span>
-<span id="cb33-62"><a href="#cb33-62" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(concept_name) <span class="sc">%&gt;%</span></span>
-<span id="cb33-63"><a href="#cb33-63" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(is_match) <span class="sc">%&gt;%</span></span>
-<span id="cb33-64"><a href="#cb33-64" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb33-65"><a href="#cb33-65" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> is_match, <span class="at">values_from =</span> n) <span class="sc">%&gt;%</span></span>
-<span id="cb33-66"><a href="#cb33-66" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transmute</span>(concept_name,</span>
-<span id="cb33-67"><a href="#cb33-67" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_total =</span> <span class="st">`</span><span class="at">0</span><span class="st">`</span> <span class="sc">+</span> <span class="st">`</span><span class="at">1</span><span class="st">`</span>,</span>
-<span id="cb33-68"><a href="#cb33-68" aria-hidden="true" tabindex="-1"></a>    <span class="at">overlapping =</span> <span class="st">`</span><span class="at">1</span><span class="st">`</span>,</span>
-<span id="cb33-69"><a href="#cb33-69" aria-hidden="true" tabindex="-1"></a>    <span class="at">percent =</span> overlapping <span class="sc">/</span> n_total</span>
-<span id="cb33-70"><a href="#cb33-70" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="04_validate-hipps_cache/html/unnamed-chunk-33_0f6d52fd31b65ac59f90c460f7509e42">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>extra_concepts <span class="ot">&lt;-</span> <span class="fu">tribble</span>(</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span>concept_id, <span class="sc">~</span>min_months, <span class="sc">~</span>max_months,</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>  <span class="dv">74698</span>, <span class="fl">4.5</span>, <span class="dv">11</span>,</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>  440795L, <span class="dv">5</span>, <span class="dv">11</span>,</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>  2211760L, <span class="dv">6</span>, <span class="dv">10</span>,</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>  81636L, <span class="dv">7</span>, <span class="dv">11</span>,</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>  4062557L, <span class="dv">5</span>, <span class="dv">11</span>,</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>  45757113L, <span class="dv">5</span>, <span class="fl">9.25</span>,</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>  2211758L, <span class="dv">6</span>, <span class="dv">10</span>,</span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>  2211759L, <span class="dv">6</span>, <span class="dv">11</span>,</span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>  2110284L, <span class="dv">6</span>, <span class="dv">11</span>,</span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>  438542L, <span class="dv">1</span>, <span class="dv">6</span>,</span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>  4024659L, <span class="dv">6</span>, <span class="dv">10</span>,</span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>  2101829L, <span class="dv">1</span>, <span class="dv">11</span>,</span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a>  40482406L, <span class="fl">4.5</span>, <span class="dv">11</span>,</span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 2314183L, 2, 7,</span></span>
+<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a>  437623L, <span class="dv">6</span>, <span class="dv">11</span>,</span>
+<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a>  72693L, <span class="dv">6</span>, <span class="dv">11</span>,</span>
+<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a>  4167493L, <span class="dv">5</span>, <span class="dv">11</span>,</span>
+<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a>  2101830L, <span class="dv">1</span>, <span class="dv">11</span>,</span>
+<span id="cb37-21"><a href="#cb37-21" aria-hidden="true" tabindex="-1"></a>  36712703L, <span class="dv">5</span>, <span class="dv">11</span>,</span>
+<span id="cb37-22"><a href="#cb37-22" aria-hidden="true" tabindex="-1"></a>  77619L, <span class="fl">5.5</span>, <span class="dv">11</span>,</span>
+<span id="cb37-23"><a href="#cb37-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 45766222L, 6.75, 11,</span></span>
+<span id="cb37-24"><a href="#cb37-24" aria-hidden="true" tabindex="-1"></a>  36712695L, <span class="dv">3</span>, <span class="dv">11</span>,</span>
+<span id="cb37-25"><a href="#cb37-25" aria-hidden="true" tabindex="-1"></a>  4218813L, <span class="dv">7</span>, <span class="dv">11</span>,</span>
+<span id="cb37-26"><a href="#cb37-26" aria-hidden="true" tabindex="-1"></a>  2211749L, <span class="dv">4</span>, <span class="dv">11</span>,</span>
+<span id="cb37-27"><a href="#cb37-27" aria-hidden="true" tabindex="-1"></a>  2211757L, <span class="dv">1</span>, <span class="dv">6</span></span>
+<span id="cb37-28"><a href="#cb37-28" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb37-29"><a href="#cb37-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-30"><a href="#cb37-30" aria-hidden="true" tabindex="-1"></a>pull_extra <span class="ot">&lt;-</span> <span class="cf">function</span>(extra_concepts, df, start_date_col, id_col) {</span>
+<span id="cb37-31"><a href="#cb37-31" aria-hidden="true" tabindex="-1"></a>  top_concepts_df <span class="ot">&lt;-</span> <span class="fu">rename</span>(df, <span class="st">"domain_concept_start_date"</span> <span class="ot">=</span> start_date_col, <span class="st">"domain_concept_id"</span> <span class="ot">=</span> id_col) <span class="sc">%&gt;%</span></span>
+<span id="cb37-32"><a href="#cb37-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(domain_concept_id <span class="sc">%in%</span> <span class="sc">!!</span>extra_concepts<span class="sc">$</span>concept_id) <span class="sc">%&gt;%</span></span>
+<span id="cb37-33"><a href="#cb37-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(person_id, domain_concept_start_date, domain_concept_id) <span class="sc">%&gt;%</span></span>
+<span id="cb37-34"><a href="#cb37-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(<span class="fu">select</span>(<span class="fu">tbl</span>(con, <span class="st">"concept"</span>), concept_id, concept_name), <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"domain_concept_id"</span> <span class="ot">=</span> <span class="st">"concept_id"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb37-35"><a href="#cb37-35" aria-hidden="true" tabindex="-1"></a>    <span class="fu">distinct</span>()</span>
+<span id="cb37-36"><a href="#cb37-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(top_concepts_df)</span>
+<span id="cb37-37"><a href="#cb37-37" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb37-38"><a href="#cb37-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-39"><a href="#cb37-39" aria-hidden="true" tabindex="-1"></a>c_o <span class="ot">&lt;-</span> <span class="fu">pull_extra</span>(extra_concepts, <span class="fu">tbl</span>(con, <span class="st">"condition_occurrence"</span>), <span class="st">"condition_start_date"</span>, <span class="st">"condition_concept_id"</span>)</span>
+<span id="cb37-40"><a href="#cb37-40" aria-hidden="true" tabindex="-1"></a>p_o <span class="ot">&lt;-</span> <span class="fu">pull_extra</span>(extra_concepts, <span class="fu">tbl</span>(con, <span class="st">"procedure_occurrence"</span>), <span class="st">"procedure_date"</span>, <span class="st">"procedure_concept_id"</span>)</span>
+<span id="cb37-41"><a href="#cb37-41" aria-hidden="true" tabindex="-1"></a>o_df <span class="ot">&lt;-</span> <span class="fu">pull_extra</span>(extra_concepts, <span class="fu">tbl</span>(con, <span class="st">"observation"</span>), <span class="st">"observation_date"</span>, <span class="st">"observation_concept_id"</span>)</span>
+<span id="cb37-42"><a href="#cb37-42" aria-hidden="true" tabindex="-1"></a>m_df <span class="ot">&lt;-</span> <span class="fu">pull_extra</span>(extra_concepts, <span class="fu">tbl</span>(con, <span class="st">"measurement"</span>), <span class="st">"measurement_date"</span>, <span class="st">"measurement_concept_id"</span>)</span>
+<span id="cb37-43"><a href="#cb37-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-44"><a href="#cb37-44" aria-hidden="true" tabindex="-1"></a>extra_preg_related_concepts <span class="ot">&lt;-</span> <span class="fu">list</span>(c_o, p_o, o_df, m_df) <span class="sc">%&gt;%</span></span>
+<span id="cb37-45"><a href="#cb37-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">reduce</span>(union_all) <span class="sc">%&gt;%</span></span>
+<span id="cb37-46"><a href="#cb37-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>()</span>
+<span id="cb37-47"><a href="#cb37-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-48"><a href="#cb37-48" aria-hidden="true" tabindex="-1"></a>matches <span class="ot">&lt;-</span> extra_preg_related_concepts <span class="sc">%&gt;%</span></span>
+<span id="cb37-49"><a href="#cb37-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">domain_concept_id =</span> <span class="fu">as.double</span>(domain_concept_id)) <span class="sc">%&gt;%</span></span>
+<span id="cb37-50"><a href="#cb37-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(extra_concepts, <span class="at">by =</span> <span class="fu">join_by</span>(domain_concept_id <span class="sc">==</span> concept_id)) <span class="sc">%&gt;%</span></span>
+<span id="cb37-51"><a href="#cb37-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(hipps, <span class="at">by =</span> <span class="fu">join_by</span>(</span>
+<span id="cb37-52"><a href="#cb37-52" aria-hidden="true" tabindex="-1"></a>    person_id, <span class="fu">closest</span>(domain_concept_start_date <span class="sc">&gt;=</span> inferred_episode_start)</span>
+<span id="cb37-53"><a href="#cb37-53" aria-hidden="true" tabindex="-1"></a>  )) <span class="sc">%&gt;%</span></span>
+<span id="cb37-54"><a href="#cb37-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb37-55"><a href="#cb37-55" aria-hidden="true" tabindex="-1"></a>    <span class="at">expected_min_date =</span> inferred_episode_start <span class="sc">%m+%</span> <span class="fu">months</span>(<span class="fu">as.integer</span>(min_months)),</span>
+<span id="cb37-56"><a href="#cb37-56" aria-hidden="true" tabindex="-1"></a>    <span class="at">expected_max_date =</span> inferred_episode_start <span class="sc">%m+%</span> <span class="fu">months</span>(<span class="fu">as.integer</span>(max_months)),</span>
+<span id="cb37-57"><a href="#cb37-57" aria-hidden="true" tabindex="-1"></a>    <span class="at">is_match =</span> <span class="fu">between</span>(domain_concept_start_date, expected_min_date, expected_max_date),</span>
+<span id="cb37-58"><a href="#cb37-58" aria-hidden="true" tabindex="-1"></a>    <span class="at">is_match =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(is_match), <span class="dv">0</span>, is_match)</span>
+<span id="cb37-59"><a href="#cb37-59" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb37-60"><a href="#cb37-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-61"><a href="#cb37-61" aria-hidden="true" tabindex="-1"></a>matches <span class="sc">%&gt;%</span></span>
+<span id="cb37-62"><a href="#cb37-62" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(concept_name) <span class="sc">%&gt;%</span></span>
+<span id="cb37-63"><a href="#cb37-63" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(is_match) <span class="sc">%&gt;%</span></span>
+<span id="cb37-64"><a href="#cb37-64" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb37-65"><a href="#cb37-65" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> is_match, <span class="at">values_from =</span> n) <span class="sc">%&gt;%</span></span>
+<span id="cb37-66"><a href="#cb37-66" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transmute</span>(concept_name,</span>
+<span id="cb37-67"><a href="#cb37-67" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_total =</span> <span class="st">`</span><span class="at">0</span><span class="st">`</span> <span class="sc">+</span> <span class="st">`</span><span class="at">1</span><span class="st">`</span>,</span>
+<span id="cb37-68"><a href="#cb37-68" aria-hidden="true" tabindex="-1"></a>    <span class="at">overlapping =</span> <span class="st">`</span><span class="at">1</span><span class="st">`</span>,</span>
+<span id="cb37-69"><a href="#cb37-69" aria-hidden="true" tabindex="-1"></a>    <span class="at">percent =</span> overlapping <span class="sc">/</span> n_total</span>
+<span id="cb37-70"><a href="#cb37-70" aria-hidden="true" tabindex="-1"></a>  ) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="kable-table">
 <table class="table table-sm table-striped">
@@ -1243,153 +1323,141 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Breech presentation</td>
-<td style="text-align: right;">2522</td>
-<td style="text-align: right;">1935</td>
-<td style="text-align: right;">0.7672482</td>
+<td style="text-align: right;">2482</td>
+<td style="text-align: right;">2426</td>
+<td style="text-align: right;">0.9774376</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Complication occurring during labor and delivery</td>
-<td style="text-align: right;">7628</td>
-<td style="text-align: right;">5031</td>
-<td style="text-align: right;">0.6595438</td>
+<td style="text-align: right;">7598</td>
+<td style="text-align: right;">7332</td>
+<td style="text-align: right;">0.9649908</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Doppler velocimetry, fetal; umbilical artery</td>
-<td style="text-align: right;">4004</td>
-<td style="text-align: right;">2933</td>
-<td style="text-align: right;">0.7325175</td>
+<td style="text-align: right;">3994</td>
+<td style="text-align: right;">3174</td>
+<td style="text-align: right;">0.7946920</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Excessive fetal growth affecting management of mother</td>
-<td style="text-align: right;">3975</td>
-<td style="text-align: right;">2639</td>
-<td style="text-align: right;">0.6638994</td>
+<td style="text-align: right;">3950</td>
+<td style="text-align: right;">2962</td>
+<td style="text-align: right;">0.7498734</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">False labor</td>
-<td style="text-align: right;">628</td>
-<td style="text-align: right;">527</td>
-<td style="text-align: right;">0.8391720</td>
+<td style="text-align: right;">616</td>
+<td style="text-align: right;">575</td>
+<td style="text-align: right;">0.9334416</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">False labor before 37 completed weeks of gestation</td>
 <td style="text-align: right;">1949</td>
-<td style="text-align: right;">1683</td>
-<td style="text-align: right;">0.8635198</td>
+<td style="text-align: right;">1786</td>
+<td style="text-align: right;">0.9163674</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Fetal biophysical profile; with non-stress testing</td>
-<td style="text-align: right;">5058</td>
-<td style="text-align: right;">3924</td>
-<td style="text-align: right;">0.7758007</td>
+<td style="text-align: right;">5011</td>
+<td style="text-align: right;">4181</td>
+<td style="text-align: right;">0.8343644</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Fetal biophysical profile; without non-stress testing</td>
-<td style="text-align: right;">18702</td>
-<td style="text-align: right;">15736</td>
-<td style="text-align: right;">0.8414073</td>
+<td style="text-align: right;">18538</td>
+<td style="text-align: right;">16550</td>
+<td style="text-align: right;">0.8927608</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Fetal non-stress test</td>
-<td style="text-align: right;">25375</td>
-<td style="text-align: right;">20341</td>
-<td style="text-align: right;">0.8016158</td>
+<td style="text-align: right;">25185</td>
+<td style="text-align: right;">22047</td>
+<td style="text-align: right;">0.8754020</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Gestation less than 24 weeks</td>
-<td style="text-align: right;">2093</td>
-<td style="text-align: right;">1761</td>
-<td style="text-align: right;">0.8413760</td>
+<td style="text-align: right;">2073</td>
+<td style="text-align: right;">1817</td>
+<td style="text-align: right;">0.8765075</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Gestational diabetes mellitus</td>
-<td style="text-align: right;">12249</td>
-<td style="text-align: right;">8468</td>
-<td style="text-align: right;">0.6913217</td>
+<td style="text-align: right;">12029</td>
+<td style="text-align: right;">9162</td>
+<td style="text-align: right;">0.7616593</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Initial prenatal care visit (report at first prenatal encounter with health care professional providing obstetrical care. Report also date of visit and, in a separate field, the date of the last menstrual period [LMP]) (Prenatal)</td>
-<td style="text-align: right;">1219</td>
-<td style="text-align: right;">1188</td>
-<td style="text-align: right;">0.9745693</td>
+<td style="text-align: right;">1217</td>
+<td style="text-align: right;">1200</td>
+<td style="text-align: right;">0.9860312</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Low lying placenta</td>
-<td style="text-align: right;">1052</td>
-<td style="text-align: right;">919</td>
-<td style="text-align: right;">0.8735741</td>
+<td style="text-align: right;">1043</td>
+<td style="text-align: right;">980</td>
+<td style="text-align: right;">0.9395973</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Medical genetics and genetic counseling services, each 30 minutes face-to-face with patient/family</td>
-<td style="text-align: right;">3843</td>
-<td style="text-align: right;">1213</td>
-<td style="text-align: right;">0.3156388</td>
-</tr>
-<tr class="odd">
 <td style="text-align: left;">Polyhydramnios</td>
-<td style="text-align: right;">1661</td>
-<td style="text-align: right;">1230</td>
-<td style="text-align: right;">0.7405178</td>
+<td style="text-align: right;">1638</td>
+<td style="text-align: right;">1439</td>
+<td style="text-align: right;">0.8785104</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">Poor fetal growth affecting management</td>
-<td style="text-align: right;">7560</td>
-<td style="text-align: right;">5418</td>
-<td style="text-align: right;">0.7166667</td>
+<td style="text-align: right;">7510</td>
+<td style="text-align: right;">6328</td>
+<td style="text-align: right;">0.8426099</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">Pregnancy-induced hypertension</td>
-<td style="text-align: right;">3700</td>
-<td style="text-align: right;">2339</td>
-<td style="text-align: right;">0.6321622</td>
+<td style="text-align: right;">3668</td>
+<td style="text-align: right;">3389</td>
+<td style="text-align: right;">0.9239368</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">Prenatal flow sheet documented in medical record by first prenatal visit (documentation includes at minimum blood pressure, weight, urine protein, uterine size, fetal heart tones, and estimated date of delivery). Report also: date of visit and, in a separ</td>
-<td style="text-align: right;">286</td>
-<td style="text-align: right;">272</td>
-<td style="text-align: right;">0.9510490</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Preterm labor without delivery</td>
-<td style="text-align: right;">1358</td>
-<td style="text-align: right;">1110</td>
-<td style="text-align: right;">0.8173785</td>
+<td style="text-align: right;">285</td>
+<td style="text-align: right;">277</td>
+<td style="text-align: right;">0.9719298</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Reduced fetal movement</td>
-<td style="text-align: right;">3916</td>
-<td style="text-align: right;">3345</td>
-<td style="text-align: right;">0.8541879</td>
+<td style="text-align: left;">Preterm labor without delivery</td>
+<td style="text-align: right;">1329</td>
+<td style="text-align: right;">1259</td>
+<td style="text-align: right;">0.9473288</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Requires diphtheria, tetanus and pertussis vaccination</td>
-<td style="text-align: right;">22625</td>
-<td style="text-align: right;">1074</td>
-<td style="text-align: right;">0.0474696</td>
+<td style="text-align: left;">Reduced fetal movement</td>
+<td style="text-align: right;">3878</td>
+<td style="text-align: right;">3649</td>
+<td style="text-align: right;">0.9409489</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Suspected fetal abnormality affecting management of mother</td>
-<td style="text-align: right;">9923</td>
-<td style="text-align: right;">8475</td>
-<td style="text-align: right;">0.8540764</td>
+<td style="text-align: right;">9850</td>
+<td style="text-align: right;">9149</td>
+<td style="text-align: right;">0.9288325</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Third trimester pregnancy</td>
-<td style="text-align: right;">55694</td>
-<td style="text-align: right;">38369</td>
-<td style="text-align: right;">0.6889252</td>
+<td style="text-align: right;">55379</td>
+<td style="text-align: right;">45222</td>
+<td style="text-align: right;">0.8165911</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Ultrasound, pregnant uterus, real time with image documentation, fetal and maternal evaluation, after first trimester (&gt; or = 14 weeks 0 days), transabdominal approach; single or first gestation</td>
-<td style="text-align: right;">17124</td>
-<td style="text-align: right;">12072</td>
-<td style="text-align: right;">0.7049755</td>
+<td style="text-align: right;">17034</td>
+<td style="text-align: right;">12805</td>
+<td style="text-align: right;">0.7517318</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Ultrasound, pregnant uterus, real time with image documentation, transvaginal</td>
-<td style="text-align: right;">26215</td>
-<td style="text-align: right;">19771</td>
-<td style="text-align: right;">0.7541865</td>
+<td style="text-align: right;">26114</td>
+<td style="text-align: right;">20647</td>
+<td style="text-align: right;">0.7906487</td>
 </tr>
 </tbody>
 </table>

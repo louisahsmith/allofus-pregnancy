@@ -11,6 +11,7 @@ execute:
 ---
 
 ```{r}
+con <- allofus::aou_connect()
 info <- allofus::aou_session_info()
 info$Platform
 info$AoU_Release

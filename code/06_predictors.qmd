@@ -35,12 +35,9 @@ hipps <- read_rds(here::here("workbench/hipps_cleaned_restricted.rds"))
 ```{r}
 hipps <- hipps %>%
   mutate(
-    race_eth_cat = fct_relevel(race_eth_cat, "White"),
-    edu_cat = fct_relevel(edu_cat, "College graduate"),
-    income_cat = fct_relevel(income_cat, "> 100k"),
-    marital_status_cat = fct_relevel(marital_status_cat, "Married/partnered"),
-    mom_age_cat = fct_relevel(mom_age_cat, "25-29 years"),
-    live_birth = as.numeric(final_outcome_category == "LB")
+    live_birth = as.numeric(final_outcome_category == "LB"),
+    across(where(is.factor), fct_infreq),
+    across(where(is.character), fct_infreq)
   )
 
 hipps_per_person <- hipps %>%
