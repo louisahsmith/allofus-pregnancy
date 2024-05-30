@@ -53,6 +53,7 @@ hipps_w_demo <- read_rds(here::here("workbench/hipps_cleaned.rds")) %>%
   ) %>% 
     mutate(across(c(state_cat, gender_cat, orientation_cat, race_eth_cat, marital_status_cat), fct_infreq),
            across(where(is.factor), fct_drop))
+
 ```
 
 ```{r}

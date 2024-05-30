@@ -254,6 +254,39 @@ hipps_w_demo %>%
 ```
 
 ```{r}
+hipps_w_demo %>%
+  filter(
+    inferred_episode_start < inferred_episode_end,
+    HIP_flag == 1 & PPS_flag == 1,
+    inferred_episode_start > as.Date("2016-01-01")
+  ) %>%
+  mutate(conc = "Data-rich episodes") %>%
+  bind_rows(hipps_w_demo %>% mutate(conc = "All")) %>%
+  mutate(
+    resolution = case_when(
+      precision_category %in% c("week", "two-week", "three-week") ~ "Week-level",
+      precision_category %in% c("month", "two-month", "three-month") ~ "Month-level",
+      precision_category %in% c("non-specific") ~ "Non-specific",
+      precision_category %in% c("week_poor-support") ~ "Week (poor support)"
+    ),
+    resolution = fct_relevel(resolution, "Week-level", "Week (poor support)", "Month-level", "Non-specific"),
+    outcome_concordance_score = ifelse(outcome_concordance_score %in% c(0, 1), 1, outcome_concordance_score)
+  ) %>% 
+    group_by(conc, resolution, outcome_concordance_score) %>% 
+    count(outcome_category) %>% 
+    group_by(conc, resolution, outcome_category) %>% 
+    mutate(prop = n / sum(n),
+           n = sum(n)) %>%
+    filter(outcome_concordance_score == 1) %>%
+    mutate(prop = 1 - prop) %>% 
+    select(-outcome_concordance_score) %>% 
+    pivot_wider(names_from = conc, names_glue = "{.value}_{conc}", values_from = c(n, prop)) %>% 
+    select(resolution, outcome_category, contains("All"), contains("rich")) %>% 
+    write_csv(here::here("workbench/new_tbl.csv"))
+```
+
+
+```{r}
 states <- hipps_persons %>%
   collect() %>%
   select(person_id, state_of_residence, dob)
