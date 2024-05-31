@@ -29,7 +29,6 @@ con <- aou_connect()
 hipps <- read_rds(here::here("workbench/hipps_cleaned.rds"))
 ```
 
-
 ```{r}
 all_people <- tbl(con, "cb_search_person")
 tally(all_people) %>% collect()
@@ -38,6 +37,7 @@ tally(male) %>% collect()
 no_ehr <- filter(filter(all_people, sex_at_birth != "Male"), has_ehr_data == 0)
 tally(no_ehr) %>% collect()
 ```
+
 ```{r}
 ehr_female <- tbl(con, "cb_search_person") %>%
   filter(sex_at_birth != "Male", has_ehr_data == 1) %>%

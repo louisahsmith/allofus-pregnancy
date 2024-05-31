@@ -123,7 +123,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </header>
 
-<div class="cell" data-hash="02_examine-hipps_cache/html/unnamed-chunk-2_362e8b725847e6e7301085705104fbc7">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(allofus)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dbplyr)</span>
@@ -131,20 +131,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gtsummary)</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_classic</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="02_examine-hipps_cache/html/unnamed-chunk-3_d2a7d1c9d89e10ee2b804be4a1a719ad">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">aou_connect</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="02_examine-hipps_cache/html/unnamed-chunk-4_28f1f092eae2272bf32e321584bbb5be">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>hipps <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"workbench/merged_episodes_with_metadata_df.rds"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="02_examine-hipps_cache/html/unnamed-chunk-5_7ffca2647f099fdf7d49b4b48188844d">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>hipps_persons <span class="ot">&lt;-</span> <span class="fu">tbl</span>(con, <span class="st">"cb_search_person"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(person_id <span class="sc">%in%</span> <span class="sc">!!</span><span class="fu">unique</span>(hipps<span class="sc">$</span>person_id)) <span class="sc">%&gt;%</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(sex_at_birth <span class="sc">!=</span> <span class="st">"Male"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(<span class="fu">distinct</span>(<span class="fu">tbl</span>(con, <span class="st">"ds_survey"</span>), person_id), <span class="at">by =</span> <span class="st">"person_id"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(person_id, dob, state_of_residence, <span class="fu">starts_with</span>(<span class="st">"has"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="02_examine-hipps_cache/html/unnamed-chunk-6_f7f9cb079c7912a8f654c3963da2b0f4">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>survey_data <span class="ot">&lt;-</span> <span class="fu">aou_survey</span>(hipps_persons,</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">questions =</span> <span class="fu">c</span>(</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1586140</span>, <span class="dv">1585899</span>, <span class="dv">1585845</span>, <span class="dv">1585375</span>,</span>
@@ -161,7 +161,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">min_svy_date =</span> <span class="fu">min</span>(<span class="fu">c_across</span>(<span class="fu">ends_with</span>(<span class="st">"_date"</span>)), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
 <span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="02_examine-hipps_cache/html/unnamed-chunk-7_3bdbcf3e2fc8c2dd91af7e5bc63750fc">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>hipps_w_demo <span class="ot">&lt;-</span> hipps <span class="sc">%&gt;%</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(survey_data, <span class="at">by =</span> <span class="st">"person_id"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
@@ -217,7 +217,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="02_examine-hipps_cache/html/unnamed-chunk-8_ac66c9fc7da63725dc46f7c7273e4799">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(hipps_w_demo)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 59645</code></pre>
@@ -227,7 +227,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>[1] 31726</code></pre>
 </div>
 </div>
-<div class="cell" data-hash="02_examine-hipps_cache/html/unnamed-chunk-9_9e990841bd891f1a70c2af0ff9e7da21">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>hipps_w_demo <span class="sc">%&gt;%</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">tabyl</span>(outcome_category)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -276,7 +276,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </div>
-<div class="cell" data-hash="02_examine-hipps_cache/html/unnamed-chunk-10_b838c7d40563176eb1618e276d9fedd3">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>hipps_w_demo <span class="sc">%&gt;%</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">tabyl</span>(outcome_category) <span class="sc">%&gt;%</span></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">outcome_category =</span> <span class="fu">fct_rev</span>(outcome_category)) <span class="sc">%&gt;%</span></span>
@@ -297,7 +297,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><img src="02_examine-hipps_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<div class="cell" data-hash="02_examine-hipps_cache/html/unnamed-chunk-11_503599c8ec34177c0f693c55629542e6">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>hipps_w_demo <span class="sc">%&gt;%</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">outcome_concordance_score =</span> <span class="fu">fct_rev</span>(<span class="fu">factor</span>(outcome_concordance_score))) <span class="sc">%&gt;%</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">tabyl</span>(outcome_category, outcome_concordance_score) <span class="sc">%&gt;%</span></span>
@@ -355,7 +355,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </div>
-<div class="cell" data-hash="02_examine-hipps_cache/html/unnamed-chunk-12_5e34ef1d9677368279de947e16de525c">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>janitor<span class="sc">::</span><span class="fu">tabyl</span>(hipps_w_demo, outcome_concordance_score)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="kable-table">
@@ -388,7 +388,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </div>
-<div class="cell" data-hash="02_examine-hipps_cache/html/unnamed-chunk-13_d854989308b6ff35b2325fe2e868ae83">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>hipps_w_demo <span class="sc">%&gt;%</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">outcome_category =</span> <span class="fu">fct_rev</span>(outcome_category)) <span class="sc">%&gt;%</span></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
@@ -409,7 +409,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><img src="02_examine-hipps_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<div class="cell" data-hash="02_examine-hipps_cache/html/unnamed-chunk-14_81e34ef98ad59cc8826fa79fac71c53f">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>hipps_w_demo <span class="sc">%&gt;%</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">tabyl</span>(precision_category)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -468,7 +468,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </div>
-<div class="cell" data-hash="02_examine-hipps_cache/html/unnamed-chunk-15_a4334cb63eae92ede2c188d18527e09a">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>hipps_w_demo <span class="sc">%&gt;%</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">resolution =</span> <span class="fu">case_when</span>(</span>
@@ -516,7 +516,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </div>
-<div class="cell" data-hash="02_examine-hipps_cache/html/unnamed-chunk-16_0568ac20ca5fcea4adeb0aed8ee199c6">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>hipps_w_demo <span class="sc">%&gt;%</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(outcome_category) <span class="sc">%&gt;%</span></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
@@ -611,10 +611,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </div>
-<div class="cell" data-hash="02_examine-hipps_cache/html/unnamed-chunk-17_0379380d60ef8d17c6e50bae283e702f">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_classic</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="02_examine-hipps_cache/html/unnamed-chunk-18_27ca93206b3c59a96d64861cea11ff77">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>hipps_w_demo <span class="sc">%&gt;%</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    inferred_episode_start <span class="sc">&lt;</span> inferred_episode_end,</span>
@@ -659,191 +659,222 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><img src="02_examine-hipps_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<div class="cell" data-hash="02_examine-hipps_cache/html/unnamed-chunk-19_785a78eb4832e9ee8b0dc402ed81e22c">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>states <span class="ot">&lt;-</span> hipps_persons <span class="sc">%&gt;%</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(person_id, state_of_residence, dob)</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>hipps_cleaned <span class="ot">&lt;-</span> hipps_w_demo <span class="sc">%&gt;%</span></span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(states, <span class="at">by =</span> <span class="st">"person_id"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">race_eth_cat =</span> <span class="fu">case_when</span>(</span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_detect</span>(race_eth, <span class="st">"Hispanic"</span>) <span class="sc">~</span> <span class="st">"Hispanic"</span>,</span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_detect</span>(race_eth, <span class="st">","</span>) <span class="sc">~</span> <span class="st">"Mixed"</span>,</span>
-<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>      race_eth <span class="sc">==</span> <span class="st">"RaceEthnicityNoneOfThese"</span> <span class="sc">~</span> <span class="st">"Other"</span>,</span>
-<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> race_eth</span>
-<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">gender_cat =</span> <span class="fu">case_when</span>(</span>
-<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>      gender <span class="sc">%in%</span> <span class="fu">c</span>(</span>
-<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>        <span class="st">"NonBinary"</span>, <span class="st">"Transgender"</span>,</span>
-<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>        <span class="st">"AdditionalOptions"</span></span>
-<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>      ) <span class="sc">~</span> <span class="st">"Other/multiple"</span>,</span>
-<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_detect</span>(gender, <span class="st">","</span>) <span class="sc">~</span> <span class="st">"Other/multiple"</span>,</span>
-<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>      gender <span class="sc">==</span> <span class="st">"Skip"</span> <span class="sc">~</span> <span class="st">"No answer"</span>,</span>
-<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> gender</span>
-<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">gender_cat =</span> <span class="fu">fct_relevel</span>(gender_cat, <span class="st">"Woman"</span>, <span class="st">"Man"</span>, <span class="st">"Other/multiple"</span>, <span class="st">"No answer"</span>),</span>
-<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">orientation_cat =</span> <span class="fu">case_when</span>(</span>
-<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>      sexual_orientation <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Gay"</span>, <span class="st">"Lesbian"</span>) <span class="sc">~</span> <span class="st">"Gay/lesbian"</span>,</span>
-<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_detect</span>(sexual_orientation, <span class="st">"Bisexual"</span>) <span class="sc">~</span> <span class="st">"Bisexual"</span>,</span>
-<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_detect</span>(sexual_orientation, <span class="st">"Gay"</span>) <span class="sc">~</span> <span class="st">"Gay/lesbian"</span>,</span>
-<span id="cb21-28"><a href="#cb21-28" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_detect</span>(sexual_orientation, <span class="st">"Lesbian"</span>) <span class="sc">~</span> <span class="st">"Gay/lesbian"</span>,</span>
-<span id="cb21-29"><a href="#cb21-29" aria-hidden="true" tabindex="-1"></a>      sexual_orientation <span class="sc">==</span> <span class="st">"Skip"</span> <span class="sc">~</span> <span class="st">"No answer"</span>,</span>
-<span id="cb21-30"><a href="#cb21-30" aria-hidden="true" tabindex="-1"></a>      <span class="at">.default =</span> sexual_orientation</span>
-<span id="cb21-31"><a href="#cb21-31" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb21-32"><a href="#cb21-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(</span>
-<span id="cb21-33"><a href="#cb21-33" aria-hidden="true" tabindex="-1"></a>      <span class="fu">where</span>(is.character),</span>
-<span id="cb21-34"><a href="#cb21-34" aria-hidden="true" tabindex="-1"></a>      <span class="sc">~</span> <span class="fu">fct_collapse</span>(.x,</span>
-<span id="cb21-35"><a href="#cb21-35" aria-hidden="true" tabindex="-1"></a>        <span class="st">"No answer"</span> <span class="ot">=</span> <span class="fu">c</span>(</span>
-<span id="cb21-36"><a href="#cb21-36" aria-hidden="true" tabindex="-1"></a>          <span class="st">"I prefer not to answer"</span>, <span class="st">"None Indicated"</span>, <span class="st">"Prefer Not to Answer"</span>,</span>
-<span id="cb21-37"><a href="#cb21-37" aria-hidden="true" tabindex="-1"></a>          <span class="st">"Prefer Not To Answer"</span>, <span class="st">"PreferNotToAnswer"</span>, <span class="st">"Skip"</span>, <span class="st">"DontKnow"</span>,</span>
-<span id="cb21-38"><a href="#cb21-38" aria-hidden="true" tabindex="-1"></a>          <span class="st">"PMI: Skip"</span>, <span class="st">"PMI: Prefer Not To Answer"</span>, <span class="st">"PMI: Dont Know"</span>, <span class="st">"Race Ethnicity None Of These"</span></span>
-<span id="cb21-39"><a href="#cb21-39" aria-hidden="true" tabindex="-1"></a>        ),</span>
-<span id="cb21-40"><a href="#cb21-40" aria-hidden="true" tabindex="-1"></a>        <span class="at">NULL =</span> <span class="st">"No matching concept"</span></span>
-<span id="cb21-41"><a href="#cb21-41" aria-hidden="true" tabindex="-1"></a>      )</span>
-<span id="cb21-42"><a href="#cb21-42" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb21-43"><a href="#cb21-43" aria-hidden="true" tabindex="-1"></a>    <span class="at">race_eth_cat =</span> <span class="fu">fct_recode</span>(</span>
-<span id="cb21-44"><a href="#cb21-44" aria-hidden="true" tabindex="-1"></a>      race_eth_cat,</span>
-<span id="cb21-45"><a href="#cb21-45" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Black or African-American"</span> <span class="ot">=</span> <span class="st">"Black"</span>,</span>
-<span id="cb21-46"><a href="#cb21-46" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Hispanic or Latino"</span> <span class="ot">=</span> <span class="st">"Hispanic"</span>,</span>
-<span id="cb21-47"><a href="#cb21-47" aria-hidden="true" tabindex="-1"></a>      <span class="st">"More than one race"</span> <span class="ot">=</span> <span class="st">"Mixed"</span>,</span>
-<span id="cb21-48"><a href="#cb21-48" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Native Hawaiian or Other Pacific Islander"</span> <span class="ot">=</span> <span class="st">"NHPI"</span>,</span>
-<span id="cb21-49"><a href="#cb21-49" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Middle Eastern or North African"</span> <span class="ot">=</span> <span class="st">"MENA"</span></span>
-<span id="cb21-50"><a href="#cb21-50" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb21-51"><a href="#cb21-51" aria-hidden="true" tabindex="-1"></a>    <span class="at">income_cat =</span> <span class="fu">fct_collapse</span>(income,</span>
-<span id="cb21-52"><a href="#cb21-52" aria-hidden="true" tabindex="-1"></a>      <span class="st">"&lt; 10k"</span> <span class="ot">=</span> <span class="st">"less10k"</span>,</span>
-<span id="cb21-53"><a href="#cb21-53" aria-hidden="true" tabindex="-1"></a>      <span class="st">"10-25k"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"10k25k"</span>),</span>
-<span id="cb21-54"><a href="#cb21-54" aria-hidden="true" tabindex="-1"></a>      <span class="st">"25-50k"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"25k35k"</span>, <span class="st">"35k50k"</span>),</span>
-<span id="cb21-55"><a href="#cb21-55" aria-hidden="true" tabindex="-1"></a>      <span class="st">"50-100k"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"50k75k"</span>, <span class="st">"75k100k"</span>),</span>
-<span id="cb21-56"><a href="#cb21-56" aria-hidden="true" tabindex="-1"></a>      <span class="st">"&gt; 100k"</span> <span class="ot">=</span> <span class="fu">c</span>(</span>
-<span id="cb21-57"><a href="#cb21-57" aria-hidden="true" tabindex="-1"></a>        <span class="st">"100k150k"</span>,</span>
-<span id="cb21-58"><a href="#cb21-58" aria-hidden="true" tabindex="-1"></a>        <span class="st">"150k200k"</span>, <span class="st">"more200k"</span></span>
-<span id="cb21-59"><a href="#cb21-59" aria-hidden="true" tabindex="-1"></a>      )</span>
-<span id="cb21-60"><a href="#cb21-60" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb21-61"><a href="#cb21-61" aria-hidden="true" tabindex="-1"></a>    <span class="at">income_cat =</span> <span class="fu">fct_relevel</span>(income_cat, <span class="st">"&lt; 10k"</span>, <span class="st">"10-25k"</span>, <span class="st">"25-50k"</span>, <span class="st">"50-100k"</span>, <span class="st">"&gt; 100k"</span>),</span>
-<span id="cb21-62"><a href="#cb21-62" aria-hidden="true" tabindex="-1"></a>    <span class="at">edu_cat =</span> <span class="fu">fct_collapse</span>(education,</span>
-<span id="cb21-63"><a href="#cb21-63" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Less than high school"</span> <span class="ot">=</span> <span class="fu">c</span>(</span>
-<span id="cb21-64"><a href="#cb21-64" aria-hidden="true" tabindex="-1"></a>        <span class="st">"FiveThroughEight"</span>, <span class="st">"NeverAttended"</span>,</span>
-<span id="cb21-65"><a href="#cb21-65" aria-hidden="true" tabindex="-1"></a>        <span class="st">"NineThroughEleven"</span>, <span class="st">"OneThroughFour"</span></span>
-<span id="cb21-66"><a href="#cb21-66" aria-hidden="true" tabindex="-1"></a>      ),</span>
-<span id="cb21-67"><a href="#cb21-67" aria-hidden="true" tabindex="-1"></a>      <span class="st">"High school graduate"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"TwelveOrGED"</span>),</span>
-<span id="cb21-68"><a href="#cb21-68" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Some college"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"CollegeOnetoThree"</span>),</span>
-<span id="cb21-69"><a href="#cb21-69" aria-hidden="true" tabindex="-1"></a>      <span class="st">"College graduate"</span> <span class="ot">=</span> <span class="st">"CollegeGraduate"</span>,</span>
-<span id="cb21-70"><a href="#cb21-70" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Advanced degree"</span> <span class="ot">=</span> <span class="st">"AdvancedDegree"</span></span>
-<span id="cb21-71"><a href="#cb21-71" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb21-72"><a href="#cb21-72" aria-hidden="true" tabindex="-1"></a>    <span class="at">edu_cat =</span> <span class="fu">fct_relevel</span>(</span>
-<span id="cb21-73"><a href="#cb21-73" aria-hidden="true" tabindex="-1"></a>      edu_cat,</span>
-<span id="cb21-74"><a href="#cb21-74" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Less than high school"</span>, <span class="st">"High school graduate"</span>, <span class="st">"Some college"</span>, <span class="st">"College graduate"</span>, <span class="st">"Advanced degree"</span></span>
-<span id="cb21-75"><a href="#cb21-75" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb21-76"><a href="#cb21-76" aria-hidden="true" tabindex="-1"></a>    <span class="at">marital_status_cat =</span> <span class="fu">fct_collapse</span>(marital_status,</span>
-<span id="cb21-77"><a href="#cb21-77" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Married/partnered"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"Married"</span>, <span class="st">"LivingWithPartner"</span>),</span>
-<span id="cb21-78"><a href="#cb21-78" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Divorced/separated/widowed"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"Divorced"</span>, <span class="st">"Separated"</span>, <span class="st">"Widowed"</span>),</span>
-<span id="cb21-79"><a href="#cb21-79" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Never married"</span> <span class="ot">=</span> <span class="st">"NeverMarried"</span></span>
-<span id="cb21-80"><a href="#cb21-80" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb21-81"><a href="#cb21-81" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(</span>
-<span id="cb21-82"><a href="#cb21-82" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(gender_cat, orientation_cat, race_eth_cat, edu_cat, income_cat, marital_status_cat),</span>
-<span id="cb21-83"><a href="#cb21-83" aria-hidden="true" tabindex="-1"></a>      <span class="sc">~</span> <span class="fu">fct_drop</span>(<span class="fu">na_if</span>(.x, <span class="st">"No answer"</span>))</span>
-<span id="cb21-84"><a href="#cb21-84" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb21-85"><a href="#cb21-85" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb21-86"><a href="#cb21-86" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(<span class="fu">tibble</span>(</span>
-<span id="cb21-87"><a href="#cb21-87" aria-hidden="true" tabindex="-1"></a>    <span class="at">state_of_residence =</span> <span class="fu">c</span>(state.abb, <span class="st">"DC"</span>, <span class="st">"PR"</span>, <span class="st">"AS"</span>, <span class="st">"MP"</span>, <span class="st">"MH"</span>, <span class="st">"PW"</span>, <span class="st">"FM"</span>),</span>
-<span id="cb21-88"><a href="#cb21-88" aria-hidden="true" tabindex="-1"></a>    <span class="at">state_cat =</span> <span class="fu">c</span>(state.name, <span class="st">"District of Columbia"</span>, <span class="st">"Puerto Rico"</span>, <span class="st">"American Samoa"</span>, <span class="st">"Northern Mariana Islands"</span>, <span class="st">"Marshall Islands"</span>, <span class="st">"Palau"</span>, <span class="st">"Federated States of Micronesia"</span>)</span>
-<span id="cb21-89"><a href="#cb21-89" aria-hidden="true" tabindex="-1"></a>  )) <span class="sc">%&gt;%</span></span>
-<span id="cb21-90"><a href="#cb21-90" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb21-91"><a href="#cb21-91" aria-hidden="true" tabindex="-1"></a>    <span class="at">year_start =</span> <span class="fu">year</span>(inferred_episode_start),</span>
-<span id="cb21-92"><a href="#cb21-92" aria-hidden="true" tabindex="-1"></a>    <span class="at">year_end =</span> <span class="fu">year</span>(inferred_episode_end),</span>
-<span id="cb21-93"><a href="#cb21-93" aria-hidden="true" tabindex="-1"></a>    <span class="at">gestational_age_weeks =</span> gestational_age_days_calculated <span class="sc">/</span> <span class="dv">7</span>,</span>
-<span id="cb21-94"><a href="#cb21-94" aria-hidden="true" tabindex="-1"></a>    <span class="at">mom_age =</span> <span class="fu">as.numeric</span>(<span class="fu">difftime</span>(inferred_episode_end, dob, <span class="at">units =</span> <span class="st">"days"</span>)) <span class="sc">/</span> <span class="fl">365.25</span>,</span>
-<span id="cb21-95"><a href="#cb21-95" aria-hidden="true" tabindex="-1"></a>    <span class="at">mom_age_cat =</span> <span class="fu">cut</span>(mom_age, <span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">seq</span>(<span class="dv">15</span>, <span class="dv">55</span>, <span class="dv">5</span>)), <span class="at">right =</span> <span class="cn">FALSE</span>, <span class="at">include.lowest =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb21-96"><a href="#cb21-96" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb21-97"><a href="#cb21-97" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(mom_age_cat, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"start"</span>, <span class="st">"stop"</span>), <span class="at">sep =</span> <span class="st">","</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb21-98"><a href="#cb21-98" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">c</span>(start, stop), parse_number),</span>
-<span id="cb21-99"><a href="#cb21-99" aria-hidden="true" tabindex="-1"></a>    <span class="at">stop =</span> stop <span class="sc">-</span> <span class="dv">1</span></span>
-<span id="cb21-100"><a href="#cb21-100" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb21-101"><a href="#cb21-101" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unite</span>(mom_age_cat, <span class="fu">c</span>(start, stop), <span class="at">sep =</span> <span class="st">"-"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb21-102"><a href="#cb21-102" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb21-103"><a href="#cb21-103" aria-hidden="true" tabindex="-1"></a>    <span class="at">mom_age_cat =</span> <span class="fu">paste</span>(mom_age_cat, <span class="st">"years"</span>),</span>
-<span id="cb21-104"><a href="#cb21-104" aria-hidden="true" tabindex="-1"></a>    <span class="at">mom_age_cat =</span> <span class="fu">ifelse</span>(mom_age_cat <span class="sc">==</span> <span class="st">"50-54 years"</span>, <span class="st">"50 years and over"</span>, mom_age_cat),</span>
-<span id="cb21-105"><a href="#cb21-105" aria-hidden="true" tabindex="-1"></a>    <span class="at">mom_age_cat =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(mom_age), <span class="cn">NA</span>, mom_age_cat),</span>
-<span id="cb21-106"><a href="#cb21-106" aria-hidden="true" tabindex="-1"></a>    <span class="at">year_start_cat =</span> <span class="fu">cut</span>(year_start,</span>
-<span id="cb21-107"><a href="#cb21-107" aria-hidden="true" tabindex="-1"></a>      <span class="at">breaks =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="cn">Inf</span>, <span class="dv">2015</span><span class="sc">:</span><span class="dv">2022</span>),</span>
-<span id="cb21-108"><a href="#cb21-108" aria-hidden="true" tabindex="-1"></a>      <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"2015 and earlier"</span>, <span class="fu">as.character</span>(<span class="dv">2016</span><span class="sc">:</span><span class="dv">2022</span>))</span>
-<span id="cb21-109"><a href="#cb21-109" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb21-110"><a href="#cb21-110" aria-hidden="true" tabindex="-1"></a>    <span class="at">year_end_cat =</span> <span class="fu">cut</span>(year_end,</span>
-<span id="cb21-111"><a href="#cb21-111" aria-hidden="true" tabindex="-1"></a>      <span class="at">breaks =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="cn">Inf</span>, <span class="dv">2015</span><span class="sc">:</span><span class="dv">2022</span>),</span>
-<span id="cb21-112"><a href="#cb21-112" aria-hidden="true" tabindex="-1"></a>      <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"2015 and earlier"</span>, <span class="fu">as.character</span>(<span class="dv">2016</span><span class="sc">:</span><span class="dv">2022</span>))</span>
-<span id="cb21-113"><a href="#cb21-113" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb21-114"><a href="#cb21-114" aria-hidden="true" tabindex="-1"></a>    <span class="at">mom_age_cat_table =</span> <span class="fu">fct_collapse</span>(mom_age_cat, <span class="st">"45 years and over"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"45-49 years"</span>, <span class="st">"50 years and over"</span>)),</span>
-<span id="cb21-115"><a href="#cb21-115" aria-hidden="true" tabindex="-1"></a>    <span class="at">mom_age_cat_table =</span> <span class="fu">fct_drop</span>(mom_age_cat_table),</span>
-<span id="cb21-116"><a href="#cb21-116" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(<span class="fu">where</span>(is.factor), <span class="sc">~</span> <span class="fu">fct_lump_min</span>(.x, <span class="at">min =</span> <span class="dv">20</span>)),</span>
-<span id="cb21-117"><a href="#cb21-117" aria-hidden="true" tabindex="-1"></a>         <span class="fu">across</span>(<span class="fu">c</span>(state_cat, gender_cat, orientation_cat, race_eth_cat, marital_status_cat), fct_infreq),</span>
-<span id="cb21-118"><a href="#cb21-118" aria-hidden="true" tabindex="-1"></a>    <span class="at">state_cat =</span> <span class="fu">fct_lump_min</span>(state_cat, <span class="at">min =</span> <span class="dv">20</span>)</span>
-<span id="cb21-119"><a href="#cb21-119" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>hipps_w_demo <span class="sc">%&gt;%</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    inferred_episode_start <span class="sc">&lt;</span> inferred_episode_end,</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    HIP_flag <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span> PPS_flag <span class="sc">==</span> <span class="dv">1</span>,</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    inferred_episode_start <span class="sc">&gt;</span> <span class="fu">as.Date</span>(<span class="st">"2016-01-01"</span>)</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">conc =</span> <span class="st">"Data-rich episodes"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>(hipps_w_demo <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">conc =</span> <span class="st">"All"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">resolution =</span> <span class="fu">case_when</span>(</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>      precision_category <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"week"</span>, <span class="st">"two-week"</span>, <span class="st">"three-week"</span>) <span class="sc">~</span> <span class="st">"Week-level"</span>,</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>      precision_category <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"month"</span>, <span class="st">"two-month"</span>, <span class="st">"three-month"</span>) <span class="sc">~</span> <span class="st">"Month-level"</span>,</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>      precision_category <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"non-specific"</span>) <span class="sc">~</span> <span class="st">"Non-specific"</span>,</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>      precision_category <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"week_poor-support"</span>) <span class="sc">~</span> <span class="st">"Week (poor support)"</span></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">resolution =</span> <span class="fu">fct_relevel</span>(resolution, <span class="st">"Week-level"</span>, <span class="st">"Week (poor support)"</span>, <span class="st">"Month-level"</span>, <span class="st">"Non-specific"</span>),</span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">outcome_concordance_score =</span> <span class="fu">ifelse</span>(outcome_concordance_score <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="dv">1</span>, outcome_concordance_score)</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(conc, resolution, outcome_concordance_score) <span class="sc">%&gt;%</span> </span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">count</span>(outcome_category) <span class="sc">%&gt;%</span> </span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(conc, resolution, outcome_category) <span class="sc">%&gt;%</span> </span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">prop =</span> n <span class="sc">/</span> <span class="fu">sum</span>(n),</span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>           <span class="at">n =</span> <span class="fu">sum</span>(n)) <span class="sc">%&gt;%</span></span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(outcome_concordance_score <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">prop =</span> <span class="dv">1</span> <span class="sc">-</span> prop) <span class="sc">%&gt;%</span> </span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>outcome_concordance_score) <span class="sc">%&gt;%</span> </span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> conc, <span class="at">names_glue =</span> <span class="st">"{.value}_{conc}"</span>, <span class="at">values_from =</span> <span class="fu">c</span>(n, prop)) <span class="sc">%&gt;%</span> </span>
+<span id="cb21-28"><a href="#cb21-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(resolution, outcome_category, <span class="fu">contains</span>(<span class="st">"All"</span>), <span class="fu">contains</span>(<span class="st">"rich"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb21-29"><a href="#cb21-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">write_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"workbench/new_tbl.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="02_examine-hipps_cache/html/unnamed-chunk-20_1300b1c96b5b3fce03fea592afd00d9a">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_rds</span>(hipps_cleaned, here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"workbench/hipps_cleaned.rds"</span>))</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">aou_workspace_to_bucket</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"workbench/hipps_cleaned.rds"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>states <span class="ot">&lt;-</span> hipps_persons <span class="sc">%&gt;%</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(person_id, state_of_residence, dob)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>hipps_cleaned <span class="ot">&lt;-</span> hipps_w_demo <span class="sc">%&gt;%</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(states, <span class="at">by =</span> <span class="st">"person_id"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">race_eth_cat =</span> <span class="fu">case_when</span>(</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_detect</span>(race_eth, <span class="st">"Hispanic"</span>) <span class="sc">~</span> <span class="st">"Hispanic"</span>,</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_detect</span>(race_eth, <span class="st">","</span>) <span class="sc">~</span> <span class="st">"Mixed"</span>,</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>      race_eth <span class="sc">==</span> <span class="st">"RaceEthnicityNoneOfThese"</span> <span class="sc">~</span> <span class="st">"Other"</span>,</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> race_eth</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">gender_cat =</span> <span class="fu">case_when</span>(</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>      gender <span class="sc">%in%</span> <span class="fu">c</span>(</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>        <span class="st">"NonBinary"</span>, <span class="st">"Transgender"</span>,</span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>        <span class="st">"AdditionalOptions"</span></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>      ) <span class="sc">~</span> <span class="st">"Other/multiple"</span>,</span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_detect</span>(gender, <span class="st">","</span>) <span class="sc">~</span> <span class="st">"Other/multiple"</span>,</span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>      gender <span class="sc">==</span> <span class="st">"Skip"</span> <span class="sc">~</span> <span class="st">"No answer"</span>,</span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> gender</span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">gender_cat =</span> <span class="fu">fct_relevel</span>(gender_cat, <span class="st">"Woman"</span>, <span class="st">"Man"</span>, <span class="st">"Other/multiple"</span>, <span class="st">"No answer"</span>),</span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">orientation_cat =</span> <span class="fu">case_when</span>(</span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>      sexual_orientation <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Gay"</span>, <span class="st">"Lesbian"</span>) <span class="sc">~</span> <span class="st">"Gay/lesbian"</span>,</span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_detect</span>(sexual_orientation, <span class="st">"Bisexual"</span>) <span class="sc">~</span> <span class="st">"Bisexual"</span>,</span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_detect</span>(sexual_orientation, <span class="st">"Gay"</span>) <span class="sc">~</span> <span class="st">"Gay/lesbian"</span>,</span>
+<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_detect</span>(sexual_orientation, <span class="st">"Lesbian"</span>) <span class="sc">~</span> <span class="st">"Gay/lesbian"</span>,</span>
+<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a>      sexual_orientation <span class="sc">==</span> <span class="st">"Skip"</span> <span class="sc">~</span> <span class="st">"No answer"</span>,</span>
+<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a>      <span class="at">.default =</span> sexual_orientation</span>
+<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb22-32"><a href="#cb22-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(</span>
+<span id="cb22-33"><a href="#cb22-33" aria-hidden="true" tabindex="-1"></a>      <span class="fu">where</span>(is.character),</span>
+<span id="cb22-34"><a href="#cb22-34" aria-hidden="true" tabindex="-1"></a>      <span class="sc">~</span> <span class="fu">fct_collapse</span>(.x,</span>
+<span id="cb22-35"><a href="#cb22-35" aria-hidden="true" tabindex="-1"></a>        <span class="st">"No answer"</span> <span class="ot">=</span> <span class="fu">c</span>(</span>
+<span id="cb22-36"><a href="#cb22-36" aria-hidden="true" tabindex="-1"></a>          <span class="st">"I prefer not to answer"</span>, <span class="st">"None Indicated"</span>, <span class="st">"Prefer Not to Answer"</span>,</span>
+<span id="cb22-37"><a href="#cb22-37" aria-hidden="true" tabindex="-1"></a>          <span class="st">"Prefer Not To Answer"</span>, <span class="st">"PreferNotToAnswer"</span>, <span class="st">"Skip"</span>, <span class="st">"DontKnow"</span>,</span>
+<span id="cb22-38"><a href="#cb22-38" aria-hidden="true" tabindex="-1"></a>          <span class="st">"PMI: Skip"</span>, <span class="st">"PMI: Prefer Not To Answer"</span>, <span class="st">"PMI: Dont Know"</span>, <span class="st">"Race Ethnicity None Of These"</span></span>
+<span id="cb22-39"><a href="#cb22-39" aria-hidden="true" tabindex="-1"></a>        ),</span>
+<span id="cb22-40"><a href="#cb22-40" aria-hidden="true" tabindex="-1"></a>        <span class="at">NULL =</span> <span class="st">"No matching concept"</span></span>
+<span id="cb22-41"><a href="#cb22-41" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb22-42"><a href="#cb22-42" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb22-43"><a href="#cb22-43" aria-hidden="true" tabindex="-1"></a>    <span class="at">race_eth_cat =</span> <span class="fu">fct_recode</span>(</span>
+<span id="cb22-44"><a href="#cb22-44" aria-hidden="true" tabindex="-1"></a>      race_eth_cat,</span>
+<span id="cb22-45"><a href="#cb22-45" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Black or African-American"</span> <span class="ot">=</span> <span class="st">"Black"</span>,</span>
+<span id="cb22-46"><a href="#cb22-46" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Hispanic or Latino"</span> <span class="ot">=</span> <span class="st">"Hispanic"</span>,</span>
+<span id="cb22-47"><a href="#cb22-47" aria-hidden="true" tabindex="-1"></a>      <span class="st">"More than one race"</span> <span class="ot">=</span> <span class="st">"Mixed"</span>,</span>
+<span id="cb22-48"><a href="#cb22-48" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Native Hawaiian or Other Pacific Islander"</span> <span class="ot">=</span> <span class="st">"NHPI"</span>,</span>
+<span id="cb22-49"><a href="#cb22-49" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Middle Eastern or North African"</span> <span class="ot">=</span> <span class="st">"MENA"</span></span>
+<span id="cb22-50"><a href="#cb22-50" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb22-51"><a href="#cb22-51" aria-hidden="true" tabindex="-1"></a>    <span class="at">income_cat =</span> <span class="fu">fct_collapse</span>(income,</span>
+<span id="cb22-52"><a href="#cb22-52" aria-hidden="true" tabindex="-1"></a>      <span class="st">"&lt; 10k"</span> <span class="ot">=</span> <span class="st">"less10k"</span>,</span>
+<span id="cb22-53"><a href="#cb22-53" aria-hidden="true" tabindex="-1"></a>      <span class="st">"10-25k"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"10k25k"</span>),</span>
+<span id="cb22-54"><a href="#cb22-54" aria-hidden="true" tabindex="-1"></a>      <span class="st">"25-50k"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"25k35k"</span>, <span class="st">"35k50k"</span>),</span>
+<span id="cb22-55"><a href="#cb22-55" aria-hidden="true" tabindex="-1"></a>      <span class="st">"50-100k"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"50k75k"</span>, <span class="st">"75k100k"</span>),</span>
+<span id="cb22-56"><a href="#cb22-56" aria-hidden="true" tabindex="-1"></a>      <span class="st">"&gt; 100k"</span> <span class="ot">=</span> <span class="fu">c</span>(</span>
+<span id="cb22-57"><a href="#cb22-57" aria-hidden="true" tabindex="-1"></a>        <span class="st">"100k150k"</span>,</span>
+<span id="cb22-58"><a href="#cb22-58" aria-hidden="true" tabindex="-1"></a>        <span class="st">"150k200k"</span>, <span class="st">"more200k"</span></span>
+<span id="cb22-59"><a href="#cb22-59" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb22-60"><a href="#cb22-60" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb22-61"><a href="#cb22-61" aria-hidden="true" tabindex="-1"></a>    <span class="at">income_cat =</span> <span class="fu">fct_relevel</span>(income_cat, <span class="st">"&lt; 10k"</span>, <span class="st">"10-25k"</span>, <span class="st">"25-50k"</span>, <span class="st">"50-100k"</span>, <span class="st">"&gt; 100k"</span>),</span>
+<span id="cb22-62"><a href="#cb22-62" aria-hidden="true" tabindex="-1"></a>    <span class="at">edu_cat =</span> <span class="fu">fct_collapse</span>(education,</span>
+<span id="cb22-63"><a href="#cb22-63" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Less than high school"</span> <span class="ot">=</span> <span class="fu">c</span>(</span>
+<span id="cb22-64"><a href="#cb22-64" aria-hidden="true" tabindex="-1"></a>        <span class="st">"FiveThroughEight"</span>, <span class="st">"NeverAttended"</span>,</span>
+<span id="cb22-65"><a href="#cb22-65" aria-hidden="true" tabindex="-1"></a>        <span class="st">"NineThroughEleven"</span>, <span class="st">"OneThroughFour"</span></span>
+<span id="cb22-66"><a href="#cb22-66" aria-hidden="true" tabindex="-1"></a>      ),</span>
+<span id="cb22-67"><a href="#cb22-67" aria-hidden="true" tabindex="-1"></a>      <span class="st">"High school graduate"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"TwelveOrGED"</span>),</span>
+<span id="cb22-68"><a href="#cb22-68" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Some college"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"CollegeOnetoThree"</span>),</span>
+<span id="cb22-69"><a href="#cb22-69" aria-hidden="true" tabindex="-1"></a>      <span class="st">"College graduate"</span> <span class="ot">=</span> <span class="st">"CollegeGraduate"</span>,</span>
+<span id="cb22-70"><a href="#cb22-70" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Advanced degree"</span> <span class="ot">=</span> <span class="st">"AdvancedDegree"</span></span>
+<span id="cb22-71"><a href="#cb22-71" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb22-72"><a href="#cb22-72" aria-hidden="true" tabindex="-1"></a>    <span class="at">edu_cat =</span> <span class="fu">fct_relevel</span>(</span>
+<span id="cb22-73"><a href="#cb22-73" aria-hidden="true" tabindex="-1"></a>      edu_cat,</span>
+<span id="cb22-74"><a href="#cb22-74" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Less than high school"</span>, <span class="st">"High school graduate"</span>, <span class="st">"Some college"</span>, <span class="st">"College graduate"</span>, <span class="st">"Advanced degree"</span></span>
+<span id="cb22-75"><a href="#cb22-75" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb22-76"><a href="#cb22-76" aria-hidden="true" tabindex="-1"></a>    <span class="at">marital_status_cat =</span> <span class="fu">fct_collapse</span>(marital_status,</span>
+<span id="cb22-77"><a href="#cb22-77" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Married/partnered"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"Married"</span>, <span class="st">"LivingWithPartner"</span>),</span>
+<span id="cb22-78"><a href="#cb22-78" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Divorced/separated/widowed"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"Divorced"</span>, <span class="st">"Separated"</span>, <span class="st">"Widowed"</span>),</span>
+<span id="cb22-79"><a href="#cb22-79" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Never married"</span> <span class="ot">=</span> <span class="st">"NeverMarried"</span></span>
+<span id="cb22-80"><a href="#cb22-80" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb22-81"><a href="#cb22-81" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(</span>
+<span id="cb22-82"><a href="#cb22-82" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(gender_cat, orientation_cat, race_eth_cat, edu_cat, income_cat, marital_status_cat),</span>
+<span id="cb22-83"><a href="#cb22-83" aria-hidden="true" tabindex="-1"></a>      <span class="sc">~</span> <span class="fu">fct_drop</span>(<span class="fu">na_if</span>(.x, <span class="st">"No answer"</span>))</span>
+<span id="cb22-84"><a href="#cb22-84" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb22-85"><a href="#cb22-85" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb22-86"><a href="#cb22-86" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(<span class="fu">tibble</span>(</span>
+<span id="cb22-87"><a href="#cb22-87" aria-hidden="true" tabindex="-1"></a>    <span class="at">state_of_residence =</span> <span class="fu">c</span>(state.abb, <span class="st">"DC"</span>, <span class="st">"PR"</span>, <span class="st">"AS"</span>, <span class="st">"MP"</span>, <span class="st">"MH"</span>, <span class="st">"PW"</span>, <span class="st">"FM"</span>),</span>
+<span id="cb22-88"><a href="#cb22-88" aria-hidden="true" tabindex="-1"></a>    <span class="at">state_cat =</span> <span class="fu">c</span>(state.name, <span class="st">"District of Columbia"</span>, <span class="st">"Puerto Rico"</span>, <span class="st">"American Samoa"</span>, <span class="st">"Northern Mariana Islands"</span>, <span class="st">"Marshall Islands"</span>, <span class="st">"Palau"</span>, <span class="st">"Federated States of Micronesia"</span>)</span>
+<span id="cb22-89"><a href="#cb22-89" aria-hidden="true" tabindex="-1"></a>  )) <span class="sc">%&gt;%</span></span>
+<span id="cb22-90"><a href="#cb22-90" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb22-91"><a href="#cb22-91" aria-hidden="true" tabindex="-1"></a>    <span class="at">year_start =</span> <span class="fu">year</span>(inferred_episode_start),</span>
+<span id="cb22-92"><a href="#cb22-92" aria-hidden="true" tabindex="-1"></a>    <span class="at">year_end =</span> <span class="fu">year</span>(inferred_episode_end),</span>
+<span id="cb22-93"><a href="#cb22-93" aria-hidden="true" tabindex="-1"></a>    <span class="at">gestational_age_weeks =</span> gestational_age_days_calculated <span class="sc">/</span> <span class="dv">7</span>,</span>
+<span id="cb22-94"><a href="#cb22-94" aria-hidden="true" tabindex="-1"></a>    <span class="at">mom_age =</span> <span class="fu">as.numeric</span>(<span class="fu">difftime</span>(inferred_episode_end, dob, <span class="at">units =</span> <span class="st">"days"</span>)) <span class="sc">/</span> <span class="fl">365.25</span>,</span>
+<span id="cb22-95"><a href="#cb22-95" aria-hidden="true" tabindex="-1"></a>    <span class="at">mom_age_cat =</span> <span class="fu">cut</span>(mom_age, <span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">seq</span>(<span class="dv">15</span>, <span class="dv">55</span>, <span class="dv">5</span>)), <span class="at">right =</span> <span class="cn">FALSE</span>, <span class="at">include.lowest =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb22-96"><a href="#cb22-96" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb22-97"><a href="#cb22-97" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(mom_age_cat, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"start"</span>, <span class="st">"stop"</span>), <span class="at">sep =</span> <span class="st">","</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb22-98"><a href="#cb22-98" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">c</span>(start, stop), parse_number),</span>
+<span id="cb22-99"><a href="#cb22-99" aria-hidden="true" tabindex="-1"></a>    <span class="at">stop =</span> stop <span class="sc">-</span> <span class="dv">1</span></span>
+<span id="cb22-100"><a href="#cb22-100" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb22-101"><a href="#cb22-101" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unite</span>(mom_age_cat, <span class="fu">c</span>(start, stop), <span class="at">sep =</span> <span class="st">"-"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb22-102"><a href="#cb22-102" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb22-103"><a href="#cb22-103" aria-hidden="true" tabindex="-1"></a>    <span class="at">mom_age_cat =</span> <span class="fu">paste</span>(mom_age_cat, <span class="st">"years"</span>),</span>
+<span id="cb22-104"><a href="#cb22-104" aria-hidden="true" tabindex="-1"></a>    <span class="at">mom_age_cat =</span> <span class="fu">ifelse</span>(mom_age_cat <span class="sc">==</span> <span class="st">"50-54 years"</span>, <span class="st">"50 years and over"</span>, mom_age_cat),</span>
+<span id="cb22-105"><a href="#cb22-105" aria-hidden="true" tabindex="-1"></a>    <span class="at">mom_age_cat =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(mom_age), <span class="cn">NA</span>, mom_age_cat),</span>
+<span id="cb22-106"><a href="#cb22-106" aria-hidden="true" tabindex="-1"></a>    <span class="at">year_start_cat =</span> <span class="fu">cut</span>(year_start,</span>
+<span id="cb22-107"><a href="#cb22-107" aria-hidden="true" tabindex="-1"></a>      <span class="at">breaks =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="cn">Inf</span>, <span class="dv">2015</span><span class="sc">:</span><span class="dv">2022</span>),</span>
+<span id="cb22-108"><a href="#cb22-108" aria-hidden="true" tabindex="-1"></a>      <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"2015 and earlier"</span>, <span class="fu">as.character</span>(<span class="dv">2016</span><span class="sc">:</span><span class="dv">2022</span>))</span>
+<span id="cb22-109"><a href="#cb22-109" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb22-110"><a href="#cb22-110" aria-hidden="true" tabindex="-1"></a>    <span class="at">year_end_cat =</span> <span class="fu">cut</span>(year_end,</span>
+<span id="cb22-111"><a href="#cb22-111" aria-hidden="true" tabindex="-1"></a>      <span class="at">breaks =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="cn">Inf</span>, <span class="dv">2015</span><span class="sc">:</span><span class="dv">2022</span>),</span>
+<span id="cb22-112"><a href="#cb22-112" aria-hidden="true" tabindex="-1"></a>      <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"2015 and earlier"</span>, <span class="fu">as.character</span>(<span class="dv">2016</span><span class="sc">:</span><span class="dv">2022</span>))</span>
+<span id="cb22-113"><a href="#cb22-113" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb22-114"><a href="#cb22-114" aria-hidden="true" tabindex="-1"></a>    <span class="at">mom_age_cat_table =</span> <span class="fu">fct_collapse</span>(mom_age_cat, <span class="st">"45 years and over"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"45-49 years"</span>, <span class="st">"50 years and over"</span>)),</span>
+<span id="cb22-115"><a href="#cb22-115" aria-hidden="true" tabindex="-1"></a>    <span class="at">mom_age_cat_table =</span> <span class="fu">fct_drop</span>(mom_age_cat_table),</span>
+<span id="cb22-116"><a href="#cb22-116" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(<span class="fu">where</span>(is.factor), <span class="sc">~</span> <span class="fu">fct_lump_min</span>(.x, <span class="at">min =</span> <span class="dv">20</span>)),</span>
+<span id="cb22-117"><a href="#cb22-117" aria-hidden="true" tabindex="-1"></a>         <span class="fu">across</span>(<span class="fu">c</span>(state_cat, gender_cat, orientation_cat, race_eth_cat, marital_status_cat), fct_infreq),</span>
+<span id="cb22-118"><a href="#cb22-118" aria-hidden="true" tabindex="-1"></a>    <span class="at">state_cat =</span> <span class="fu">fct_lump_min</span>(state_cat, <span class="at">min =</span> <span class="dv">20</span>)</span>
+<span id="cb22-119"><a href="#cb22-119" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="02_examine-hipps_cache/html/unnamed-chunk-21_6a2cdb2fffc9cd35ad7780d4a8652b59">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>hipps_cleaned <span class="sc">%&gt;%</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">Concordance =</span> <span class="fu">case_when</span>(</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>      <span class="fu">is.na</span>(algo1_id) <span class="sc">|</span> <span class="fu">is.na</span>(algo2_id) <span class="sc">~</span> <span class="st">"Single algorithm"</span>,</span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">.default =</span> <span class="fu">fct_recode</span>(<span class="fu">as.character</span>(outcome_concordance_score),</span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Not concordant"</span> <span class="ot">=</span> <span class="st">"0"</span>,</span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Somewhat concordant"</span> <span class="ot">=</span> <span class="st">"1"</span>,</span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Fully concordant"</span> <span class="ot">=</span> <span class="st">"2"</span></span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>      )</span>
-<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">Concordance =</span> <span class="fu">factor</span>(Concordance, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Single algorithm"</span>, <span class="st">"Not concordant"</span>, <span class="st">"Somewhat concordant"</span>, <span class="st">"Fully concordant"</span>))</span>
-<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(year_start, <span class="at">fill =</span> Concordance)) <span class="sc">+</span></span>
-<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="fu">length</span>(<span class="dv">1979</span><span class="sc">:</span><span class="dv">2022</span>)) <span class="sc">+</span></span>
-<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fl">2015.5</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"darkgrey"</span>) <span class="sc">+</span></span>
-<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Year of pregnancy start"</span>, <span class="at">y =</span> <span class="st">"Number of pregancies"</span>) <span class="sc">+</span></span>
-<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_okabe_ito</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_rds</span>(hipps_cleaned, here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"workbench/hipps_cleaned.rds"</span>))</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">aou_workspace_to_bucket</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"workbench/hipps_cleaned.rds"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>hipps_cleaned <span class="sc">%&gt;%</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">Concordance =</span> <span class="fu">case_when</span>(</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>      <span class="fu">is.na</span>(algo1_id) <span class="sc">|</span> <span class="fu">is.na</span>(algo2_id) <span class="sc">~</span> <span class="st">"Single algorithm"</span>,</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">.default =</span> <span class="fu">fct_recode</span>(<span class="fu">as.character</span>(outcome_concordance_score),</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Not concordant"</span> <span class="ot">=</span> <span class="st">"0"</span>,</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Somewhat concordant"</span> <span class="ot">=</span> <span class="st">"1"</span>,</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Fully concordant"</span> <span class="ot">=</span> <span class="st">"2"</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">Concordance =</span> <span class="fu">factor</span>(Concordance, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Single algorithm"</span>, <span class="st">"Not concordant"</span>, <span class="st">"Somewhat concordant"</span>, <span class="st">"Fully concordant"</span>))</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(year_start, <span class="at">fill =</span> Concordance)) <span class="sc">+</span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="fu">length</span>(<span class="dv">1979</span><span class="sc">:</span><span class="dv">2022</span>)) <span class="sc">+</span></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fl">2015.5</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"darkgrey"</span>) <span class="sc">+</span></span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Year of pregnancy start"</span>, <span class="at">y =</span> <span class="st">"Number of pregancies"</span>) <span class="sc">+</span></span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_okabe_ito</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="02_examine-hipps_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="672"></p>
+<p><img src="02_examine-hipps_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <section id="demographics-table" class="level2">
 <h2 class="anchored" data-anchor-id="demographics-table">Demographics table</h2>
-<div class="cell" data-hash="02_examine-hipps_cache/html/unnamed-chunk-22_a6d21fa62e2239f11c8eb91cf2e8ba0a">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>demo_table <span class="ot">&lt;-</span> hipps_cleaned <span class="sc">%&gt;%</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(person_id, gender_cat, orientation_cat, race_eth_cat, income_cat, edu_cat, marital_status_cat, state_cat) <span class="sc">%&gt;%</span></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl_summary</span>(</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">include =</span> <span class="fu">c</span>(gender_cat, orientation_cat, race_eth_cat, income_cat, edu_cat, state_cat),</span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="fu">list</span>(</span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>      gender_cat <span class="sc">~</span> <span class="st">"Gender identity"</span>,</span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>      orientation_cat <span class="sc">~</span> <span class="st">"Sexual orientation"</span>,</span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>      race_eth_cat <span class="sc">~</span> <span class="st">"Race/ethnicity"</span>,</span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>      income_cat <span class="sc">~</span> <span class="st">"Family income"</span>,</span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>      edu_cat <span class="sc">~</span> <span class="st">"Education"</span>,</span>
-<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>      state_cat <span class="sc">~</span> <span class="st">"State of residence"</span></span>
-<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bold_labels</span>()</span>
-<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>demo_table</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>demo_table <span class="ot">&lt;-</span> hipps_cleaned <span class="sc">%&gt;%</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(person_id, gender_cat, orientation_cat, race_eth_cat, income_cat, edu_cat, marital_status_cat, state_cat) <span class="sc">%&gt;%</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl_summary</span>(</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">include =</span> <span class="fu">c</span>(gender_cat, orientation_cat, race_eth_cat, income_cat, edu_cat, state_cat),</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="fu">list</span>(</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>      gender_cat <span class="sc">~</span> <span class="st">"Gender identity"</span>,</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>      orientation_cat <span class="sc">~</span> <span class="st">"Sexual orientation"</span>,</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>      race_eth_cat <span class="sc">~</span> <span class="st">"Race/ethnicity"</span>,</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>      income_cat <span class="sc">~</span> <span class="st">"Family income"</span>,</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>      edu_cat <span class="sc">~</span> <span class="st">"Education"</span>,</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>      state_cat <span class="sc">~</span> <span class="st">"State of residence"</span></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bold_labels</span>()</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>demo_table</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 
-<div id="hjmlvpnmpk" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#hjmlvpnmpk table {
+<div id="ptrioopkws" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ptrioopkws table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#hjmlvpnmpk thead, #hjmlvpnmpk tbody, #hjmlvpnmpk tfoot, #hjmlvpnmpk tr, #hjmlvpnmpk td, #hjmlvpnmpk th {
+#ptrioopkws thead, #ptrioopkws tbody, #ptrioopkws tfoot, #ptrioopkws tr, #ptrioopkws td, #ptrioopkws th {
   border-style: none;
 }
 
-#hjmlvpnmpk p {
+#ptrioopkws p {
   margin: 0;
   padding: 0;
 }
 
-#hjmlvpnmpk .gt_table {
+#ptrioopkws .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -869,12 +900,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-left-color: #D3D3D3;
 }
 
-#hjmlvpnmpk .gt_caption {
+#ptrioopkws .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#hjmlvpnmpk .gt_title {
+#ptrioopkws .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -886,7 +917,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-width: 0;
 }
 
-#hjmlvpnmpk .gt_subtitle {
+#ptrioopkws .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -898,7 +929,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-top-width: 0;
 }
 
-#hjmlvpnmpk .gt_heading {
+#ptrioopkws .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -910,13 +941,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#hjmlvpnmpk .gt_bottom_border {
+#ptrioopkws .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#hjmlvpnmpk .gt_col_headings {
+#ptrioopkws .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -931,7 +962,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#hjmlvpnmpk .gt_col_heading {
+#ptrioopkws .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -951,7 +982,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   overflow-x: hidden;
 }
 
-#hjmlvpnmpk .gt_column_spanner_outer {
+#ptrioopkws .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -963,15 +994,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 4px;
 }
 
-#hjmlvpnmpk .gt_column_spanner_outer:first-child {
+#ptrioopkws .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#hjmlvpnmpk .gt_column_spanner_outer:last-child {
+#ptrioopkws .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#hjmlvpnmpk .gt_column_spanner {
+#ptrioopkws .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -983,11 +1014,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   width: 100%;
 }
 
-#hjmlvpnmpk .gt_spanner_row {
+#ptrioopkws .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#hjmlvpnmpk .gt_group_heading {
+#ptrioopkws .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1013,7 +1044,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   text-align: left;
 }
 
-#hjmlvpnmpk .gt_empty_group_heading {
+#ptrioopkws .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1028,15 +1059,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   vertical-align: middle;
 }
 
-#hjmlvpnmpk .gt_from_md > :first-child {
+#ptrioopkws .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#hjmlvpnmpk .gt_from_md > :last-child {
+#ptrioopkws .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#hjmlvpnmpk .gt_row {
+#ptrioopkws .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1055,7 +1086,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   overflow-x: hidden;
 }
 
-#hjmlvpnmpk .gt_stub {
+#ptrioopkws .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1068,7 +1099,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#hjmlvpnmpk .gt_stub_row_group {
+#ptrioopkws .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1082,15 +1113,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   vertical-align: top;
 }
 
-#hjmlvpnmpk .gt_row_group_first td {
+#ptrioopkws .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#hjmlvpnmpk .gt_row_group_first th {
+#ptrioopkws .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#hjmlvpnmpk .gt_summary_row {
+#ptrioopkws .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1100,16 +1131,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#hjmlvpnmpk .gt_first_summary_row {
+#ptrioopkws .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#hjmlvpnmpk .gt_first_summary_row.thick {
+#ptrioopkws .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#hjmlvpnmpk .gt_last_summary_row {
+#ptrioopkws .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1119,7 +1150,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-color: #D3D3D3;
 }
 
-#hjmlvpnmpk .gt_grand_summary_row {
+#ptrioopkws .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1129,7 +1160,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#hjmlvpnmpk .gt_first_grand_summary_row {
+#ptrioopkws .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1139,7 +1170,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-top-color: #D3D3D3;
 }
 
-#hjmlvpnmpk .gt_last_grand_summary_row_top {
+#ptrioopkws .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1149,11 +1180,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-color: #D3D3D3;
 }
 
-#hjmlvpnmpk .gt_striped {
+#ptrioopkws .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#hjmlvpnmpk .gt_table_body {
+#ptrioopkws .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1162,7 +1193,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-color: #D3D3D3;
 }
 
-#hjmlvpnmpk .gt_footnotes {
+#ptrioopkws .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1176,7 +1207,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#hjmlvpnmpk .gt_footnote {
+#ptrioopkws .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1185,7 +1216,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#hjmlvpnmpk .gt_sourcenotes {
+#ptrioopkws .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1199,7 +1230,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#hjmlvpnmpk .gt_sourcenote {
+#ptrioopkws .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1207,63 +1238,63 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#hjmlvpnmpk .gt_left {
+#ptrioopkws .gt_left {
   text-align: left;
 }
 
-#hjmlvpnmpk .gt_center {
+#ptrioopkws .gt_center {
   text-align: center;
 }
 
-#hjmlvpnmpk .gt_right {
+#ptrioopkws .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#hjmlvpnmpk .gt_font_normal {
+#ptrioopkws .gt_font_normal {
   font-weight: normal;
 }
 
-#hjmlvpnmpk .gt_font_bold {
+#ptrioopkws .gt_font_bold {
   font-weight: bold;
 }
 
-#hjmlvpnmpk .gt_font_italic {
+#ptrioopkws .gt_font_italic {
   font-style: italic;
 }
 
-#hjmlvpnmpk .gt_super {
+#ptrioopkws .gt_super {
   font-size: 65%;
 }
 
-#hjmlvpnmpk .gt_footnote_marks {
+#ptrioopkws .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#hjmlvpnmpk .gt_asterisk {
+#ptrioopkws .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#hjmlvpnmpk .gt_indent_1 {
+#ptrioopkws .gt_indent_1 {
   text-indent: 5px;
 }
 
-#hjmlvpnmpk .gt_indent_2 {
+#ptrioopkws .gt_indent_2 {
   text-indent: 10px;
 }
 
-#hjmlvpnmpk .gt_indent_3 {
+#ptrioopkws .gt_indent_3 {
   text-indent: 15px;
 }
 
-#hjmlvpnmpk .gt_indent_4 {
+#ptrioopkws .gt_indent_4 {
   text-indent: 20px;
 }
 
-#hjmlvpnmpk .gt_indent_5 {
+#ptrioopkws .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -1412,44 +1443,44 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="live-births" class="level2">
 <h2 class="anchored" data-anchor-id="live-births">Live births</h2>
-<div class="cell" data-hash="02_examine-hipps_cache/html/unnamed-chunk-23_f6b7673b11ee643856a7649dbc11d59b">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>preg_table <span class="ot">&lt;-</span> hipps_cleaned <span class="sc">%&gt;%</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(outcome_category <span class="sc">==</span> <span class="st">"Live birth"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl_summary</span>(</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">include =</span> <span class="fu">c</span>(</span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>      mom_age_cat_table, year_end_cat, took_the_survey, gestational_age_weeks,</span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>      preterm_status_from_calculation</span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="fu">list</span>(</span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>      mom_age_cat_table <span class="sc">~</span> <span class="st">"Maternal age"</span>,</span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>      year_end_cat <span class="sc">~</span> <span class="st">"Year of delivery"</span>,</span>
-<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>      took_the_survey <span class="sc">~</span> <span class="st">"All of Us participation relative to pregnancy"</span>,</span>
-<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>      gestational_age_weeks <span class="sc">~</span> <span class="st">"Gestational age at delivery (weeks)"</span>,</span>
-<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>      preterm_status_from_calculation <span class="sc">~</span> <span class="st">"Preterm (&lt; 37 weeks)"</span></span>
-<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">digits =</span> <span class="fu">list</span>(gestational_age_weeks <span class="sc">~</span> <span class="fu">c</span>(<span class="dv">1</span>))</span>
-<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bold_labels</span>()</span>
-<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>preg_table</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>preg_table <span class="ot">&lt;-</span> hipps_cleaned <span class="sc">%&gt;%</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(outcome_category <span class="sc">==</span> <span class="st">"Live birth"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl_summary</span>(</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">include =</span> <span class="fu">c</span>(</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>      mom_age_cat_table, year_end_cat, took_the_survey, gestational_age_weeks,</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>      preterm_status_from_calculation</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="fu">list</span>(</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>      mom_age_cat_table <span class="sc">~</span> <span class="st">"Maternal age"</span>,</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>      year_end_cat <span class="sc">~</span> <span class="st">"Year of delivery"</span>,</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>      took_the_survey <span class="sc">~</span> <span class="st">"All of Us participation relative to pregnancy"</span>,</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>      gestational_age_weeks <span class="sc">~</span> <span class="st">"Gestational age at delivery (weeks)"</span>,</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>      preterm_status_from_calculation <span class="sc">~</span> <span class="st">"Preterm (&lt; 37 weeks)"</span></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">digits =</span> <span class="fu">list</span>(gestational_age_weeks <span class="sc">~</span> <span class="fu">c</span>(<span class="dv">1</span>))</span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bold_labels</span>()</span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>preg_table</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 
-<div id="abjzovlavp" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#abjzovlavp table {
+<div id="dtettryhzi" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#dtettryhzi table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#abjzovlavp thead, #abjzovlavp tbody, #abjzovlavp tfoot, #abjzovlavp tr, #abjzovlavp td, #abjzovlavp th {
+#dtettryhzi thead, #dtettryhzi tbody, #dtettryhzi tfoot, #dtettryhzi tr, #dtettryhzi td, #dtettryhzi th {
   border-style: none;
 }
 
-#abjzovlavp p {
+#dtettryhzi p {
   margin: 0;
   padding: 0;
 }
 
-#abjzovlavp .gt_table {
+#dtettryhzi .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1475,12 +1506,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-left-color: #D3D3D3;
 }
 
-#abjzovlavp .gt_caption {
+#dtettryhzi .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#abjzovlavp .gt_title {
+#dtettryhzi .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1492,7 +1523,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-width: 0;
 }
 
-#abjzovlavp .gt_subtitle {
+#dtettryhzi .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1504,7 +1535,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-top-width: 0;
 }
 
-#abjzovlavp .gt_heading {
+#dtettryhzi .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1516,13 +1547,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#abjzovlavp .gt_bottom_border {
+#dtettryhzi .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#abjzovlavp .gt_col_headings {
+#dtettryhzi .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1537,7 +1568,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#abjzovlavp .gt_col_heading {
+#dtettryhzi .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1557,7 +1588,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   overflow-x: hidden;
 }
 
-#abjzovlavp .gt_column_spanner_outer {
+#dtettryhzi .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1569,15 +1600,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 4px;
 }
 
-#abjzovlavp .gt_column_spanner_outer:first-child {
+#dtettryhzi .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#abjzovlavp .gt_column_spanner_outer:last-child {
+#dtettryhzi .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#abjzovlavp .gt_column_spanner {
+#dtettryhzi .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1589,11 +1620,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   width: 100%;
 }
 
-#abjzovlavp .gt_spanner_row {
+#dtettryhzi .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#abjzovlavp .gt_group_heading {
+#dtettryhzi .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1619,7 +1650,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   text-align: left;
 }
 
-#abjzovlavp .gt_empty_group_heading {
+#dtettryhzi .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1634,15 +1665,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   vertical-align: middle;
 }
 
-#abjzovlavp .gt_from_md > :first-child {
+#dtettryhzi .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#abjzovlavp .gt_from_md > :last-child {
+#dtettryhzi .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#abjzovlavp .gt_row {
+#dtettryhzi .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1661,7 +1692,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   overflow-x: hidden;
 }
 
-#abjzovlavp .gt_stub {
+#dtettryhzi .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1674,7 +1705,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#abjzovlavp .gt_stub_row_group {
+#dtettryhzi .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1688,15 +1719,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   vertical-align: top;
 }
 
-#abjzovlavp .gt_row_group_first td {
+#dtettryhzi .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#abjzovlavp .gt_row_group_first th {
+#dtettryhzi .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#abjzovlavp .gt_summary_row {
+#dtettryhzi .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1706,16 +1737,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#abjzovlavp .gt_first_summary_row {
+#dtettryhzi .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#abjzovlavp .gt_first_summary_row.thick {
+#dtettryhzi .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#abjzovlavp .gt_last_summary_row {
+#dtettryhzi .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1725,7 +1756,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-color: #D3D3D3;
 }
 
-#abjzovlavp .gt_grand_summary_row {
+#dtettryhzi .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1735,7 +1766,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#abjzovlavp .gt_first_grand_summary_row {
+#dtettryhzi .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1745,7 +1776,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-top-color: #D3D3D3;
 }
 
-#abjzovlavp .gt_last_grand_summary_row_top {
+#dtettryhzi .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1755,11 +1786,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-color: #D3D3D3;
 }
 
-#abjzovlavp .gt_striped {
+#dtettryhzi .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#abjzovlavp .gt_table_body {
+#dtettryhzi .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1768,7 +1799,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-color: #D3D3D3;
 }
 
-#abjzovlavp .gt_footnotes {
+#dtettryhzi .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1782,7 +1813,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#abjzovlavp .gt_footnote {
+#dtettryhzi .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1791,7 +1822,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#abjzovlavp .gt_sourcenotes {
+#dtettryhzi .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1805,7 +1836,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#abjzovlavp .gt_sourcenote {
+#dtettryhzi .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1813,63 +1844,63 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#abjzovlavp .gt_left {
+#dtettryhzi .gt_left {
   text-align: left;
 }
 
-#abjzovlavp .gt_center {
+#dtettryhzi .gt_center {
   text-align: center;
 }
 
-#abjzovlavp .gt_right {
+#dtettryhzi .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#abjzovlavp .gt_font_normal {
+#dtettryhzi .gt_font_normal {
   font-weight: normal;
 }
 
-#abjzovlavp .gt_font_bold {
+#dtettryhzi .gt_font_bold {
   font-weight: bold;
 }
 
-#abjzovlavp .gt_font_italic {
+#dtettryhzi .gt_font_italic {
   font-style: italic;
 }
 
-#abjzovlavp .gt_super {
+#dtettryhzi .gt_super {
   font-size: 65%;
 }
 
-#abjzovlavp .gt_footnote_marks {
+#dtettryhzi .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#abjzovlavp .gt_asterisk {
+#dtettryhzi .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#abjzovlavp .gt_indent_1 {
+#dtettryhzi .gt_indent_1 {
   text-indent: 5px;
 }
 
-#abjzovlavp .gt_indent_2 {
+#dtettryhzi .gt_indent_2 {
   text-indent: 10px;
 }
 
-#abjzovlavp .gt_indent_3 {
+#dtettryhzi .gt_indent_3 {
   text-indent: 15px;
 }
 
-#abjzovlavp .gt_indent_4 {
+#dtettryhzi .gt_indent_4 {
   text-indent: 20px;
 }
 
-#abjzovlavp .gt_indent_5 {
+#dtettryhzi .gt_indent_5 {
   text-indent: 25px;
 }
 </style>

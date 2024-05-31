@@ -32,7 +32,7 @@ all <- read_rds(here::here("workbench/merged_episodes_with_metadata_df.rds"))
 
 count(all,
   both_algo = inferred_episode_start < inferred_episode_end & HIP_flag == 1 & PPS_flag == 1,
-  post_2016 = inferred_episode_start > as.Date("2016-01-01")
+  post_2016 = inferred_episode_start >= as.Date("2016-01-01")
 )
 
 # restrict

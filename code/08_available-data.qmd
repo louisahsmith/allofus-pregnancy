@@ -95,6 +95,7 @@ has_surveys <- tbl(con, "ds_survey") %>%
   filter(person_id %in% !!unique(hipps$person_id)) %>%
   distinct(person_id, survey) %>%
   collect()
+
 has_surveys %>%
   mutate(survey = str_sub(survey, 1, 15)) %>%
   pivot_wider(names_from = "survey", values_from = "survey") %>%
