@@ -6,9 +6,9 @@ A paper describing this work can be found here:
 
 Smith, Louisa H, Wanjiang Wang, Brianna Keefe-Oates. "Pregnancy episodes in All of Us: harnessing multi-source data for pregnancy-related research." Journal of the American Medical Informatics Association 31, no. 12 (December 2024): 2789–2799. https://doi.org/10.1093/jamia/ocae195
 
-## Warning
+## Warning ⚠️
 
-In the latest version of the All of Us data (V8), "perinatal" related codes are suppressed. A list of suppressed codes is available here: https://docs.google.com/spreadsheets/d/1sPMzOod784PAR0RfjuDezoT15z7w1e0RZsMVlpT2378/edit?gid=168982584#gid=168982584. Unfortunately, this makes this algorithm essentially useless, and pregnancy-related research impossible.
+In the latest version of the All of Us data (V8), "perinatal" related codes are suppressed. A list of suppressed codes is available [here](https://docs.google.com/spreadsheets/d/1sPMzOod784PAR0RfjuDezoT15z7w1e0RZsMVlpT2378/edit?gid=168982584#gid=168982584). Unfortunately, this makes this algorithm essentially useless, and pregnancy-related research impossible. Please contact the All of Us Research Program directly to let them know how this change affects you.
 
 ## Code
 
