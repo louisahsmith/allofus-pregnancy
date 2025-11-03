@@ -8,7 +8,7 @@ Smith, Louisa H, Wanjiang Wang, Brianna Keefe-Oates. "Pregnancy episodes in All 
 
 ## Warning ⚠️
 
-In the latest version of the All of Us data (V8), "perinatal" related codes are suppressed. A list of suppressed codes is available [here](https://docs.google.com/spreadsheets/d/1sPMzOod784PAR0RfjuDezoT15z7w1e0RZsMVlpT2378/edit?gid=168982584#gid=168982584). Unfortunately, this makes this algorithm essentially useless, and pregnancy-related research impossible. Please contact the All of Us Research Program directly to let them know how this change affects you.
+In the latest version of the All of Us data (V8), [delivery-related codes are suppressed](https://support.researchallofus.org/hc/en-us/articles/42547761308692-Update-to-maternal-health-concepts-in-CDRv8). Though this is an improvement on previous V8 data releases, much pregnancy-related research is still impossible. Please see the [v8 branch](https://github.com/louisahsmith/allofus-pregnancy/tree/v8) of this repository to see the results of running this algorithm in V8, which can be compared to the output below (from V7). Please contact the All of Us Research Program directly to let them know how this affects you.
 
 ## Code
 
