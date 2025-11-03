@@ -7,7 +7,7 @@ df-print: kable
 execute: 
   warning: false
   message: false
-  cache: true
+  error: true
 ---
 
 ```{r}

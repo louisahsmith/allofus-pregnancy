@@ -438,16 +438,15 @@ hipps_cleaned %>%
 
 ```{r}
 demo_table <- hipps_cleaned %>%
-  distinct(person_id, gender_cat, orientation_cat, race_eth_cat, income_cat, edu_cat, marital_status_cat, state_cat) %>%
+  distinct(person_id, gender_cat, orientation_cat, race_eth_cat, income_cat, edu_cat, marital_status_cat) %>%
   tbl_summary(
-    include = c(gender_cat, orientation_cat, race_eth_cat, income_cat, edu_cat, state_cat),
+    include = c(gender_cat, orientation_cat, race_eth_cat, income_cat, edu_cat),
     label = list(
       gender_cat ~ "Gender identity",
       orientation_cat ~ "Sexual orientation",
       race_eth_cat ~ "Race/ethnicity",
       income_cat ~ "Family income",
-      edu_cat ~ "Education",
-      state_cat ~ "State of residence"
+      edu_cat ~ "Education"
     )
   ) %>%
   bold_labels()

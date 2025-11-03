@@ -7,7 +7,7 @@ df-print: kable
 execute: 
   warning: false
   message: false
-  cache: true
+  error: true
 ---
 ```{r}
 #| include: false
@@ -44,7 +44,7 @@ hipps <- read_rds(here::here("workbench/hipps_cleaned_restricted.rds")) %>%
     ),
     concordant = fct_relevel(
       factor(
-        as.numeric(HIP_outcome_cat == PPS_outcome_cat),
+        as.numeric(as.character(HIP_outcome_cat) == as.character(PPS_outcome_cat)),
         labels = c("Discordant", "Concordant")
       ),
       "Concordant", "Discordant"

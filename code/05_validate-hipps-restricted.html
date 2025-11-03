@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.335">
+<meta name="generator" content="quarto-1.4.553">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -17,11 +17,12 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -46,43 +47,13 @@ pre.numberSource code > span > a:first-child::before
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
     padding: 0 4px; width: 4em;
-    color: #aaaaaa;
   }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
 div.sourceCode
   {   }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 
@@ -121,25 +92,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </div>
   
 
+
 </header>
 
-<div class="cell" data-hash="05_validate-hipps-restricted_cache/html/unnamed-chunk-2_1a61017b8c34994faff507728d8aa809">
+
+<div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(allofus)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gtsummary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="05_validate-hipps-restricted_cache/html/unnamed-chunk-3_48f37e555db4ea8d101fbb08152fa1fa">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">aou_connect</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="05_validate-hipps-restricted_cache/html/unnamed-chunk-4_94cf98a657bda5a44f5539ed47e9a90a">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>hipps <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"workbench/hipps_cleaned_restricted.rds"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="05_validate-hipps-restricted_cache/html/unnamed-chunk-5_2dd01a4647de5dddf038b91925f8e1aa">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>ehr_female <span class="ot">&lt;-</span> <span class="fu">tbl</span>(con, <span class="st">"cb_search_person"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(sex_at_birth <span class="sc">!=</span> <span class="st">"Male"</span>, has_ehr_data <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(person_id, dob)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="05_validate-hipps-restricted_cache/html/unnamed-chunk-6_f69c1731ba938a307accbc74f8cb1ba5">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>poss_preg <span class="ot">&lt;-</span> ehr_female <span class="sc">%&gt;%</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">date_15 =</span> <span class="fu">date_add</span>(dob, <span class="fu">sql</span>(<span class="st">"INTERVAL 15 year"</span>)),</span>
@@ -159,11 +132,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    ))</span>
 <span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="05_validate-hipps-restricted_cache/html/unnamed-chunk-7_2132bd705eb913657d87d2d9b8151733">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tally</span>(<span class="fu">distinct</span>(poss_preg, person_id)) <span class="sc">%&gt;%</span> <span class="fu">collect</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="kable-table">
-<table class="table table-sm table-striped">
+<table class="table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th style="text-align: right;">n</th>
@@ -171,18 +144,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: right;">108959</td>
+<td style="text-align: right;">153340</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
 </div>
-<div class="cell" data-hash="05_validate-hipps-restricted_cache/html/unnamed-chunk-8_0d4b08987b97984c5f1b8370ea7cbbe7">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>surv_preg <span class="ot">&lt;-</span> <span class="fu">aou_survey</span>(<span class="fu">distinct</span>(poss_preg, person_id), <span class="at">questions =</span> <span class="fu">c</span>(<span class="dv">1585811</span>), <span class="at">question_output =</span> <span class="fu">c</span>(<span class="st">"pregnancy"</span>), <span class="at">collect =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pregnancy =</span> <span class="fu">ifelse</span>(pregnancy <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"PreferNotToAnswer"</span>, <span class="st">"Skip"</span>), <span class="st">"Skip"</span>, pregnancy))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="05_validate-hipps-restricted_cache/html/unnamed-chunk-9_23377e3ecc80a16a416e06d2c7c3dfd2">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>combined_dat <span class="ot">&lt;-</span> <span class="fu">collect</span>(poss_preg) <span class="sc">%&gt;%</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(surv_preg) <span class="sc">%&gt;%</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(hipps, <span class="at">by =</span> <span class="fu">join_by</span>(person_id, dob, pregnancy, pregnancy_date), <span class="at">relationship =</span> <span class="st">"many-to-many"</span>) <span class="sc">%&gt;%</span></span>
@@ -233,11 +206,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_min</span>(<span class="at">order_by =</span> time_to_closest, <span class="at">n =</span> <span class="dv">1</span>, <span class="at">with_ties =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="05_validate-hipps-restricted_cache/html/unnamed-chunk-10_a36cca232850414c1470923fd5609720">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tally</span>(<span class="fu">distinct</span>(combined_dat, person_id)) <span class="sc">%&gt;%</span> <span class="fu">collect</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="kable-table">
-<table class="table table-sm table-striped">
+<table class="table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th style="text-align: right;">n</th>
@@ -245,7 +218,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: right;">65648</td>
+<td style="text-align: right;">91889</td>
 </tr>
 </tbody>
 </table>
@@ -253,14 +226,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 <p>PPV = probability of saying you are pregnant on the survey, given that you have been identified as pregnant by hipps (past 12 weeks)</p>
-<div class="cell" data-hash="05_validate-hipps-restricted_cache/html/unnamed-chunk-11_3125a342dae874bb319aa5ee06d7f693">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>combined_dat <span class="sc">%&gt;%</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(survey_after_week_12 <span class="sc">==</span> <span class="dv">1</span>, inferred_episode_end <span class="sc">&gt;</span> week_12) <span class="sc">%&gt;%</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pregnancy =</span> <span class="fu">ifelse</span>(pregnancy <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Skip"</span>, <span class="st">"DontKnow"</span>), <span class="st">"Skip/DK"</span>, pregnancy)) <span class="sc">%&gt;%</span></span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(pregnancy)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="kable-table">
-<table class="table table-sm table-striped">
+<table class="table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th style="text-align: left;">pregnancy</th>
@@ -270,11 +243,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">No</td>
-<td style="text-align: right;">518</td>
+<td style="text-align: right;">2561</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Yes</td>
-<td style="text-align: right;">2548</td>
+<td style="text-align: right;">3008</td>
 </tr>
 </tbody>
 </table>
@@ -286,18 +259,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(pregnancy <span class="sc">==</span> <span class="st">"Yes"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(percent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.8310502</code></pre>
+<pre><code>[1] 0.5401329</code></pre>
 </div>
 </div>
 <p>PPV = probability of saying you are pregnant on the survey, given that you have been identified as pregnant by hipps (past 20 weeks)</p>
-<div class="cell" data-hash="05_validate-hipps-restricted_cache/html/unnamed-chunk-12_077bc9c2f15a3c9e03c6560a781022e3">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>combined_dat <span class="sc">%&gt;%</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(survey_after_week_20 <span class="sc">==</span> <span class="dv">1</span>, inferred_episode_end <span class="sc">&gt;</span> week_20) <span class="sc">%&gt;%</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pregnancy =</span> <span class="fu">ifelse</span>(pregnancy <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Skip"</span>, <span class="st">"DontKnow"</span>), <span class="st">"Skip/DK"</span>, pregnancy)) <span class="sc">%&gt;%</span></span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(pregnancy)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="kable-table">
-<table class="table table-sm table-striped">
+<table class="table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th style="text-align: left;">pregnancy</th>
@@ -307,11 +280,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">No</td>
-<td style="text-align: right;">498</td>
+<td style="text-align: right;">2535</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Yes</td>
-<td style="text-align: right;">1275</td>
+<td style="text-align: right;">1609</td>
 </tr>
 </tbody>
 </table>
@@ -323,28 +296,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(pregnancy <span class="sc">==</span> <span class="st">"Yes"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(percent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.7191201</code></pre>
+<pre><code>[1] 0.3882722</code></pre>
 </div>
 </div>
 <p>NPV = probability you say you aren’t pregnant given that we say you aren’t pregnant around the time you take the survey</p>
-<div class="cell" data-hash="05_validate-hipps-restricted_cache/html/unnamed-chunk-13_31c81c76a6a540ed86be92eb5abdfcd0">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>combined_dat <span class="sc">%&gt;%</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(survey_within_buffer <span class="sc">==</span> <span class="dv">0</span>, pregnancy <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"No"</span>, <span class="st">"Yes"</span>)) <span class="sc">%&gt;%</span></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">tabyl</span>(pregnancy) <span class="sc">%&gt;%</span></span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(pregnancy <span class="sc">==</span> <span class="st">"No"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(percent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.9851883</code></pre>
+<pre><code>[1] 0.9860364</code></pre>
 </div>
 </div>
 <p>sensitivity = probability of identifying you as pregnant (within buffer zone) given that you reported you were pregnant on the survey if you are a 0 here, we don’t know whether we missed you entirely or whether the dates were exatly right (probably the latter)</p>
-<div class="cell" data-hash="05_validate-hipps-restricted_cache/html/unnamed-chunk-14_9564f352b52e1380c19fac0ca6edf7d7">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>combined_dat <span class="sc">%&gt;%</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(pregnancy <span class="sc">==</span> <span class="st">"Yes"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">tabyl</span>(survey_within_buffer)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="kable-table">
-<table class="table table-sm table-striped">
+<table class="table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th style="text-align: right;">survey_within_buffer</th>
@@ -355,13 +328,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tbody>
 <tr class="odd">
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">848</td>
-<td style="text-align: right;">0.1811966</td>
+<td style="text-align: right;">1116</td>
+<td style="text-align: right;">0.2010449</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">3832</td>
-<td style="text-align: right;">0.8188034</td>
+<td style="text-align: right;">4435</td>
+<td style="text-align: right;">0.7989551</td>
 </tr>
 </tbody>
 </table>
@@ -369,13 +342,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 <p>specificity = probability we didn’t identify you as &gt; 12 weeks pregnant given you said you weren’t pregnant</p>
-<div class="cell" data-hash="05_validate-hipps-restricted_cache/html/unnamed-chunk-15_ebfdb6d438d07f5461d35d8e5ccd2dc6">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>combined_dat <span class="sc">%&gt;%</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(pregnancy <span class="sc">==</span> <span class="st">"No"</span>, inferred_episode_end <span class="sc">&gt;</span> week_12 <span class="sc">|</span> <span class="fu">is.na</span>(inferred_episode_end)) <span class="sc">%&gt;%</span></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">tabyl</span>(survey_after_week_12)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="kable-table">
-<table class="table table-sm table-striped">
+<table class="table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th style="text-align: right;">survey_after_week_12</th>
@@ -386,13 +359,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tbody>
 <tr class="odd">
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">57241</td>
-<td style="text-align: right;">0.9910317</td>
+<td style="text-align: right;">79336</td>
+<td style="text-align: right;">0.968729</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">518</td>
-<td style="text-align: right;">0.0089683</td>
+<td style="text-align: right;">2561</td>
+<td style="text-align: right;">0.031271</td>
 </tr>
 </tbody>
 </table>
@@ -400,13 +373,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 <p>specificity = probability we didn’t identify you as &gt; 20 weeks pregnant given you said you weren’t pregnant</p>
-<div class="cell" data-hash="05_validate-hipps-restricted_cache/html/unnamed-chunk-16_101df42c874e01825fa8a6be55e70649">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>combined_dat <span class="sc">%&gt;%</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(pregnancy <span class="sc">==</span> <span class="st">"No"</span>, inferred_episode_end <span class="sc">&gt;</span> week_20 <span class="sc">|</span> <span class="fu">is.na</span>(inferred_episode_end)) <span class="sc">%&gt;%</span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">tabyl</span>(survey_after_week_20)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="kable-table">
-<table class="table table-sm table-striped">
+<table class="table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th style="text-align: right;">survey_after_week_20</th>
@@ -417,13 +390,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tbody>
 <tr class="odd">
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">56593</td>
-<td style="text-align: right;">0.9912771</td>
+<td style="text-align: right;">78319</td>
+<td style="text-align: right;">0.9686472</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">498</td>
-<td style="text-align: right;">0.0087229</td>
+<td style="text-align: right;">2535</td>
+<td style="text-align: right;">0.0313528</td>
 </tr>
 </tbody>
 </table>
@@ -431,13 +404,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 <p>here are the exact values</p>
-<div class="cell" data-hash="05_validate-hipps-restricted_cache/html/unnamed-chunk-17_f4b5295eb296057dcd81baa67b2e3989">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>combined_dat <span class="sc">%&gt;%</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(pregnancy <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Yes"</span>, <span class="st">"No"</span>)) <span class="sc">%&gt;%</span></span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">tabyl</span>(pregnancy, survey_within_exact)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="kable-table">
-<table class="table table-sm table-striped">
+<table class="table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th style="text-align: left;">pregnancy</th>
@@ -448,27 +421,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">No</td>
-<td style="text-align: right;">58067</td>
-<td style="text-align: right;">672</td>
+<td style="text-align: right;">80600</td>
+<td style="text-align: right;">2746</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Yes</td>
-<td style="text-align: right;">943</td>
-<td style="text-align: right;">3737</td>
+<td style="text-align: right;">1257</td>
+<td style="text-align: right;">4294</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
 </div>
-<div class="cell" data-hash="05_validate-hipps-restricted_cache/html/unnamed-chunk-18_49cc63715f06ab0b36a8766a599a3803">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>combined_dat <span class="sc">%&gt;%</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(pregnancy <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Yes"</span>, <span class="st">"No"</span>)) <span class="sc">%&gt;%</span></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">tabyl</span>(pregnancy, survey_within_exact) <span class="sc">%&gt;%</span></span>
 <span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">adorn_percentages</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="kable-table">
-<table class="table table-sm table-striped">
+<table class="table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th style="text-align: left;">pregnancy</th>
@@ -479,13 +452,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">No</td>
-<td style="text-align: right;">0.9885596</td>
-<td style="text-align: right;">0.0114404</td>
+<td style="text-align: right;">0.9670530</td>
+<td style="text-align: right;">0.0329470</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Yes</td>
-<td style="text-align: right;">0.2014957</td>
-<td style="text-align: right;">0.7985043</td>
+<td style="text-align: right;">0.2264457</td>
+<td style="text-align: right;">0.7735543</td>
 </tr>
 </tbody>
 </table>
@@ -493,18 +466,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 <p>On average, among people who said they were not pregnant during a HIPPS assigned pregnancy episode, they took the survey on average x days from the end of the pregnancy episode. x% of those were within two weeks of the end of the interval. Additional people might not have known they were pregnant at the time.</p>
-<div class="cell" data-hash="05_validate-hipps-restricted_cache/html/unnamed-chunk-19_35ed00ad47fb963f1f343e9f01366543">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>combined_dat <span class="sc">%&gt;%</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(survey_after_week_12 <span class="sc">==</span> <span class="dv">1</span>, inferred_episode_end <span class="sc">&gt;</span> week_12, pregnancy <span class="sc">==</span> <span class="st">"No"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(), <span class="fu">quantile</span>(time_diff, .<span class="dv">25</span>), <span class="fu">median</span>(time_diff), <span class="fu">quantile</span>(time_diff, .<span class="dv">75</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="kable-table">
-<table class="table table-sm table-striped">
+<table class="table table-sm table-striped small">
 <colgroup>
-<col style="width: 5%">
-<col style="width: 35%">
+<col style="width: 6%">
+<col style="width: 34%">
 <col style="width: 24%">
-<col style="width: 35%">
+<col style="width: 34%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -516,17 +489,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: right;">518</td>
-<td style="text-align: left;">0 days</td>
-<td style="text-align: left;">14 days</td>
-<td style="text-align: left;">20 days</td>
+<td style="text-align: right;">2561</td>
+<td style="text-align: left;">5 days</td>
+<td style="text-align: left;">8 days</td>
+<td style="text-align: left;">13 days</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
 </div>
-<div class="cell" data-hash="05_validate-hipps-restricted_cache/html/unnamed-chunk-20_eaa7c97dfb307eb62cb85aa7f9b2dc28">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>combined_dat <span class="sc">%&gt;%</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(survey_after_week_12 <span class="sc">==</span> <span class="dv">1</span>, inferred_episode_end <span class="sc">&gt;</span> week_12, pregnancy <span class="sc">==</span> <span class="st">"No"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">within_14 =</span> <span class="fu">as.numeric</span>(<span class="fu">abs</span>(time_diff) <span class="sc">&lt;=</span> <span class="dv">14</span>)) <span class="sc">%&gt;%</span></span>
@@ -535,7 +508,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">percent =</span> <span class="fu">round</span>(percent <span class="sc">*</span> <span class="dv">100</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="kable-table">
-<table class="table table-sm table-striped">
+<table class="table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th style="text-align: right;">within_14</th>
@@ -545,24 +518,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tbody>
 <tr class="odd">
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">44</td>
+<td style="text-align: right;">18</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">56</td>
+<td style="text-align: right;">82</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
 </div>
-<div class="cell" data-hash="05_validate-hipps-restricted_cache/html/unnamed-chunk-21_d8ccf773099a076423c078786a558e7e">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>combined_dat <span class="sc">%&gt;%</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(survey_within_buffer <span class="sc">==</span> <span class="dv">0</span>, pregnancy <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"No"</span>, <span class="st">"Yes"</span>)) <span class="sc">%&gt;%</span></span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">tabyl</span>(pregnancy)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="kable-table">
-<table class="table table-sm table-striped">
+<table class="table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th style="text-align: left;">pregnancy</th>
@@ -573,13 +546,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">No</td>
-<td style="text-align: right;">56404</td>
-<td style="text-align: right;">0.9851883</td>
+<td style="text-align: right;">78806</td>
+<td style="text-align: right;">0.9860364</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Yes</td>
-<td style="text-align: right;">848</td>
-<td style="text-align: right;">0.0148117</td>
+<td style="text-align: right;">1116</td>
+<td style="text-align: right;">0.0139636</td>
 </tr>
 </tbody>
 </table>
@@ -587,7 +560,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 <p>So what’s the deal with the people who said they were pregnant but we didn’t catch their pregnancy?</p>
-<div class="cell" data-hash="05_validate-hipps-restricted_cache/html/unnamed-chunk-22_e91b72f571b04722068f2109c270759c">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>hidden_preg <span class="ot">&lt;-</span> combined_dat <span class="sc">%&gt;%</span></span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(pregnancy <span class="sc">==</span> <span class="st">"Yes"</span>, survey_within_buffer <span class="sc">==</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
@@ -604,12 +577,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(vocabulary_id <span class="sc">!=</span> <span class="st">"PPI"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(concept_name, concept_id)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="05_validate-hipps-restricted_cache/html/unnamed-chunk-23_a69e9a4ae568bd7433d5b1fca600a1ec">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>HIP_concepts <span class="ot">&lt;-</span> readxl<span class="sc">::</span><span class="fu">read_excel</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data/HIP_concepts.xlsx"</span>)) <span class="sc">%&gt;%</span></span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>concept_name) <span class="sc">%&gt;%</span></span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="05_validate-hipps-restricted_cache/html/unnamed-chunk-24_13949eed36e81f6a4d72b8f0ec9bc372">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>cond_hidden <span class="ot">&lt;-</span> <span class="fu">tbl</span>(con, <span class="st">"condition_occurrence"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(person_id <span class="sc">%in%</span> <span class="sc">!!</span>hidden_preg<span class="sc">$</span>person_id) <span class="sc">%&gt;%</span></span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(concept_names, <span class="at">by =</span> <span class="fu">join_by</span>(condition_concept_id <span class="sc">==</span> concept_id)) <span class="sc">%&gt;%</span></span>
@@ -618,7 +591,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">concept_id =</span> <span class="fu">as.double</span>(condition_concept_id)) <span class="sc">%&gt;%</span></span>
 <span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(HIP_concepts, <span class="at">by =</span> <span class="fu">join_by</span>(concept_id))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="05_validate-hipps-restricted_cache/html/unnamed-chunk-25_fbf0a73cc1cdba783148c23cccdb61be">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>cond_found <span class="ot">&lt;-</span> <span class="fu">tbl</span>(con, <span class="st">"condition_occurrence"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(person_id <span class="sc">%in%</span> <span class="sc">!!</span>found_preg<span class="sc">$</span>person_id) <span class="sc">%&gt;%</span></span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(concept_names, <span class="at">by =</span> <span class="fu">join_by</span>(condition_concept_id <span class="sc">==</span> concept_id)) <span class="sc">%&gt;%</span></span>
@@ -627,7 +600,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">concept_id =</span> <span class="fu">as.double</span>(condition_concept_id)) <span class="sc">%&gt;%</span></span>
 <span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(HIP_concepts, <span class="at">by =</span> <span class="fu">join_by</span>(concept_id))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="05_validate-hipps-restricted_cache/html/unnamed-chunk-26_2190c82e5e44e02b8cb41d304a9b0877">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>proc_hidden <span class="ot">&lt;-</span> <span class="fu">tbl</span>(con, <span class="st">"procedure_occurrence"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(person_id <span class="sc">%in%</span> <span class="sc">!!</span>hidden_preg<span class="sc">$</span>person_id) <span class="sc">%&gt;%</span></span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(concept_names, <span class="at">by =</span> <span class="fu">join_by</span>(procedure_concept_id <span class="sc">==</span> concept_id)) <span class="sc">%&gt;%</span></span>
@@ -636,7 +609,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">concept_id =</span> <span class="fu">as.double</span>(procedure_concept_id)) <span class="sc">%&gt;%</span></span>
 <span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(HIP_concepts, <span class="at">by =</span> <span class="fu">join_by</span>(concept_id))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="05_validate-hipps-restricted_cache/html/unnamed-chunk-27_9f17ac998b79c4c333cd243e506c5a60">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>proc_found <span class="ot">&lt;-</span> <span class="fu">tbl</span>(con, <span class="st">"procedure_occurrence"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(person_id <span class="sc">%in%</span> <span class="sc">!!</span>found_preg<span class="sc">$</span>person_id) <span class="sc">%&gt;%</span></span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(concept_names, <span class="at">by =</span> <span class="fu">join_by</span>(procedure_concept_id <span class="sc">==</span> concept_id)) <span class="sc">%&gt;%</span></span>
@@ -645,19 +618,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">concept_id =</span> <span class="fu">as.double</span>(procedure_concept_id)) <span class="sc">%&gt;%</span></span>
 <span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(HIP_concepts, <span class="at">by =</span> <span class="fu">join_by</span>(concept_id))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="05_validate-hipps-restricted_cache/html/unnamed-chunk-28_dc58df80cf977ef3d7ac2680b06a950f">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>all_found <span class="ot">&lt;-</span> cond_found <span class="sc">%&gt;%</span></span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(person_id, concept_id, category, gest_value, pregnancy_date, <span class="at">date =</span> condition_start_date) <span class="sc">%&gt;%</span></span>
 <span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>(<span class="fu">select</span>(proc_found, person_id, concept_id, category, gest_value, pregnancy_date, <span class="at">date =</span> procedure_date)) <span class="sc">%&gt;%</span></span>
 <span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">type =</span> <span class="st">"found"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="05_validate-hipps-restricted_cache/html/unnamed-chunk-29_37ab56794f53b0f2a64b04dc391ba4fa">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>all_hidden <span class="ot">&lt;-</span> cond_hidden <span class="sc">%&gt;%</span></span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(person_id, concept_id, category, gest_value, pregnancy_date, <span class="at">date =</span> condition_start_date) <span class="sc">%&gt;%</span></span>
 <span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>(<span class="fu">select</span>(proc_hidden, person_id, concept_id, category, gest_value, pregnancy_date, <span class="at">date =</span> procedure_date)) <span class="sc">%&gt;%</span></span>
 <span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">type =</span> <span class="st">"hidden"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="05_validate-hipps-restricted_cache/html/unnamed-chunk-30_ed646e9dad1519c2e01f0c668ae58af3">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>all <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(all_found, all_hidden) <span class="sc">%&gt;%</span></span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">time_from_survey =</span> <span class="fu">as.numeric</span>(date <span class="sc">-</span> pregnancy_date),</span>
@@ -686,7 +659,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb34-26"><a href="#cb34-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span></span>
 <span id="cb34-27"><a href="#cb34-27" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="05_validate-hipps-restricted_cache/html/unnamed-chunk-31_2d00879a6c44a125e751cde84b8dd372">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>all_stats <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(<span class="fu">select</span>(hidden_preg, person_id), <span class="fu">select</span>(found_preg, person_id)) <span class="sc">%&gt;%</span></span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(all, <span class="at">by =</span> <span class="st">"person_id"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
@@ -695,31 +668,31 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(<span class="fu">where</span>(is.numeric), <span class="sc">~</span> <span class="fu">ifelse</span>(<span class="fu">is.infinite</span>(.x), <span class="cn">NA</span>, .x))</span>
 <span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="05_validate-hipps-restricted_cache/html/unnamed-chunk-32_43f55d9add9f7e7c57116ce1d5498b75">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>table_stats <span class="ot">&lt;-</span> all_stats <span class="sc">%&gt;%</span></span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>person_id) <span class="sc">%&gt;%</span></span>
 <span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl_summary</span>(<span class="at">by =</span> type, <span class="at">type =</span> <span class="fu">everything</span>() <span class="sc">~</span> <span class="st">"continuous"</span>, <span class="at">digits =</span> <span class="fu">list</span>(<span class="fu">starts_with</span>(<span class="st">"m"</span>) <span class="sc">~</span> <span class="dv">0</span>, <span class="fu">starts_with</span>(<span class="st">"n"</span>) <span class="sc">~</span> <span class="dv">1</span>), <span class="at">missing =</span> <span class="st">"no"</span>, <span class="at">statistic =</span> <span class="fu">all_continuous</span>() <span class="sc">~</span> <span class="st">"{mean} ({sd})"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_p</span>()</span>
 <span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>table_stats</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-
-<div id="daaglinokg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#daaglinokg table {
+<div>
+<div id="uoypzkwfqh" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#uoypzkwfqh table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#daaglinokg thead, #daaglinokg tbody, #daaglinokg tfoot, #daaglinokg tr, #daaglinokg td, #daaglinokg th {
+#uoypzkwfqh thead, #uoypzkwfqh tbody, #uoypzkwfqh tfoot, #uoypzkwfqh tr, #uoypzkwfqh td, #uoypzkwfqh th {
   border-style: none;
 }
 
-#daaglinokg p {
+#uoypzkwfqh p {
   margin: 0;
   padding: 0;
 }
 
-#daaglinokg .gt_table {
+#uoypzkwfqh .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -745,12 +718,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-left-color: #D3D3D3;
 }
 
-#daaglinokg .gt_caption {
+#uoypzkwfqh .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#daaglinokg .gt_title {
+#uoypzkwfqh .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -762,7 +735,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-width: 0;
 }
 
-#daaglinokg .gt_subtitle {
+#uoypzkwfqh .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -774,7 +747,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-top-width: 0;
 }
 
-#daaglinokg .gt_heading {
+#uoypzkwfqh .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -786,13 +759,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#daaglinokg .gt_bottom_border {
+#uoypzkwfqh .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#daaglinokg .gt_col_headings {
+#uoypzkwfqh .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -807,7 +780,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#daaglinokg .gt_col_heading {
+#uoypzkwfqh .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -827,7 +800,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   overflow-x: hidden;
 }
 
-#daaglinokg .gt_column_spanner_outer {
+#uoypzkwfqh .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -839,15 +812,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 4px;
 }
 
-#daaglinokg .gt_column_spanner_outer:first-child {
+#uoypzkwfqh .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#daaglinokg .gt_column_spanner_outer:last-child {
+#uoypzkwfqh .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#daaglinokg .gt_column_spanner {
+#uoypzkwfqh .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -859,11 +832,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   width: 100%;
 }
 
-#daaglinokg .gt_spanner_row {
+#uoypzkwfqh .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#daaglinokg .gt_group_heading {
+#uoypzkwfqh .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -889,7 +862,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   text-align: left;
 }
 
-#daaglinokg .gt_empty_group_heading {
+#uoypzkwfqh .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -904,15 +877,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   vertical-align: middle;
 }
 
-#daaglinokg .gt_from_md > :first-child {
+#uoypzkwfqh .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#daaglinokg .gt_from_md > :last-child {
+#uoypzkwfqh .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#daaglinokg .gt_row {
+#uoypzkwfqh .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -931,7 +904,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   overflow-x: hidden;
 }
 
-#daaglinokg .gt_stub {
+#uoypzkwfqh .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -944,7 +917,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#daaglinokg .gt_stub_row_group {
+#uoypzkwfqh .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -958,15 +931,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   vertical-align: top;
 }
 
-#daaglinokg .gt_row_group_first td {
+#uoypzkwfqh .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#daaglinokg .gt_row_group_first th {
+#uoypzkwfqh .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#daaglinokg .gt_summary_row {
+#uoypzkwfqh .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -976,16 +949,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#daaglinokg .gt_first_summary_row {
+#uoypzkwfqh .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#daaglinokg .gt_first_summary_row.thick {
+#uoypzkwfqh .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#daaglinokg .gt_last_summary_row {
+#uoypzkwfqh .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -995,7 +968,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-color: #D3D3D3;
 }
 
-#daaglinokg .gt_grand_summary_row {
+#uoypzkwfqh .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1005,7 +978,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#daaglinokg .gt_first_grand_summary_row {
+#uoypzkwfqh .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1015,7 +988,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-top-color: #D3D3D3;
 }
 
-#daaglinokg .gt_last_grand_summary_row_top {
+#uoypzkwfqh .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1025,11 +998,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-color: #D3D3D3;
 }
 
-#daaglinokg .gt_striped {
+#uoypzkwfqh .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#daaglinokg .gt_table_body {
+#uoypzkwfqh .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1038,7 +1011,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-bottom-color: #D3D3D3;
 }
 
-#daaglinokg .gt_footnotes {
+#uoypzkwfqh .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1052,7 +1025,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#daaglinokg .gt_footnote {
+#uoypzkwfqh .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1061,7 +1034,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#daaglinokg .gt_sourcenotes {
+#uoypzkwfqh .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1075,7 +1048,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   border-right-color: #D3D3D3;
 }
 
-#daaglinokg .gt_sourcenote {
+#uoypzkwfqh .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1083,189 +1056,255 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   padding-right: 5px;
 }
 
-#daaglinokg .gt_left {
+#uoypzkwfqh .gt_left {
   text-align: left;
 }
 
-#daaglinokg .gt_center {
+#uoypzkwfqh .gt_center {
   text-align: center;
 }
 
-#daaglinokg .gt_right {
+#uoypzkwfqh .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#daaglinokg .gt_font_normal {
+#uoypzkwfqh .gt_font_normal {
   font-weight: normal;
 }
 
-#daaglinokg .gt_font_bold {
+#uoypzkwfqh .gt_font_bold {
   font-weight: bold;
 }
 
-#daaglinokg .gt_font_italic {
+#uoypzkwfqh .gt_font_italic {
   font-style: italic;
 }
 
-#daaglinokg .gt_super {
+#uoypzkwfqh .gt_super {
   font-size: 65%;
 }
 
-#daaglinokg .gt_footnote_marks {
+#uoypzkwfqh .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#daaglinokg .gt_asterisk {
+#uoypzkwfqh .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#daaglinokg .gt_indent_1 {
+#uoypzkwfqh .gt_indent_1 {
   text-indent: 5px;
 }
 
-#daaglinokg .gt_indent_2 {
+#uoypzkwfqh .gt_indent_2 {
   text-indent: 10px;
 }
 
-#daaglinokg .gt_indent_3 {
+#uoypzkwfqh .gt_indent_3 {
   text-indent: 15px;
 }
 
-#daaglinokg .gt_indent_4 {
+#uoypzkwfqh .gt_indent_4 {
   text-indent: 20px;
 }
 
-#daaglinokg .gt_indent_5 {
+#uoypzkwfqh .gt_indent_5 {
   text-indent: 25px;
 }
+
+#uoypzkwfqh .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#uoypzkwfqh div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
 </style>
-<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-  <thead>
-    
-    <tr class="gt_col_headings">
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="<strong>Characteristic</strong>"><strong>Characteristic</strong></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>found</strong>, N = 3,832<span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>"><strong>found</strong>, N = 3,832<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>hidden</strong>, N = 848<span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>"><strong>hidden</strong>, N = 848<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>p-value</strong><span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>2</sup></span>"><strong>p-value</strong><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>2</sup></span></th>
-    </tr>
-  </thead>
-  <tbody class="gt_table_body">
-    <tr><td headers="label" class="gt_row gt_left">n</td>
-<td headers="stat_1" class="gt_row gt_center">90.1 (72.8)</td>
-<td headers="stat_2" class="gt_row gt_center">35.9 (69.2)</td>
-<td headers="p.value" class="gt_row gt_center">&lt;0.001</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">n_hip</td>
-<td headers="stat_1" class="gt_row gt_center">12.0 (7.7)</td>
-<td headers="stat_2" class="gt_row gt_center">2.3 (5.7)</td>
-<td headers="p.value" class="gt_row gt_center">&lt;0.001</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">n_AB</td>
-<td headers="stat_1" class="gt_row gt_center">0.0 (0.2)</td>
-<td headers="stat_2" class="gt_row gt_center">0.0 (0.2)</td>
-<td headers="p.value" class="gt_row gt_center">0.2</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">n_DELIV</td>
-<td headers="stat_1" class="gt_row gt_center">2.1 (1.5)</td>
-<td headers="stat_2" class="gt_row gt_center">0.4 (0.9)</td>
-<td headers="p.value" class="gt_row gt_center">&lt;0.001</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">n_ECT</td>
-<td headers="stat_1" class="gt_row gt_center">0.0 (0.3)</td>
-<td headers="stat_2" class="gt_row gt_center">0.0 (0.3)</td>
-<td headers="p.value" class="gt_row gt_center">0.2</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">n_LB</td>
-<td headers="stat_1" class="gt_row gt_center">1.4 (0.9)</td>
-<td headers="stat_2" class="gt_row gt_center">0.2 (0.6)</td>
-<td headers="p.value" class="gt_row gt_center">&lt;0.001</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">n_PREG</td>
-<td headers="stat_1" class="gt_row gt_center">8.4 (6.3)</td>
-<td headers="stat_2" class="gt_row gt_center">1.5 (4.4)</td>
-<td headers="p.value" class="gt_row gt_center">&lt;0.001</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">n_SA</td>
-<td headers="stat_1" class="gt_row gt_center">0.1 (0.6)</td>
-<td headers="stat_2" class="gt_row gt_center">0.1 (0.7)</td>
-<td headers="p.value" class="gt_row gt_center">0.2</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">n_SB</td>
-<td headers="stat_1" class="gt_row gt_center">0.0 (0.1)</td>
-<td headers="stat_2" class="gt_row gt_center">0.0 (0.1)</td>
-<td headers="p.value" class="gt_row gt_center">&gt;0.9</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">med_time_from_survey</td>
-<td headers="stat_1" class="gt_row gt_center">82 (77)</td>
-<td headers="stat_2" class="gt_row gt_center">-1 (100)</td>
-<td headers="p.value" class="gt_row gt_center">&lt;0.001</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">mean_time_from_survey</td>
-<td headers="stat_1" class="gt_row gt_center">62 (65)</td>
-<td headers="stat_2" class="gt_row gt_center">-7 (85)</td>
-<td headers="p.value" class="gt_row gt_center">&lt;0.001</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">min_time_from_survey</td>
-<td headers="stat_1" class="gt_row gt_center">-103 (93)</td>
-<td headers="stat_2" class="gt_row gt_center">-126 (109)</td>
-<td headers="p.value" class="gt_row gt_center">&lt;0.001</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">max_time_from_survey</td>
-<td headers="stat_1" class="gt_row gt_center">168 (74)</td>
-<td headers="stat_2" class="gt_row gt_center">102 (121)</td>
-<td headers="p.value" class="gt_row gt_center">&lt;0.001</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">med_time_from_survey_hips</td>
-<td headers="stat_1" class="gt_row gt_center">104 (77)</td>
-<td headers="stat_2" class="gt_row gt_center">18 (106)</td>
-<td headers="p.value" class="gt_row gt_center">&lt;0.001</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">mean_time_from_survey_hips</td>
-<td headers="stat_1" class="gt_row gt_center">80 (67)</td>
-<td headers="stat_2" class="gt_row gt_center">11 (99)</td>
-<td headers="p.value" class="gt_row gt_center">&lt;0.001</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">min_time_from_survey_hips</td>
-<td headers="stat_1" class="gt_row gt_center">-33 (76)</td>
-<td headers="stat_2" class="gt_row gt_center">-45 (120)</td>
-<td headers="p.value" class="gt_row gt_center">0.5</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">max_time_from_survey_hips</td>
-<td headers="stat_1" class="gt_row gt_center">130 (73)</td>
-<td headers="stat_2" class="gt_row gt_center">44 (112)</td>
-<td headers="p.value" class="gt_row gt_center">&lt;0.001</td></tr>
-  </tbody>
-  
-  <tfoot class="gt_footnotes">
-    <tr>
-      <td class="gt_footnote" colspan="4"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span> Mean (SD)</td>
-    </tr>
-    <tr>
-      <td class="gt_footnote" colspan="4"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>2</sup></span> Wilcoxon rank sum test</td>
-    </tr>
-  </tfoot>
+
+<table class="gt_table table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header gt_col_headings">
+<th id="label" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col"><strong>Characteristic</strong></th>
+<th id="stat_1" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>found</strong><br>
+N = 4,435<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span></th>
+<th id="stat_2" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>hidden</strong><br>
+N = 1,116<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span></th>
+<th id="p.value" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>p-value</strong></th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">n</td>
+<td class="gt_row gt_center" headers="stat_1">73.2 (68.8)</td>
+<td class="gt_row gt_center" headers="stat_2">32.5 (64.0)</td>
+<td class="gt_row gt_center" headers="p.value"><br>
+</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">n_hip</td>
+<td class="gt_row gt_center" headers="stat_1">8.3 (6.4)</td>
+<td class="gt_row gt_center" headers="stat_2">1.3 (4.4)</td>
+<td class="gt_row gt_center" headers="p.value"><br>
+</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">n_AB</td>
+<td class="gt_row gt_center" headers="stat_1">0.0 (0.0)</td>
+<td class="gt_row gt_center" headers="stat_2">0.0 (0.0)</td>
+<td class="gt_row gt_center" headers="p.value"><br>
+</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">n_DELIV</td>
+<td class="gt_row gt_center" headers="stat_1">0.0 (0.0)</td>
+<td class="gt_row gt_center" headers="stat_2">0.0 (0.0)</td>
+<td class="gt_row gt_center" headers="p.value"><br>
+</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">n_ECT</td>
+<td class="gt_row gt_center" headers="stat_1">0.0 (0.5)</td>
+<td class="gt_row gt_center" headers="stat_2">0.0 (0.2)</td>
+<td class="gt_row gt_center" headers="p.value"><br>
+</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">n_LB</td>
+<td class="gt_row gt_center" headers="stat_1">0.0 (0.0)</td>
+<td class="gt_row gt_center" headers="stat_2">0.0 (0.0)</td>
+<td class="gt_row gt_center" headers="p.value"><br>
+</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">n_PREG</td>
+<td class="gt_row gt_center" headers="stat_1">8.2 (6.4)</td>
+<td class="gt_row gt_center" headers="stat_2">1.1 (4.1)</td>
+<td class="gt_row gt_center" headers="p.value"><br>
+</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">n_SA</td>
+<td class="gt_row gt_center" headers="stat_1">0.1 (0.6)</td>
+<td class="gt_row gt_center" headers="stat_2">0.1 (0.7)</td>
+<td class="gt_row gt_center" headers="p.value"><br>
+</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">n_SB</td>
+<td class="gt_row gt_center" headers="stat_1">0.0 (0.0)</td>
+<td class="gt_row gt_center" headers="stat_2">0.0 (0.0)</td>
+<td class="gt_row gt_center" headers="p.value"><br>
+</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">med_time_from_survey</td>
+<td class="gt_row gt_center" headers="stat_1">60 (75)</td>
+<td class="gt_row gt_center" headers="stat_2">-2 (98)</td>
+<td class="gt_row gt_center" headers="p.value"><br>
+</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">mean_time_from_survey</td>
+<td class="gt_row gt_center" headers="stat_1">49 (63)</td>
+<td class="gt_row gt_center" headers="stat_2">-5 (83)</td>
+<td class="gt_row gt_center" headers="p.value"><br>
+</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">min_time_from_survey</td>
+<td class="gt_row gt_center" headers="stat_1">-102 (93)</td>
+<td class="gt_row gt_center" headers="stat_2">-129 (106)</td>
+<td class="gt_row gt_center" headers="p.value"><br>
+</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">max_time_from_survey</td>
+<td class="gt_row gt_center" headers="stat_1">161 (77)</td>
+<td class="gt_row gt_center" headers="stat_2">111 (120)</td>
+<td class="gt_row gt_center" headers="p.value"><br>
+</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">med_time_from_survey_hips</td>
+<td class="gt_row gt_center" headers="stat_1">67 (73)</td>
+<td class="gt_row gt_center" headers="stat_2">-28 (103)</td>
+<td class="gt_row gt_center" headers="p.value"><br>
+</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">mean_time_from_survey_hips</td>
+<td class="gt_row gt_center" headers="stat_1">57 (64)</td>
+<td class="gt_row gt_center" headers="stat_2">-32 (94)</td>
+<td class="gt_row gt_center" headers="p.value"><br>
+</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">min_time_from_survey_hips</td>
+<td class="gt_row gt_center" headers="stat_1">-32 (76)</td>
+<td class="gt_row gt_center" headers="stat_2">-101 (99)</td>
+<td class="gt_row gt_center" headers="p.value"><br>
+</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">max_time_from_survey_hips</td>
+<td class="gt_row gt_center" headers="stat_1">121 (74)</td>
+<td class="gt_row gt_center" headers="stat_2">23 (127)</td>
+<td class="gt_row gt_center" headers="p.value"><br>
+</td>
+</tr>
+</tbody><tfoot>
+<tr class="even gt_footnotes">
+<td colspan="4" class="gt_footnote"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span> Mean (SD)</td>
+</tr>
+</tfoot>
+
 </table>
+
+</div>
 </div>
 </div>
 </div>
 <section id="validation-as-in-jones-et-al" class="level2">
 <h2 class="anchored" data-anchor-id="validation-as-in-jones-et-al">Validation as in Jones et al</h2>
-<div class="cell" data-hash="05_validate-hipps-restricted_cache/html/unnamed-chunk-33_221c0b0a7e5fd6d7428b36280e40f045">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>extra_concepts <span class="ot">&lt;-</span> <span class="fu">tribble</span>(</span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span>concept_id, <span class="sc">~</span>min_months, <span class="sc">~</span>max_months,</span>
 <span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>  <span class="dv">74698</span>, <span class="fl">4.5</span>, <span class="dv">11</span>,</span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>  440795L, <span class="dv">5</span>, <span class="dv">11</span>,</span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>  2211760L, <span class="dv">6</span>, <span class="dv">10</span>,</span>
-<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>  81636L, <span class="dv">7</span>, <span class="dv">11</span>,</span>
-<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>  4062557L, <span class="dv">5</span>, <span class="dv">11</span>,</span>
-<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>  45757113L, <span class="dv">5</span>, <span class="fl">9.25</span>,</span>
-<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>  2211758L, <span class="dv">6</span>, <span class="dv">10</span>,</span>
-<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>  2211759L, <span class="dv">6</span>, <span class="dv">11</span>,</span>
-<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>  2110284L, <span class="dv">6</span>, <span class="dv">11</span>,</span>
-<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>  438542L, <span class="dv">1</span>, <span class="dv">6</span>,</span>
-<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>  4024659L, <span class="dv">6</span>, <span class="dv">10</span>,</span>
-<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>  2101829L, <span class="dv">1</span>, <span class="dv">11</span>,</span>
-<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a>  40482406L, <span class="fl">4.5</span>, <span class="dv">11</span>,</span>
-<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a>  2314183L, <span class="dv">2</span>, <span class="dv">7</span>,</span>
-<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a>  437623L, <span class="dv">6</span>, <span class="dv">11</span>,</span>
-<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a>  72693L, <span class="dv">6</span>, <span class="dv">11</span>,</span>
-<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a>  4167493L, <span class="dv">5</span>, <span class="dv">11</span>,</span>
-<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a>  2101830L, <span class="dv">1</span>, <span class="dv">11</span>,</span>
-<span id="cb37-21"><a href="#cb37-21" aria-hidden="true" tabindex="-1"></a>  36712703L, <span class="dv">5</span>, <span class="dv">11</span>,</span>
-<span id="cb37-22"><a href="#cb37-22" aria-hidden="true" tabindex="-1"></a>  77619L, <span class="fl">5.5</span>, <span class="dv">11</span>,</span>
-<span id="cb37-23"><a href="#cb37-23" aria-hidden="true" tabindex="-1"></a>  45766222L, <span class="fl">6.75</span>, <span class="dv">11</span>,</span>
-<span id="cb37-24"><a href="#cb37-24" aria-hidden="true" tabindex="-1"></a>  36712695L, <span class="dv">3</span>, <span class="dv">11</span>,</span>
-<span id="cb37-25"><a href="#cb37-25" aria-hidden="true" tabindex="-1"></a>  4218813L, <span class="dv">7</span>, <span class="dv">11</span>,</span>
-<span id="cb37-26"><a href="#cb37-26" aria-hidden="true" tabindex="-1"></a>  2211749L, <span class="dv">4</span>, <span class="dv">11</span>,</span>
-<span id="cb37-27"><a href="#cb37-27" aria-hidden="true" tabindex="-1"></a>  2211757L, <span class="dv">1</span>, <span class="dv">6</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>  <span class="dv">440795</span>L, <span class="dv">5</span>, <span class="dv">11</span>,</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>  <span class="dv">2211760</span>L, <span class="dv">6</span>, <span class="dv">10</span>,</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>  <span class="dv">81636</span>L, <span class="dv">7</span>, <span class="dv">11</span>,</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>  <span class="dv">4062557</span>L, <span class="dv">5</span>, <span class="dv">11</span>,</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>  <span class="dv">45757113</span>L, <span class="dv">5</span>, <span class="fl">9.25</span>,</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>  <span class="dv">2211758</span>L, <span class="dv">6</span>, <span class="dv">10</span>,</span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>  <span class="dv">2211759</span>L, <span class="dv">6</span>, <span class="dv">11</span>,</span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>  <span class="dv">2110284</span>L, <span class="dv">6</span>, <span class="dv">11</span>,</span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>  <span class="dv">438542</span>L, <span class="dv">1</span>, <span class="dv">6</span>,</span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>  <span class="dv">4024659</span>L, <span class="dv">6</span>, <span class="dv">10</span>,</span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>  <span class="dv">2101829</span>L, <span class="dv">1</span>, <span class="dv">11</span>,</span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a>  <span class="dv">40482406</span>L, <span class="fl">4.5</span>, <span class="dv">11</span>,</span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a>  <span class="dv">2314183</span>L, <span class="dv">2</span>, <span class="dv">7</span>,</span>
+<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a>  <span class="dv">437623</span>L, <span class="dv">6</span>, <span class="dv">11</span>,</span>
+<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a>  <span class="dv">72693</span>L, <span class="dv">6</span>, <span class="dv">11</span>,</span>
+<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a>  <span class="dv">4167493</span>L, <span class="dv">5</span>, <span class="dv">11</span>,</span>
+<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a>  <span class="dv">2101830</span>L, <span class="dv">1</span>, <span class="dv">11</span>,</span>
+<span id="cb37-21"><a href="#cb37-21" aria-hidden="true" tabindex="-1"></a>  <span class="dv">36712703</span>L, <span class="dv">5</span>, <span class="dv">11</span>,</span>
+<span id="cb37-22"><a href="#cb37-22" aria-hidden="true" tabindex="-1"></a>  <span class="dv">77619</span>L, <span class="fl">5.5</span>, <span class="dv">11</span>,</span>
+<span id="cb37-23"><a href="#cb37-23" aria-hidden="true" tabindex="-1"></a>  <span class="dv">45766222</span>L, <span class="fl">6.75</span>, <span class="dv">11</span>,</span>
+<span id="cb37-24"><a href="#cb37-24" aria-hidden="true" tabindex="-1"></a>  <span class="dv">36712695</span>L, <span class="dv">3</span>, <span class="dv">11</span>,</span>
+<span id="cb37-25"><a href="#cb37-25" aria-hidden="true" tabindex="-1"></a>  <span class="dv">4218813</span>L, <span class="dv">7</span>, <span class="dv">11</span>,</span>
+<span id="cb37-26"><a href="#cb37-26" aria-hidden="true" tabindex="-1"></a>  <span class="dv">2211749</span>L, <span class="dv">4</span>, <span class="dv">11</span>,</span>
+<span id="cb37-27"><a href="#cb37-27" aria-hidden="true" tabindex="-1"></a>  <span class="dv">2211757</span>L, <span class="dv">1</span>, <span class="dv">6</span></span>
 <span id="cb37-28"><a href="#cb37-28" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb37-29"><a href="#cb37-29" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb37-30"><a href="#cb37-30" aria-hidden="true" tabindex="-1"></a>pull_extra <span class="ot">&lt;-</span> <span class="cf">function</span>(extra_concepts, df, start_date_col, id_col) {</span>
@@ -1312,7 +1351,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb37-71"><a href="#cb37-71" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="kable-table">
-<table class="table table-sm table-striped">
+<table class="table table-sm table-striped small">
 <colgroup>
 <col style="width: 89%">
 <col style="width: 2%">
@@ -1330,153 +1369,117 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Breech presentation</td>
-<td style="text-align: right;">2297</td>
-<td style="text-align: right;">1892</td>
-<td style="text-align: right;">0.8236831</td>
+<td style="text-align: right;">3215</td>
+<td style="text-align: right;">2778</td>
+<td style="text-align: right;">0.8640747</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Complication occurring during labor and delivery</td>
-<td style="text-align: right;">7174</td>
-<td style="text-align: right;">6168</td>
-<td style="text-align: right;">0.8597714</td>
-</tr>
-<tr class="odd">
 <td style="text-align: left;">Doppler velocimetry, fetal; umbilical artery</td>
-<td style="text-align: right;">2882</td>
-<td style="text-align: right;">2058</td>
-<td style="text-align: right;">0.7140874</td>
+<td style="text-align: right;">4067</td>
+<td style="text-align: right;">2867</td>
+<td style="text-align: right;">0.7049422</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">Excessive fetal growth affecting management of mother</td>
-<td style="text-align: right;">2107</td>
-<td style="text-align: right;">1498</td>
-<td style="text-align: right;">0.7109635</td>
+<td style="text-align: right;">2775</td>
+<td style="text-align: right;">1949</td>
+<td style="text-align: right;">0.7023423</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">False labor</td>
-<td style="text-align: right;">544</td>
-<td style="text-align: right;">422</td>
-<td style="text-align: right;">0.7757353</td>
+<td style="text-align: right;">811</td>
+<td style="text-align: right;">645</td>
+<td style="text-align: right;">0.7953144</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">False labor before 37 completed weeks of gestation</td>
-<td style="text-align: right;">1718</td>
-<td style="text-align: right;">1449</td>
-<td style="text-align: right;">0.8434226</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Fetal biophysical profile; with non-stress testing</td>
-<td style="text-align: right;">3148</td>
-<td style="text-align: right;">2543</td>
-<td style="text-align: right;">0.8078145</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Fetal biophysical profile; without non-stress testing</td>
-<td style="text-align: right;">13057</td>
-<td style="text-align: right;">10422</td>
-<td style="text-align: right;">0.7981925</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Fetal non-stress test</td>
-<td style="text-align: right;">13688</td>
-<td style="text-align: right;">10234</td>
-<td style="text-align: right;">0.7476622</td>
+<td style="text-align: right;">2393</td>
+<td style="text-align: right;">1979</td>
+<td style="text-align: right;">0.8269954</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Gestation less than 24 weeks</td>
-<td style="text-align: right;">2041</td>
-<td style="text-align: right;">1601</td>
-<td style="text-align: right;">0.7844194</td>
+<td style="text-align: right;">2987</td>
+<td style="text-align: right;">2374</td>
+<td style="text-align: right;">0.7947774</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Gestational diabetes mellitus</td>
-<td style="text-align: right;">11416</td>
-<td style="text-align: right;">7567</td>
-<td style="text-align: right;">0.6628416</td>
+<td style="text-align: right;">19426</td>
+<td style="text-align: right;">11611</td>
+<td style="text-align: right;">0.5977041</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Initial prenatal care visit (report at first prenatal encounter with health care professional providing obstetrical care. Report also date of visit and, in a separate field, the date of the last menstrual period [LMP]) (Prenatal)</td>
-<td style="text-align: right;">1065</td>
-<td style="text-align: right;">937</td>
-<td style="text-align: right;">0.8798122</td>
-</tr>
-<tr class="odd">
 <td style="text-align: left;">Low lying placenta</td>
-<td style="text-align: right;">1026</td>
-<td style="text-align: right;">878</td>
-<td style="text-align: right;">0.8557505</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Medical genetics and genetic counseling services, each 30 minutes face-to-face with patient/family</td>
-<td style="text-align: right;">3231</td>
-<td style="text-align: right;">928</td>
-<td style="text-align: right;">0.2872176</td>
+<td style="text-align: right;">1481</td>
+<td style="text-align: right;">1256</td>
+<td style="text-align: right;">0.8480756</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Polyhydramnios</td>
-<td style="text-align: right;">1534</td>
-<td style="text-align: right;">1190</td>
-<td style="text-align: right;">0.7757497</td>
+<td style="text-align: right;">2124</td>
+<td style="text-align: right;">1678</td>
+<td style="text-align: right;">0.7900188</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Poor fetal growth affecting management</td>
-<td style="text-align: right;">4629</td>
-<td style="text-align: right;">3766</td>
-<td style="text-align: right;">0.8135666</td>
+<td style="text-align: right;">6606</td>
+<td style="text-align: right;">5239</td>
+<td style="text-align: right;">0.7930669</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Pregnancy-induced hypertension</td>
-<td style="text-align: right;">3557</td>
-<td style="text-align: right;">2833</td>
-<td style="text-align: right;">0.7964577</td>
+<td style="text-align: right;">4604</td>
+<td style="text-align: right;">3107</td>
+<td style="text-align: right;">0.6748480</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Prenatal flow sheet documented in medical record by first prenatal visit (documentation includes at minimum blood pressure, weight, urine protein, uterine size, fetal heart tones, and estimated date of delivery). Report also: date of visit and, in a separ</td>
-<td style="text-align: right;">210</td>
-<td style="text-align: right;">160</td>
-<td style="text-align: right;">0.7619048</td>
+<td style="text-align: right;">344</td>
+<td style="text-align: right;">237</td>
+<td style="text-align: right;">0.6889535</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Preterm labor without delivery</td>
-<td style="text-align: right;">1265</td>
-<td style="text-align: right;">1035</td>
-<td style="text-align: right;">0.8181818</td>
+<td style="text-align: right;">1277</td>
+<td style="text-align: right;">1099</td>
+<td style="text-align: right;">0.8606108</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Reduced fetal movement</td>
-<td style="text-align: right;">2206</td>
-<td style="text-align: right;">1805</td>
-<td style="text-align: right;">0.8182230</td>
+<td style="text-align: right;">2994</td>
+<td style="text-align: right;">2439</td>
+<td style="text-align: right;">0.8146293</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Requires diphtheria, tetanus and pertussis vaccination</td>
-<td style="text-align: right;">1979</td>
-<td style="text-align: right;">274</td>
-<td style="text-align: right;">0.1384538</td>
+<td style="text-align: right;">2847</td>
+<td style="text-align: right;">392</td>
+<td style="text-align: right;">0.1376888</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Suspected fetal abnormality affecting management of mother</td>
-<td style="text-align: right;">6329</td>
-<td style="text-align: right;">5164</td>
-<td style="text-align: right;">0.8159267</td>
+<td style="text-align: right;">7553</td>
+<td style="text-align: right;">6271</td>
+<td style="text-align: right;">0.8302661</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Third trimester pregnancy</td>
-<td style="text-align: right;">53783</td>
-<td style="text-align: right;">38084</td>
-<td style="text-align: right;">0.7081048</td>
+<td style="text-align: right;">75915</td>
+<td style="text-align: right;">53747</td>
+<td style="text-align: right;">0.7079892</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Ultrasound, pregnant uterus, real time with image documentation, fetal and maternal evaluation, after first trimester (&gt; or = 14 weeks 0 days), transabdominal approach; single or first gestation</td>
-<td style="text-align: right;">6453</td>
-<td style="text-align: right;">4108</td>
-<td style="text-align: right;">0.6366031</td>
+<td style="text-align: right;">10694</td>
+<td style="text-align: right;">6270</td>
+<td style="text-align: right;">0.5863101</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Ultrasound, pregnant uterus, real time with image documentation, transvaginal</td>
-<td style="text-align: right;">17649</td>
-<td style="text-align: right;">11735</td>
-<td style="text-align: right;">0.6649102</td>
+<td style="text-align: right;">24418</td>
+<td style="text-align: right;">15213</td>
+<td style="text-align: right;">0.6230240</td>
 </tr>
 </tbody>
 </table>
@@ -1514,9 +1517,23 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     icon: icon
   };
   anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
   const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
     }
   });
   clipboard.on('success', function(e) {
@@ -1552,10 +1569,27 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn) {
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -1565,8 +1599,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -1578,9 +1621,245 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
     });
   }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
   const findCites = (el) => {
     const parentEl = el.parentElement;
     if (parentEl) {
@@ -1621,6 +1900,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
+
 
 
 

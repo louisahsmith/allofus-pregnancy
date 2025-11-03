@@ -8,6 +8,7 @@ execute:
   warning: false
   message: false
   cache: true
+  error: true
 ---
 
 ```{r}
@@ -60,13 +61,13 @@ glm(
 ) %>%
   tbl_regression(exponentiate = TRUE, tidy_fun = partial(tidy_robust, vcov = "HC1"))
 
-glm(
-  preterm_status_from_calculation ~ race_eth_cat + edu_cat + income_cat +
-    marital_status_cat + mom_age_cat,
-  family = poisson,
-  data = hipps, subset = final_outcome_category == "LB"
-) %>%
-  tbl_regression(exponentiate = TRUE, tidy_fun = partial(tidy_robust, vcov = "HC1"))
+# glm(
+#   preterm_status_from_calculation ~ race_eth_cat + edu_cat + income_cat +
+#     marital_status_cat + mom_age_cat,
+#   family = poisson,
+#   data = hipps, subset = final_outcome_category == "LB"
+# ) %>%
+#   tbl_regression(exponentiate = TRUE, tidy_fun = partial(tidy_robust, vcov = "HC1"))
 
 glm(
   live_birth ~ race_eth_cat + edu_cat + income_cat +
