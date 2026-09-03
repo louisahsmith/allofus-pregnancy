@@ -150,7 +150,7 @@ assign_episodes <- function(personlist, ...) {
   return(personlist)
 }
 
-get_PPS_episodes <- function(input_GT_concepts_df, PPS_concepts, person_tbl) {
+get_PPS_episodes <- function(input_GT_concepts_df, PPS_concepts, person_tbl, page_size = 50000) {
   patients_with_preg_concepts <- filter(input_GT_concepts_df, !is.na(domain_concept_start_date)) %>%
     left_join(PPS_concepts, by = join_by(domain_concept_id)) %>%
     inner_join(select(person_tbl, person_id, sex_at_birth_concept_id, year_of_birth, day_of_birth, month_of_birth),
@@ -183,7 +183,7 @@ get_PPS_episodes <- function(input_GT_concepts_df, PPS_concepts, person_tbl) {
   # record date: list of matching months, save this to a new dictionary with record dates as the keys. Where no match occurs, put NA
   #   person_dates_dict <- split(person_dates_df$list_col, person_dates_df$person_id)
 
-  person_dates_df <- collect(patients_with_preg_concepts, page_size = 50000) %>%
+  person_dates_df <- collect(patients_with_preg_concepts, page_size = page_size) %>%
     group_by(person_id) %>%
     arrange(domain_concept_start_date)
 

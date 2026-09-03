@@ -148,7 +148,7 @@ input_GT_concepts_df <- input_GT_concepts(
 )
 
 # get the gestational timing information for each concept
-get_PPS_episodes_df <- get_PPS_episodes(input_GT_concepts_df, PPS_concepts, person_tbl)
+get_PPS_episodes_df <- get_PPS_episodes(input_GT_concepts_df, PPS_concepts, person_tbl, page_size = 30000)
 
 # get the min and max dates for each episode
 PPS_episodes_df <- get_episode_max_min_dates(get_PPS_episodes_df)
@@ -203,6 +203,7 @@ if (!dir.exists(here::here("workbench"))) dir.create(here::here("workbench"))
 
 write_rds(merged_episodes_with_metadata_df, here::here("workbench/merged_episodes_with_metadata_df.rds"))
 
-allofus::aou_workspace_to_bucket(here::here("workbench/merged_episodes_with_metadata_df.rds"))
+aou_create_bucket()
+aou_workspace_to_bucket(here::here("workbench/merged_episodes_with_metadata_df.rds"))
 ```
 
